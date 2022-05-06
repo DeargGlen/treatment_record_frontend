@@ -4,14 +4,15 @@ import { treatmentsIndex } from 'urls/index';
 export type TREATMENT = {
   id: number;
   individual_id: string;
-  datetime: string;
+  datetime: number;
   body_temperature: number;
   symptom: string;
   content: string;
   gotDosage: boolean;
   user_id: number;
-  created_at: string;
-  updated_at: string;
+  user_name: string;
+  created_at: Date;
+  updated_at: Date;
 };
 
 type DATA = {
