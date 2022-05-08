@@ -4,7 +4,7 @@ import { treatmentsIndex } from 'urls/index';
 export type TREATMENT = {
   id: number;
   individual_id: string;
-  datetime: number;
+  datetime: string;
   body_temperature: number;
   symptom: string;
   content: string;

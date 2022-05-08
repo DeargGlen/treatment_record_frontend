@@ -7,19 +7,14 @@ import styled from 'styled-components';
 import Individuals from 'containers/Individuals';
 import Treatments from 'containers/Treatments';
 import Users from 'containers/Users';
-import Header from 'components/layouts/Header';
-import Sidebar from 'components/layouts/Sidebar';
+import HeaderAlt from 'components/layouts/HeaderAlt';
 
-const MainWrapper = styled.div`
-  padding-left: 160px;
-  padding-top: 50px;
-`;
+const MainWrapper = styled.div``;
 
 const App: FC = () => (
   <>
     <Router>
-      <Header />
-      <Sidebar />
+      <HeaderAlt />
       <MainWrapper>
         <Routes>
           <Route path="/individuals/*" element={<Individuals />} />

@@ -4,7 +4,6 @@ import AllTreatments from 'containers/templates/AllTreatments';
 
 const Treatments: FC = () => (
   <>
-    <div>Treatments</div>
     <Routes>
       <Route path="/" element={<AllTreatments />} />
     </Routes>
