@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { individualsIndex, individualShow } from 'urls/index';
+import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 
 export type INDIVIDUAL = {
@@ -33,9 +33,9 @@ export type INDIVIDUAL_SHOW_DATA = {
   sex: number | null;
   category: number | null;
   breed_type: number | null;
-  mother_id: string | null;
-  father_name: string | null;
-  grandfather_name: string | null;
+  mother_id?: string | null;
+  father_name?: string | null;
+  grandfather_name?: string | null;
   date_of_introduction: string | null;
   name: string | null;
   No: string | null;
@@ -45,6 +45,19 @@ export type INDIVIDUAL_SHOW_DATA = {
 };
 type INDIVIDUAL_SHOW_RES = {
   data: INDIVIDUAL_SHOW_DATA;
+};
+
+type INDIVIDUAL_POST_PROPS = {
+  individualId: string;
+  dateOfBirth: string;
+  sex: string;
+  category: string;
+  breedType: string;
+  motherId?: string;
+  fatherName?: string;
+  grandfatherName?: string;
+  dateOfIntroduction: string;
+  blockId: number;
 };
 
 export const fetchIndividuals = () =>
@@ -60,3 +73,22 @@ export const fetchIndividual = (individualId: string) =>
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));
+
+export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
+  axios
+    .post(individualCreate, {
+      id: params.individualId,
+      date_of_birth: params.dateOfBirth,
+      sex: params.sex,
+      category: params.category,
+      breed_type: params.breedType,
+      mother_id: params.motherId,
+      father_name: params.fatherName,
+      grandfather_name: params.grandfatherName,
+      date_of_introduction: params.dateOfIntroduction,
+      block_id: params.blockId,
+    })
+    .then((res: INDIVIDUAL_SHOW_RES) => res.data)
+    .catch((e) => {
+      throw e;
+    });

@@ -4,6 +4,7 @@ import { fetchIndividuals, INDIVIDUALS_DATA } from 'apis/individuals';
 import { Fab, Tooltip, Typography, Container } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import IndividualsList from 'components/organisms/IndividualsList';
+import { Link as RouterLink } from 'react-router-dom';
 
 // components
 import IndividualSkelton from 'components/molecules/IndividualsSkelton';
@@ -54,7 +55,13 @@ const AllTreatments: FC = () => {
         )}
       </Container>
       <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
-        <Fab sx={fabStyle} color="primary" aria-label="add">
+        <Fab
+          sx={fabStyle}
+          color="primary"
+          aria-label="add"
+          component={RouterLink}
+          to="/individuals/new"
+        >
           <AddIcon />
         </Fab>
       </Tooltip>
