@@ -4,7 +4,7 @@ import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
-import handleToDate from 'containers/func/handleToDate';
+import handleToDateAndTime from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
 import { TreatmentContentWrapper, MainWrapper } from 'Style';
 import styled from 'styled-components';
@@ -28,17 +28,20 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
       <TreatmentContentWrapper key={treatment.id}>
         <ThemeProvider theme={theme}>
           <MainWrapper>
-            <Link
-              component={RouterLink}
-              to={`/individuals/${treatment.individual_id}`}
-            >
-              <div className="tag-num" style={{ fontSize: 22, color: 'blue' }}>
+            <div className="tag-num">
+              <Link
+                component={RouterLink}
+                to={`/individuals/${treatment.individual_id}`}
+                style={{ fontSize: 24, color: 'black' }}
+              >
                 <img src={EarTagImage} alt="tag-number" width="20" />
-                {treatment.individual_id.slice(5, 9)}
-              </div>{' '}
-            </Link>
+                {treatment.individual_id.slice(5, 9)}{' '}
+              </Link>
+            </div>{' '}
             <Row>
-              <Datetime>日時：{handleToDate(treatment.datetime)}</Datetime>
+              <Datetime>
+                日時：{handleToDateAndTime(treatment.datetime)}
+              </Datetime>
               <Temperature>
                 体温：{treatment.body_temperature.toFixed(1)}℃
               </Temperature>

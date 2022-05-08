@@ -4,7 +4,7 @@ import { TREATMENT } from 'apis/treatments';
 import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
 import { ContentWrapper, MainWrapper } from 'Style';
-import handleToDate from 'containers/func/handleToDate';
+import handleToDate from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
 import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 import styled from 'styled-components';

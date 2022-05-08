@@ -19,14 +19,14 @@ export const ContentWrapper = styled.div`
 `;
 
 export const IndividualContentWrapper = styled.div`
-  height: 80px;
+  height: 100px;
   padding: 15px 20px;
   overflow: auto;
   box-shadow: 0 2px 2px #c1ced7;
 `;
 
 export const TreatmentContentWrapper = styled.div`
-  height: 150px;
+  height: 140px;
   padding: 15px 20px;
   overflow: auto;
   box-shadow: 0 2px 2px #c1ced7;

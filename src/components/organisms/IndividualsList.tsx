@@ -7,6 +7,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import EarTagImage from 'images/ear.png';
 import { IndividualContentWrapper, MainWrapper } from 'Style';
 import styled from 'styled-components';
+import handleToDate from 'containers/func/handleToDate';
 
 const Row = styled.div`
   display: flex;
@@ -46,8 +47,15 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                 </span>
                 .{individual.id.slice(9, 10)}
               </InvidividualId>
-              <DateOfBirth>生年月日：{individual.date_of_birth}</DateOfBirth>
+            </Row>
+            <Row>
+              <DateOfBirth>
+                生年月日：{handleToDate(individual.date_of_birth)}
+              </DateOfBirth>
               <Age>月齢：{individual.age}</Age>
+              <BreedType>
+                品種：{['黒毛和種', 'F1'][individual.breed_type]}
+              </BreedType>
             </Row>
             <Row>
               <Sex>性別：{['去勢', '雌', '雄'][individual.sex]}</Sex>
@@ -55,9 +63,6 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                 種別：
                 {['肥育', '繁殖', '子牛', '育成'][individual.category]}
               </Category>
-              <BreedType>
-                品種：{['黒毛和種', 'F1'][individual.breed_type]}
-              </BreedType>
               <Location>
                 場所：{individual.name} {individual.No}{' '}
               </Location>
