@@ -1,14 +1,12 @@
 import { FC } from 'react';
-import * as React from 'react';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import Link from '@mui/material/Link';
+import { ListItem, ListItemButton, ListItemText, Divider } from '@mui/material';
 import styled from 'styled-components';
-import { Link as RouterLink } from 'react-router-dom';
+import { useLocation, Link as RouterLink } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from 'components/theme';
+import HomeIcon from '@mui/icons-material/Home';
+import CreateIcon from '@mui/icons-material/Create';
+import AccoutntCircle from '@mui/icons-material/AccountCircle';
 
 const SidebarWrapper = styled.div`
   height: 100%;
@@ -17,50 +15,43 @@ const SidebarWrapper = styled.div`
 `;
 
 const Sidebar: FC = () => {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleListItemClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-    index: number,
-  ) => {
-    setSelectedIndex(index);
-  };
+  const location = useLocation();
 
   return (
     <>
       <SidebarWrapper>
         <ThemeProvider theme={theme}>
           <ListItem>
-            <Link component={RouterLink} to="/individuals">
-              <ListItemButton
-                selected={selectedIndex === 0}
-                onClick={(event) => handleListItemClick(event, 0)}
-              >
-                <ListItemText primary="個体管理" />
-              </ListItemButton>
-            </Link>
+            <ListItemButton
+              selected={location.pathname.includes('/individuals')}
+              component={RouterLink}
+              to="/individuals"
+            >
+              <HomeIcon />
+              <ListItemText primary="個体管理" />
+            </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem>
-            <Link component={RouterLink} to="/treatments">
-              <ListItemButton
-                selected={selectedIndex === 1}
-                onClick={(event) => handleListItemClick(event, 1)}
-              >
-                <ListItemText primary="治療管理" />
-              </ListItemButton>
-            </Link>
+            <ListItemButton
+              selected={location.pathname.includes('/treatments')}
+              component={RouterLink}
+              to="/treatments"
+            >
+              <CreateIcon />
+              <ListItemText primary="治療管理" />
+            </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem>
-            <Link component={RouterLink} to="/users">
-              <ListItemButton
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
-              >
-                <ListItemText primary="ユーザー設定" />
-              </ListItemButton>
-            </Link>
+            <ListItemButton
+              selected={location.pathname.includes('/users')}
+              component={RouterLink}
+              to="/users"
+            >
+              <AccoutntCircle />
+              <ListItemText primary="ユーザー設定" />
+            </ListItemButton>
           </ListItem>
         </ThemeProvider>
       </SidebarWrapper>

@@ -54,7 +54,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Divider />
       <Row>
         <p>性別：</p>
-        <p>{['去勢', '雌', '雄'][individual.sex!]}</p>
+        <p>{['去勢', 'オス', 'メス'][individual.sex!]}</p>
       </Row>
       <Divider />
       <Row>

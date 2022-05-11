@@ -4,7 +4,8 @@ import { fetchTreatments, TREATMENT } from 'apis/treatments';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import TreatmentsList from 'components/organisms/TreatmentsList';
-import { Container } from '@mui/material';
+import { Container, Tooltip, Typography } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 
 // components
 import TreatmentSkelton from 'components/molecules/TreatmentsSkelton';
@@ -58,9 +59,17 @@ const AllTreatments: FC = () => {
           <TreatmentsList treatments={state.treatmentsList} />
         )}
       </Container>
-      <Fab sx={fabStyle} color="primary" aria-label="add">
-        <AddIcon />
-      </Fab>
+      <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
+        <Fab
+          sx={fabStyle}
+          color="primary"
+          aria-label="add"
+          component={RouterLink}
+          to="/treatments/new"
+        >
+          <AddIcon />
+        </Fab>
+      </Tooltip>
     </>
   );
 };

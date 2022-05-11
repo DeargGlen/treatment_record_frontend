@@ -14,6 +14,7 @@ import {
   Drawer,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+
 import Sidebar from './Sidebar';
 
 const myTheme = createTheme({
@@ -32,6 +33,15 @@ const myTheme = createTheme({
     },
     secondary: {
       main: '#ffffff',
+    },
+  },
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 890,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
     },
   },
 });
@@ -81,10 +91,11 @@ const HeaderAlt: FC<Props> = (props) => {
                   牛の治療管理
                 </Link>
               </Typography>
-              <Button color="secondary">Login</Button>
+              <Button color="secondary" component={RouterLink} to="/login">
+                Login
+              </Button>
             </Toolbar>
           </AppBar>
-
           <Box
             component="nav"
             sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -111,7 +122,6 @@ const HeaderAlt: FC<Props> = (props) => {
               <Sidebar />
             </Drawer>
           </Box>
-
           <Drawer
             variant="permanent"
             sx={{
@@ -124,6 +134,7 @@ const HeaderAlt: FC<Props> = (props) => {
             open
           >
             <Toolbar />
+
             <Box
               component="nav"
               sx={{ overflow: 'auto', height: '100%' }}

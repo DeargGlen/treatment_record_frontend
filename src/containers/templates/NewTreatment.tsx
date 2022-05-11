@@ -103,7 +103,7 @@ interface State {
   blockId: number;
 }
 
-const NewIndividual: FC = () => {
+const NewTreatment: FC = () => {
   const [values, setValues] = React.useState<State>({
     individualId: '',
     dateOfBirth: '',
@@ -304,4 +304,4 @@ const NewIndividual: FC = () => {
   );
 };
 
-export default NewIndividual;
+export default NewTreatment;

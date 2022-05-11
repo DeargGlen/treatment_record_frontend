@@ -26,7 +26,7 @@ export const IndividualContentWrapper = styled.div`
 `;
 
 export const TreatmentContentWrapper = styled.div`
-  height: 150px;
+  height: 160px;
   padding: 10px 20px 0px 20px;
   overflow: auto;
   box-shadow: 0 2px 2px #c1ced7;

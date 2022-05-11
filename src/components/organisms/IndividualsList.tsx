@@ -58,7 +58,7 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
               </BreedType>
             </Row>
             <Row>
-              <Sex>性別：{['去勢', '雌', '雄'][individual.sex]}</Sex>
+              <Sex>性別：{['去勢', 'オス', 'メス'][individual.sex]}</Sex>
               <Category>
                 種別：
                 {['肥育', '繁殖', '子牛', '育成'][individual.category]}
