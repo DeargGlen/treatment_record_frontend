@@ -49,7 +49,11 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Divider />
       <Row>
         <p>導入日：</p>
-        <p>{handleToDate(individual.date_of_introduction!)}</p>
+        <p>
+          {individual.date_of_introduction
+            ? handleToDate(individual.date_of_introduction)
+            : '-'}
+        </p>
       </Row>
       <Divider />
       <Row>

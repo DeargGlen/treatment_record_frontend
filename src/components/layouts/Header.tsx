@@ -1,3 +1,4 @@
+/* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FC, useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -64,14 +65,12 @@ const Header: FC = () => {
 
           setIsSignedIn(false);
           navigate('/signin');
-
-          console.log('Succeeded in sign out');
         } else {
-          console.log('Failed in sign out');
+          alert('Failed in sign out');
         }
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   };
 
