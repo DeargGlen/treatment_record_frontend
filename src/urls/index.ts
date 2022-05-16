@@ -4,6 +4,7 @@ export const individualShow = (individualId: string) =>
   `${DEFAULT_API_LOCALHOST}/individuals/${individualId}.json`;
 export const individualCreate = `${DEFAULT_API_LOCALHOST}/individuals`;
 export const treatmentsIndex = `${DEFAULT_API_LOCALHOST}/treatments.json`;
-export const usersIndex = `${DEFAULT_API_LOCALHOST}/users`;
-export const userShow = (userId: number) =>
-  `${DEFAULT_API_LOCALHOST}/users/${userId}.json`;
+export const signUpUrl = `${DEFAULT_API_LOCALHOST}/auth`;
+export const signInUrl = `${DEFAULT_API_LOCALHOST}/auth/sign_in`;
+export const signOutUrl = `${DEFAULT_API_LOCALHOST}/auth/sign_out`;
+export const getCurrentUserUrl = `${DEFAULT_API_LOCALHOST}/auth/sessions`;

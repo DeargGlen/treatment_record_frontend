@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
+import { headers } from './client';
 
 export type INDIVIDUAL = {
   id: string;
@@ -62,32 +63,36 @@ type INDIVIDUAL_POST_PROPS = {
 
 export const fetchIndividuals = () =>
   axios
-    .get(individualsIndex)
+    .get(individualsIndex, headers)
     .then((res: INDIVIDUALS_RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));
 
 export const fetchIndividual = (individualId: string) =>
   axios
-    .get(individualShow(individualId))
+    .get(individualShow(individualId), headers)
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));
 
 export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
   axios
-    .post(individualCreate, {
-      id: params.individualId,
-      date_of_birth: params.dateOfBirth,
-      sex: params.sex,
-      category: params.category,
-      breed_type: params.breedType,
-      mother_id: params.motherId,
-      father_name: params.fatherName,
-      grandfather_name: params.grandfatherName,
-      date_of_introduction: params.dateOfIntroduction,
-      block_id: params.blockId,
-    })
+    .post(
+      individualCreate,
+      {
+        id: params.individualId,
+        date_of_birth: params.dateOfBirth,
+        sex: params.sex,
+        category: params.category,
+        breed_type: params.breedType,
+        mother_id: params.motherId,
+        father_name: params.fatherName,
+        grandfather_name: params.grandfatherName,
+        date_of_introduction: params.dateOfIntroduction,
+        block_id: params.blockId,
+      },
+      headers,
+    )
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     .catch((e) => {
       throw e;

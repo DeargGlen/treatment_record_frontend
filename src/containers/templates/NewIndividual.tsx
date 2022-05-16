@@ -169,6 +169,7 @@ const NewIndividual: FC = () => {
           <Row>
             個体識別番号(必須)：
             <TextField
+              required
               value={values.individualId}
               onChange={handleChange}
               name="individualId"
@@ -183,6 +184,7 @@ const NewIndividual: FC = () => {
             生年月日(必須)：
             <TextField
               type="date"
+              required
               value={values.dateOfBirth}
               onChange={handleChange}
               name="dateOfBirth"
@@ -196,6 +198,7 @@ const NewIndividual: FC = () => {
             <div>
               <TextField
                 select
+                required
                 label="性別"
                 value={values.sex}
                 onChange={handleChange}
@@ -223,6 +226,7 @@ const NewIndividual: FC = () => {
             <div>
               <TextField
                 select
+                required
                 label="種別"
                 value={values.category}
                 onChange={handleChange}
@@ -249,6 +253,7 @@ const NewIndividual: FC = () => {
             <div>
               <TextField
                 select
+                required
                 label="品種"
                 value={values.breedType}
                 onChange={handleChange}

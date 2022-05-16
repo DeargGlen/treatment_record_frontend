@@ -26,7 +26,7 @@ type DATA = {
 
 const fabStyle = {
   position: 'fixed',
-  bottom: 40,
+  bottom: 72,
   right: 40,
 };
 

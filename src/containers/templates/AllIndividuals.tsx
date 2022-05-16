@@ -9,7 +9,14 @@ import {
   INDIVIDUALS_DATA,
   INDIVIDUAL,
 } from 'apis/individuals';
-import { Fab, Tooltip, Typography, Container, InputBase } from '@mui/material';
+import {
+  Fab,
+  Tooltip,
+  Typography,
+  Container,
+  InputBase,
+  Box,
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import IndividualsList from 'components/organisms/IndividualsList';
 import { Link as RouterLink } from 'react-router-dom';
@@ -28,12 +35,6 @@ import {
   individualsActionTypes,
   individualsReducer,
 } from 'reducers/individuals';
-
-const fabStyle = {
-  position: 'fixed',
-  bottom: 40,
-  right: 40,
-};
 
 const SearchBar = styled.div`
   margin-left: auto;
@@ -92,7 +93,7 @@ const AllIndividuals: FC = () => {
             onChange={handleChange}
             margin="none"
             sx={{ width: 90 }}
-            inputProps={{ maxlength: 4 }}
+            inputProps={{ maxLength: 4 }}
           />
         </SearchBar>
         {state.fetchState === REQUEST_STATE.LOADING ? (
@@ -103,17 +104,24 @@ const AllIndividuals: FC = () => {
           <IndividualsList individuals={selectedList} />
         )}
       </Container>
-      <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
-        <Fab
-          sx={fabStyle}
-          color="primary"
-          aria-label="add"
-          component={RouterLink}
-          to="/individuals/new"
-        >
-          <AddIcon />
-        </Fab>
-      </Tooltip>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 72,
+          right: 40,
+        }}
+      >
+        <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
+          <Fab
+            color="primary"
+            aria-label="add"
+            component={RouterLink}
+            to="/individuals/new"
+          >
+            <AddIcon />
+          </Fab>
+        </Tooltip>
+      </Box>
     </>
   );
 };

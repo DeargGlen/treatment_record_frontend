@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { treatmentsIndex } from 'urls/index';
+import { headers } from './client';
 
 export type TREATMENT = {
   id: number;
@@ -24,7 +25,7 @@ type RES = {
 
 export const fetchTreatments = () =>
   axios
-    .get(treatmentsIndex)
+    .get(treatmentsIndex, headers)
     .then((res: RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));

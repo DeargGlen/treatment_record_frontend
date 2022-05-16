@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { FC } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+import { FC, useContext } from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import {
   AppBar,
@@ -13,8 +13,10 @@ import {
   IconButton,
   Drawer,
 } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Cookies from 'js-cookie';
+import { signOut } from 'apis/users';
+import { AuthContext } from 'App';
 import Sidebar from './Sidebar';
 
 const myTheme = createTheme({
@@ -48,21 +50,59 @@ const myTheme = createTheme({
 
 const drawerWidth = 161;
 
-interface Props {
-  // eslint-disable-next-line react/require-default-props
-  window?: () => Window;
-}
+const Header: FC = () => {
+  const { loading, isSignedIn, setIsSignedIn } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-const HeaderAlt: FC<Props> = (props) => {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const handleSignOut = () => {
+    signOut()
+      .then((res) => {
+        if (res.data?.success === true) {
+          Cookies.remove('_access_token');
+          Cookies.remove('_client');
+          Cookies.remove('_uid');
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+          setIsSignedIn(false);
+          navigate('/signin');
+
+          console.log('Succeeded in sign out');
+        } else {
+          console.log('Failed in sign out');
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
-  const container =
-    window !== undefined ? () => window().document.body : undefined;
+  const back = () => {
+    navigate(-1);
+  };
+
+  const AuthButtons = () => {
+    if (!loading) {
+      if (isSignedIn) {
+        return (
+          <Button color="secondary" onClick={handleSignOut}>
+            ログアウト
+          </Button>
+        );
+      }
+
+      return (
+        <>
+          <Button component={RouterLink} to="/signin" color="secondary">
+            ログイン
+          </Button>
+          <Button component={RouterLink} to="/signup" color="secondary">
+            ユーザー登録
+          </Button>
+        </>
+      );
+    }
+
+    return <></>;
+  };
 
   return (
     <>
@@ -80,48 +120,21 @@ const HeaderAlt: FC<Props> = (props) => {
                 size="large"
                 edge="start"
                 color="secondary"
-                aria-label="open drawer"
-                onClick={handleDrawerToggle}
-                sx={{ mr: 2, display: { sm: 'none' } }}
+                aria-label="backarrow"
+                onClick={back}
+                sx={{ mr: 2, display: { xs: 'none', sm: 'block' } }}
               >
-                <MenuIcon />
+                <ArrowBackIcon />
               </IconButton>
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                 <Link component={RouterLink} to="/individuals">
                   牛の治療管理
                 </Link>
               </Typography>
-              <Button color="secondary" component={RouterLink} to="/login">
-                Login
-              </Button>
+              <AuthButtons />
             </Toolbar>
           </AppBar>
-          <Box
-            component="nav"
-            sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-            aria-label="sidebar"
-          >
-            <Drawer
-              container={container}
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-              sx={{
-                display: { xs: 'block', sm: 'none' },
-                '& .MuiDrawer-paper': {
-                  boxSizing: 'border-box',
-                  width: drawerWidth,
-                },
-              }}
-            >
-              <Toolbar />
 
-              <Sidebar />
-            </Drawer>
-          </Box>
           <Drawer
             variant="permanent"
             sx={{
@@ -149,4 +162,4 @@ const HeaderAlt: FC<Props> = (props) => {
     </>
   );
 };
-export default HeaderAlt;
+export default Header;
