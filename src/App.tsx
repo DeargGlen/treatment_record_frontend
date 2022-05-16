@@ -61,6 +61,14 @@ const App: FC = () => {
     });
   }, [setCurrentUser]);
 
+  const Private = ({ children }: { children: React.ReactElement }) => {
+    if (isSignedIn) {
+      return children;
+    }
+
+    return <Navigate to="/signin" />;
+  };
+
   return (
     <>
       <Router>
@@ -78,13 +86,28 @@ const App: FC = () => {
           <Routes>
             <Route
               path="/individuals/*"
-              element={isSignedIn ? <Individuals /> : <SignIn />}
+              element={
+                <Private>
+                  <Individuals />
+                </Private>
+              }
             />
             <Route
               path="/treatments/*"
-              element={isSignedIn ? <Treatments /> : <SignIn />}
+              element={
+                <Private>
+                  <Treatments />
+                </Private>
+              }
             />
-            <Route path="/users/*" element={<Users />} />
+            <Route
+              path="/users/*"
+              element={
+                <Private>
+                  <Users />
+                </Private>
+              }
+            />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
           </Routes>
