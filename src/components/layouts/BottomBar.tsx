@@ -4,7 +4,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Box, Paper, ThemeProvider, IconButton } from '@mui/material';
+import { Box, Paper, ThemeProvider } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import theme from 'components/theme';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -78,19 +78,16 @@ const BottomBar: FC = () => {
             }}
             elevation={3}
           >
-            <IconButton
-              color="default"
-              aria-label="backarrow"
+            <BottomNavigationAction
+              className={classes.button}
+              icon={<ArrowBackIcon />}
               onClick={back}
-              sx={{ mt: 2, mb: 2, height: 40 }}
-            >
-              <ArrowBackIcon />
-            </IconButton>
+              sx={{ mb: 2 }}
+            />
             <BottomNavigation
               showLabels
               value={select()}
               className={classes.root}
-              sx={{ mt: 1, mb: 1 }}
             >
               <BottomNavigationAction
                 label="個体管理"
@@ -98,7 +95,7 @@ const BottomBar: FC = () => {
                 icon={<HomeIcon />}
                 component={RouterLink}
                 to="/individuals"
-                sx={{ width: 180 }}
+                sx={{ width: 105 }}
               />
               <BottomNavigationAction
                 label="治療管理"
@@ -106,15 +103,15 @@ const BottomBar: FC = () => {
                 icon={<CreateIcon />}
                 component={RouterLink}
                 to="/treatments"
-                sx={{ width: 180 }}
+                sx={{ width: 105 }}
               />
               <BottomNavigationAction
-                label="ユーザー設定"
+                label="設定"
                 className={classes.button}
                 icon={<AccountCircle />}
                 component={RouterLink}
                 to="/users"
-                sx={{ width: 180 }}
+                sx={{ width: 105 }}
               />
             </BottomNavigation>
           </Paper>

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
-import { headers } from './client';
+import Cookies from 'js-cookie';
 
 export type INDIVIDUAL = {
   id: string;
@@ -63,14 +63,28 @@ type INDIVIDUAL_POST_PROPS = {
 
 export const fetchIndividuals = () =>
   axios
-    .get(individualsIndex, headers)
+    .get(individualsIndex, {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
     .then((res: INDIVIDUALS_RES) => res.data)
     // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch((e) => {
+      console.error(e);
+    });
 
 export const fetchIndividual = (individualId: string) =>
   axios
-    .get(individualShow(individualId), headers)
+    .get(individualShow(individualId), {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));
@@ -91,7 +105,13 @@ export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
         date_of_introduction: params.dateOfIntroduction,
         block_id: params.blockId,
       },
-      headers,
+      {
+        headers: {
+          'access-token': Cookies.get('_access_token') || '',
+          client: Cookies.get('_client') || '',
+          uid: Cookies.get('_uid') || '',
+        },
+      },
     )
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     .catch((e) => {

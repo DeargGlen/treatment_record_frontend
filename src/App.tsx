@@ -11,6 +11,9 @@ import {
 import { User, currentUserRes } from 'interfaces/index';
 import { getCurrentUser } from 'apis/users';
 import Users from 'containers/UserSettings';
+import { styled } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material';
+import theme from 'components/theme';
 
 // components
 import Individuals from 'containers/Individuals';
@@ -32,9 +35,39 @@ export const AuthContext = createContext(
 );
 
 const App: FC = () => {
+  const sidebarWidth = 160;
+  const headerNavigationHeightSmall = 40;
+  const headerNavigationHeightBig = 56;
+  const bottomNavigationHeight = 56;
+
+  const ResponsiveDrawer = styled('div')(() => ({
+    flexGrow: 1,
+    paddingTop: `calc(5px + ${headerNavigationHeightSmall}px)`,
+    paddingBottom: `calc(10px + ${bottomNavigationHeight}px)`,
+    paddingLeft: 0,
+    paddingRight: 0,
+    [theme.breakpoints.up('sm')]: {
+      paddingTop: `calc(10px + ${headerNavigationHeightBig}px)`,
+      paddingBottom: 10,
+      paddingLeft: `calc(20px + ${sidebarWidth}px)`,
+      paddingRight: 20,
+    },
+    [theme.breakpoints.up('md')]: {
+      paddingBottom: 10,
+      paddingLeft: `calc(80px + ${sidebarWidth}px)`,
+      paddingRight: 80,
+    },
+    [theme.breakpoints.up('lg')]: {
+      paddingBottom: 10,
+      paddingLeft: `calc(100px + ${sidebarWidth}px)`,
+      paddingRight: 100,
+    },
+  }));
+
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | undefined>();
+  const [headers, setHeaders] = useState<Headers | undefined>();
 
   const handleGetCurrentUser = async () => {
     try {
@@ -62,11 +95,15 @@ const App: FC = () => {
   }, [setCurrentUser]);
 
   const Private = ({ children }: { children: React.ReactElement }) => {
-    if (isSignedIn) {
-      return children;
+    if (!loading) {
+      if (isSignedIn) {
+        return children;
+      }
+
+      return <Navigate to="/signin" />;
     }
 
-    return <Navigate to="/signin" />;
+    return <></>;
   };
 
   return (
@@ -83,34 +120,39 @@ const App: FC = () => {
           }}
         >
           <Header />
-          <Routes>
-            <Route
-              path="/individuals/*"
-              element={
-                <Private>
-                  <Individuals />
-                </Private>
-              }
-            />
-            <Route
-              path="/treatments/*"
-              element={
-                <Private>
-                  <Treatments />
-                </Private>
-              }
-            />
-            <Route
-              path="/users/*"
-              element={
-                <Private>
-                  <Users />
-                </Private>
-              }
-            />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Routes>
+          <ThemeProvider theme={theme}>
+            <ResponsiveDrawer>
+              <Routes>
+                <Route
+                  path="/individuals/*"
+                  element={
+                    <Private>
+                      <Individuals />
+                    </Private>
+                  }
+                />
+                <Route
+                  path="/treatments/*"
+                  element={
+                    <Private>
+                      <Treatments />
+                    </Private>
+                  }
+                />
+                <Route
+                  path="/users/*"
+                  element={
+                    <Private>
+                      <Users />
+                    </Private>
+                  }
+                />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/signin" element={<SignIn />} />
+                <Route path="/" element={<Navigate to="/signin" />} />
+              </Routes>
+            </ResponsiveDrawer>
+          </ThemeProvider>
           <BottomBar />
         </AuthContext.Provider>
       </Router>

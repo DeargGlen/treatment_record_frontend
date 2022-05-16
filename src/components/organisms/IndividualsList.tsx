@@ -50,7 +50,7 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
             </Row>
             <Row>
               <DateOfBirth>
-                生年月日：{handleToDate(individual.date_of_birth)}
+                出生日：{handleToDate(individual.date_of_birth)}
               </DateOfBirth>
               <Age>月齢：{individual.age}</Age>
               <BreedType>

@@ -4,24 +4,19 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/unbound-method */
 import { FC, useEffect, useReducer, useState } from 'react';
+import * as React from 'react';
 import {
   fetchIndividuals,
   INDIVIDUALS_DATA,
   INDIVIDUAL,
 } from 'apis/individuals';
-import {
-  Fab,
-  Tooltip,
-  Typography,
-  Container,
-  InputBase,
-  Box,
-} from '@mui/material';
+import { Fab, Tooltip, Typography, Container, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import IndividualsList from 'components/organisms/IndividualsList';
 import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import styled from 'styled-components';
+import NumberFormat from 'react-number-format';
 
 // components
 import IndividualSkelton from 'components/molecules/IndividualsSkelton';
@@ -39,9 +34,45 @@ import {
 const SearchBar = styled.div`
   margin-left: auto;
   margin-right: 0;
-  width: 120px;
+  width: 95px;
   background-color: #f5f5f5;
 `;
+
+const fabStyle = {
+  position: 'fixed',
+  bottom: 70,
+  right: 20,
+};
+
+interface CustomProps {
+  onChange: (event: { target: { value: string } }) => void;
+  name: string;
+}
+
+const NumberFormatCustom = React.forwardRef<NumberFormat<number>, CustomProps>(
+  (props, ref) => {
+    const { onChange, ...other } = props;
+
+    return (
+      <NumberFormat
+        // eslint-disable-next-line react/jsx-props-no-spreading
+        {...other}
+        getInputRef={ref}
+        onValueChange={(values) => {
+          onChange({
+            target: {
+              value: values.value,
+            },
+          });
+        }}
+        isNumericString
+        format="####"
+        placeholder="耳標番号"
+        mask="*"
+      />
+    );
+  },
+);
 
 const AllIndividuals: FC = () => {
   const [state, dispatch] = useReducer(individualsReducer, initialState);
@@ -63,7 +94,9 @@ const AllIndividuals: FC = () => {
     setIndividualsList(state.individualsList!);
   }, [state.individualsList, inputValue]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
     setInputValue(e.target.value);
   };
 
@@ -86,14 +119,14 @@ const AllIndividuals: FC = () => {
     <>
       <Container maxWidth="sm">
         <SearchBar>
-          <SearchIcon />
-          <InputBase
-            placeholder="耳標番号"
+          <SearchIcon sx={{ mt: 0.5, mb: 1 }} />
+          <TextField
             value={inputValue}
             onChange={handleChange}
             margin="none"
-            sx={{ width: 90 }}
-            inputProps={{ maxLength: 4 }}
+            sx={{ width: 65 }}
+            variant="standard"
+            InputProps={{ inputComponent: NumberFormatCustom as never }}
           />
         </SearchBar>
         {state.fetchState === REQUEST_STATE.LOADING ? (
@@ -104,24 +137,18 @@ const AllIndividuals: FC = () => {
           <IndividualsList individuals={selectedList} />
         )}
       </Container>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 72,
-          right: 40,
-        }}
-      >
-        <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
-          <Fab
-            color="primary"
-            aria-label="add"
-            component={RouterLink}
-            to="/individuals/new"
-          >
-            <AddIcon />
-          </Fab>
-        </Tooltip>
-      </Box>
+
+      <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
+        <Fab
+          color="primary"
+          aria-label="add"
+          component={RouterLink}
+          to="/individuals/new"
+          sx={fabStyle}
+        >
+          <AddIcon />
+        </Fab>
+      </Tooltip>
     </>
   );
 };

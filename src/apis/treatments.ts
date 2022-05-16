@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { treatmentsIndex } from 'urls/index';
-import { headers } from './client';
+import Cookies from 'js-cookie';
 
 export type TREATMENT = {
   id: number;
@@ -25,7 +25,13 @@ type RES = {
 
 export const fetchTreatments = () =>
   axios
-    .get(treatmentsIndex, headers)
+    .get(treatmentsIndex, {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
     .then((res: RES) => res.data)
     // eslint-disable-next-line no-console
     .catch((e) => console.error(e));

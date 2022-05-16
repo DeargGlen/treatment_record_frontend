@@ -24,9 +24,7 @@ const useStyles = makeStyles(() => ({
   header: {
     textAlign: 'center',
   },
-  card: {
-    maxWidth: 400,
-  },
+  card: {},
 }));
 
 // サインアップ用ページ
@@ -73,7 +71,7 @@ const SignUp: FC = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
+      <Container maxWidth="xs">
         <form noValidate autoComplete="off">
           <Card className={classes.card}>
             <CardHeader className={classes.header} title="ユーザー登録" />

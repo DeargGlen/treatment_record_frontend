@@ -26,8 +26,8 @@ type DATA = {
 
 const fabStyle = {
   position: 'fixed',
-  bottom: 72,
-  right: 40,
+  bottom: 70,
+  right: 20,
 };
 
 const AllTreatments: FC = () => {

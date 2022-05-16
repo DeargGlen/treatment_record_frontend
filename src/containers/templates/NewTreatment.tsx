@@ -272,6 +272,17 @@ const NewTreatment: FC = () => {
           </Row>
 
           <Row>
+            導入日：
+            <TextField
+              type="date"
+              value={values.dateOfIntroduction}
+              onChange={handleChange}
+              name="dateOfIntroduction"
+              variant="standard"
+              sx={{ width: 120 }}
+            />
+          </Row>
+          <Row>
             母牛の個体識別番号：
             <TextField
               value={values.motherId}
@@ -284,18 +295,14 @@ const NewTreatment: FC = () => {
               sx={{ width: 120 }}
             />
           </Row>
-          <Row>
-            導入日：
-            <TextField
-              type="date"
-              value={values.dateOfIntroduction}
-              onChange={handleChange}
-              name="dateOfIntroduction"
-              variant="standard"
-              sx={{ width: 120 }}
-            />
-          </Row>
-          <Button variant="contained" color="primary" onClick={onSubmit}>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            onClick={onSubmit}
+            disabled
+          >
             登録
           </Button>
         </Box>

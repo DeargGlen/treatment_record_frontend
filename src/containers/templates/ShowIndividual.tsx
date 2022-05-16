@@ -33,6 +33,7 @@ const ShowIndividual: FC = () => {
             individual: data,
           },
         });
+        console.log(data);
       })
       .catch(() => 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps

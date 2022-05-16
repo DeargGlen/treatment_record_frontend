@@ -26,11 +26,11 @@ const sexList = [
   },
   {
     value: '1',
-    label: '雄(オス)',
+    label: 'オス',
   },
   {
     value: '2',
-    label: '雌(メス)',
+    label: 'メス',
   },
 ];
 
@@ -103,6 +103,11 @@ interface State {
   blockId: number;
 }
 
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
 const NewIndividual: FC = () => {
   const [values, setValues] = React.useState<State>({
     individualId: '',
@@ -111,6 +116,8 @@ const NewIndividual: FC = () => {
     category: '',
     breedType: '',
     dateOfIntroduction: '',
+    fatherName: '',
+    grandfatherName: '',
     blockId: 1,
   });
 
@@ -149,6 +156,8 @@ const NewIndividual: FC = () => {
             category: '',
             breedType: '',
             dateOfIntroduction: '',
+            fatherName: '',
+            grandfatherName: '',
           });
         } else {
           throw e;
@@ -277,6 +286,17 @@ const NewIndividual: FC = () => {
           </Row>
 
           <Row>
+            導入日：
+            <TextField
+              type="date"
+              value={values.dateOfIntroduction}
+              onChange={handleChange}
+              name="dateOfIntroduction"
+              variant="standard"
+              sx={{ width: 120 }}
+            />
+          </Row>
+          <Row>
             母牛の個体識別番号：
             <TextField
               value={values.motherId}
@@ -290,19 +310,45 @@ const NewIndividual: FC = () => {
             />
           </Row>
           <Row>
-            導入日：
+            父牛の名前：
             <TextField
-              type="date"
-              value={values.dateOfIntroduction}
+              value={values.fatherName}
               onChange={handleChange}
-              name="dateOfIntroduction"
+              name="fatherName"
               variant="standard"
               sx={{ width: 120 }}
             />
           </Row>
-          <Button variant="contained" color="primary" onClick={onSubmit}>
-            登録
-          </Button>
+          <Row>
+            父の父の名前：
+            <TextField
+              value={values.grandfatherName}
+              onChange={handleChange}
+              name="grandfatherName"
+              variant="standard"
+              sx={{ width: 120 }}
+            />
+          </Row>
+          <ButtonDiv>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+              disabled={
+                !!(
+                  !values.individualId ||
+                  !values.dateOfBirth ||
+                  !values.sex ||
+                  !values.category ||
+                  !values.breedType
+                )
+              }
+              sx={{ width: 120 }}
+            >
+              登録
+            </Button>
+          </ButtonDiv>
         </Box>
       </Container>
     </>

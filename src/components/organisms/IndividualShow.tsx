@@ -38,7 +38,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       </Row>
       <Divider />
       <Row>
-        <p>生年月日：</p>
+        <p>出生日：</p>
         <p>{handleToDate(individual.date_of_birth!)}</p>
       </Row>
       <Divider />
@@ -80,17 +80,29 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Divider />
       <Row>
         <p>母牛の個体識別番号：</p>
-        <p>{individual.mother_id ?? '-'}</p>
+        <div>
+          {individual.mother_id ? (
+            <p>
+              {individual.mother_id?.slice(0, 5)}.
+              <span style={{ fontWeight: 'bold' }}>
+                {individual.mother_id?.slice(5, 9)}
+              </span>
+              .{individual.mother_id?.slice(9, 10)}
+            </p>
+          ) : (
+            '-'
+          )}
+        </div>
       </Row>
       <Divider />
       <Row>
-        <p>父の名前：</p>
-        <p>{individual.father_name ?? '-'}</p>
+        <p>父牛：</p>
+        <p>{individual.father_name ? individual.father_name : '-'}</p>
       </Row>
       <Divider />
       <Row>
-        <p>父の父の名前：</p>
-        <p>{individual.grandfather_name ?? '-'}</p>
+        <p>母の父牛：</p>
+        <p>{individual.grandfather_name ? individual.grandfather_name : '-'}</p>
       </Row>
       <Divider />
       <Row>

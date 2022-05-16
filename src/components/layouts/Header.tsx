@@ -41,9 +41,9 @@ const myTheme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 890,
-      md: 900,
-      lg: 1200,
+      sm: 700,
+      md: 850,
+      lg: 1000,
       xl: 1536,
     },
   },
@@ -110,11 +110,9 @@ const Header: FC = () => {
           <AppBar
             position="fixed"
             color="primary"
-            sx={{
-              zIndex: (theme) => theme.zIndex.drawer + 1,
-            }}
+            sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
           >
-            <Toolbar>
+            <Toolbar sx={{ minHeight: 40 }}>
               <IconButton
                 size="large"
                 edge="start"
@@ -146,7 +144,6 @@ const Header: FC = () => {
             open
           >
             <Toolbar />
-
             <Box
               component="nav"
               sx={{ overflow: 'auto', height: '100%' }}
@@ -157,7 +154,6 @@ const Header: FC = () => {
           </Drawer>
         </ThemeProvider>
       </Box>
-      <Toolbar />
     </>
   );
 };
