@@ -45,12 +45,12 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/users')}
+              selected={location.pathname.includes('/settings')}
               component={RouterLink}
-              to="/users"
+              to="/settings"
             >
               <AccoutntCircle />
-              <ListItemText primary="ユーザー設定" />
+              <ListItemText primary="設定" />
             </ListItemButton>
           </ListItem>
         </ThemeProvider>

@@ -1,21 +1,21 @@
-import axios from 'axios';
 import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 import Cookies from 'js-cookie';
+import client from './client';
 
 export type INDIVIDUAL = {
   id: string;
-  date_of_birth: string;
+  dateOfBirth: string;
   age: number;
   sex: number;
   category: number;
-  breed_type: number;
-  mother_id: string;
-  father_name: string;
-  grandfather_name: string;
-  date_of_introduction: string;
+  breedType: number;
+  motherId?: string;
+  fatherName?: string;
+  grandfatherName?: string;
+  dateOfIntroduction: string;
   name: string;
-  No: string;
+  no: string;
   created_at: string;
   updated_at: string;
 };
@@ -29,17 +29,17 @@ type INDIVIDUALS_RES = {
 
 export type INDIVIDUAL_SHOW_DATA = {
   id: string | null;
-  date_of_birth: string | null;
+  dateOfBirth: string | null;
   age: number | null;
-  sex: number | null;
-  category: number | null;
-  breed_type: number | null;
-  mother_id?: string | null;
-  father_name?: string | null;
-  grandfather_name?: string | null;
-  date_of_introduction: string | null;
+  sex: number;
+  category: number;
+  breedType: number;
+  motherId?: string | null;
+  fatherName?: string | null;
+  grandfatherName?: string | null;
+  dateOfIntroduction: string | null;
   name: string | null;
-  No: string | null;
+  no: string | null;
   created_at: string | null;
   updated_at: string | null;
   treatments: TREATMENT[];
@@ -62,7 +62,7 @@ type INDIVIDUAL_POST_PROPS = {
 };
 
 export const fetchIndividuals = () =>
-  axios
+  client
     .get(individualsIndex, {
       headers: {
         'access-token': Cookies.get('_access_token') || '',
@@ -71,13 +71,12 @@ export const fetchIndividuals = () =>
       },
     })
     .then((res: INDIVIDUALS_RES) => res.data)
-    // eslint-disable-next-line no-console
     .catch((e) => {
       console.error(e);
     });
 
 export const fetchIndividual = (individualId: string) =>
-  axios
+  client
     .get(individualShow(individualId), {
       headers: {
         'access-token': Cookies.get('_access_token') || '',
@@ -86,11 +85,10 @@ export const fetchIndividual = (individualId: string) =>
       },
     })
     .then((res: INDIVIDUAL_SHOW_RES) => res.data)
-    // eslint-disable-next-line no-console
     .catch((e) => console.error(e));
 
 export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
-  axios
+  client
     .post(
       individualCreate,
       {

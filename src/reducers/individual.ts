@@ -3,27 +3,30 @@ import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 
 type IndividualState = {
   fetchState: string;
-  individualList: void | INDIVIDUAL_SHOW_DATA;
+  individualList: INDIVIDUAL_SHOW_DATA;
 };
+
+const emptyIndividualList: INDIVIDUAL_SHOW_DATA = {
+  id: null,
+  dateOfBirth: null,
+  age: null,
+  sex: 3,
+  category: 4,
+  breedType: 2,
+  motherId: null,
+  fatherName: null,
+  grandfatherName: null,
+  dateOfIntroduction: null,
+  name: null,
+  no: null,
+  created_at: null,
+  updated_at: null,
+  treatments: [],
+};
+
 export const initialState: IndividualState = {
   fetchState: REQUEST_STATE.INITIAL,
-  individualList: {
-    id: null,
-    date_of_birth: null,
-    age: null,
-    sex: null,
-    category: null,
-    breed_type: null,
-    mother_id: null,
-    father_name: null,
-    grandfather_name: null,
-    date_of_introduction: null,
-    name: null,
-    No: null,
-    created_at: null,
-    updated_at: null,
-    treatments: [],
-  },
+  individualList: emptyIndividualList,
 };
 
 type ValueOf<T> = T[keyof T];
@@ -50,8 +53,7 @@ export const individualReducer = (
     case individualActionTypes.FETCH_SUCCESS:
       return {
         fetchState: REQUEST_STATE.OK,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        individualList: action.payload!.individual,
+        individualList: action.payload?.individual ?? emptyIndividualList,
       };
     default:
       throw new Error();

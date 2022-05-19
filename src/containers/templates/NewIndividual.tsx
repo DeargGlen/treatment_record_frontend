@@ -186,7 +186,7 @@ const NewIndividual: FC = () => {
                 inputComponent: IndividualIdInput as never,
               }}
               variant="standard"
-              sx={{ width: 120, textAlign: 'right' }}
+              sx={{ width: 100, textAlign: 'right' }}
             />
           </Row>
           <Row>
@@ -198,7 +198,7 @@ const NewIndividual: FC = () => {
               onChange={handleChange}
               name="dateOfBirth"
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 110 }}
             />
           </Row>
 
@@ -213,7 +213,7 @@ const NewIndividual: FC = () => {
                 onChange={handleChange}
                 variant="standard"
                 name="sex"
-                sx={{ width: 120 }}
+                sx={{ width: 60 }}
                 SelectProps={{
                   native: true,
                 }}
@@ -241,7 +241,7 @@ const NewIndividual: FC = () => {
                 onChange={handleChange}
                 variant="standard"
                 name="category"
-                sx={{ width: 120 }}
+                sx={{ width: 60 }}
                 SelectProps={{
                   native: true,
                 }}
@@ -268,7 +268,7 @@ const NewIndividual: FC = () => {
                 onChange={handleChange}
                 variant="standard"
                 name="breedType"
-                sx={{ width: 120 }}
+                sx={{ width: 90 }}
                 SelectProps={{
                   native: true,
                 }}
@@ -293,7 +293,7 @@ const NewIndividual: FC = () => {
               onChange={handleChange}
               name="dateOfIntroduction"
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 110 }}
             />
           </Row>
           <Row>
@@ -306,7 +306,7 @@ const NewIndividual: FC = () => {
                 inputComponent: IndividualIdInput as never,
               }}
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 100 }}
             />
           </Row>
           <Row>

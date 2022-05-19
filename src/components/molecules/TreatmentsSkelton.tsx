@@ -4,15 +4,14 @@ import { TreatmentContentWrapper, MainWrapper } from 'Style';
 
 const TreamentsSkelton: FC = () => (
   <>
-    {[...Array(5).keys()].map((value) => (
+    {[...Array(6).keys()].map((value) => (
       <TreatmentContentWrapper key={value}>
         <MainWrapper>
           <Skeleton width="20%" style={{ marginBottom: 8 }} />
-          <Skeleton width="80%" style={{ marginBottom: 4 }} />
-          <Skeleton width="80%" style={{ marginBottom: 4 }} />
-          <Skeleton width="80%" style={{ marginBottom: 4 }} />
-          <Skeleton width="80%" style={{ marginBottom: 4 }} />
-          <Skeleton width="80%" />
+          <Skeleton width="100%" style={{ marginBottom: 4 }} />
+          <Skeleton width="100%" style={{ marginBottom: 4 }} />
+          <Skeleton width="100%" style={{ marginBottom: 4 }} />
+          <Skeleton width="100%" />
         </MainWrapper>
       </TreatmentContentWrapper>
     ))}

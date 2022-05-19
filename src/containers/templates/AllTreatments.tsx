@@ -24,12 +24,6 @@ type DATA = {
   treatments: TREATMENT[];
 };
 
-const fabStyle = {
-  position: 'fixed',
-  bottom: 70,
-  right: 20,
-};
-
 const AllTreatments: FC = () => {
   const [state, dispatch] = useReducer(treatmentsReducer, initialState);
 
@@ -61,7 +55,11 @@ const AllTreatments: FC = () => {
       </Container>
       <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
         <Fab
-          sx={fabStyle}
+          sx={{
+            position: 'fixed',
+            bottom: 70,
+            right: 20,
+          }}
           color="primary"
           aria-label="add"
           component={RouterLink}

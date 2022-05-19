@@ -50,11 +50,11 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
             </Row>
             <Row>
               <DateOfBirth>
-                出生日：{handleToDate(individual.date_of_birth)}
+                出生日：{handleToDate(individual.dateOfBirth)}
               </DateOfBirth>
               <Age>月齢：{individual.age}</Age>
               <BreedType>
-                品種：{['黒毛和種', 'F1'][individual.breed_type]}
+                品種：{['黒毛和種', 'F1'][individual.breedType]}
               </BreedType>
             </Row>
             <Row>
@@ -64,7 +64,7 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                 {['肥育', '繁殖', '子牛', '育成'][individual.category]}
               </Category>
               <Location>
-                場所：{individual.name} {individual.No}{' '}
+                場所：{individual.name} {individual.no}{' '}
               </Location>
             </Row>
           </MainWrapper>

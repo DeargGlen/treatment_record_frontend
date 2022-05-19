@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import { User, currentUserRes } from 'interfaces/index';
 import { getCurrentUser } from 'apis/users';
-import Users from 'containers/UserSettings';
+import Settings from 'containers/Settings';
 import { styled } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material';
 import theme from 'components/theme';
@@ -76,10 +76,6 @@ const App: FC = () => {
       if (res?.data?.isLogin === true) {
         setIsSignedIn(true);
         setCurrentUser(res?.data?.data);
-
-        console.log(res?.data.data);
-      } else {
-        console.log('No current user');
       }
     } catch (err) {
       console.log(err);
@@ -140,10 +136,10 @@ const App: FC = () => {
                   }
                 />
                 <Route
-                  path="/users/*"
+                  path="/settings/*"
                   element={
                     <Private>
-                      <Users />
+                      <Settings />
                     </Private>
                   }
                 />

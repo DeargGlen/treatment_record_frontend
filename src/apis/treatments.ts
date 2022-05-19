@@ -1,19 +1,18 @@
-import axios from 'axios';
 import { treatmentsIndex, treatmentCreate } from 'urls/index';
 import Cookies from 'js-cookie';
+import client from './client';
 
 export type TREATMENT = {
   id: number;
-  individual_id: string;
+  individualId: string;
   datetime: string;
-  body_temperature: number;
+  bodyTemperature: number;
   symptom: string;
   content: string;
-  gotDosage: boolean;
-  user_id: number;
-  user_name: string;
-  created_at?: Date;
-  updated_at?: Date;
+  userId: number;
+  userName: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 };
 
 export type TREATMENT_POST_PROPS = {
@@ -22,7 +21,6 @@ export type TREATMENT_POST_PROPS = {
   bodyTemperature: number;
   symptom: string;
   content: string;
-  gotDosage: boolean;
   userId: number;
   userName: string;
   created_at?: Date;
@@ -38,7 +36,7 @@ type TREATMENT_RES = {
 };
 
 export const fetchTreatments = () =>
-  axios
+  client
     .get(treatmentsIndex, {
       headers: {
         'access-token': Cookies.get('_access_token') || '',
@@ -51,7 +49,7 @@ export const fetchTreatments = () =>
     .catch((e) => console.error(e));
 
 export const postTreatment = (params: TREATMENT_POST_PROPS) =>
-  axios
+  client
     .post(
       treatmentCreate,
       {
@@ -60,7 +58,6 @@ export const postTreatment = (params: TREATMENT_POST_PROPS) =>
         body_temperature: params.bodyTemperature,
         symptom: params.symptom,
         content: params.content,
-        gotDosage: params.gotDosage,
         user_id: params.userId,
         user_name: params.userName,
       },

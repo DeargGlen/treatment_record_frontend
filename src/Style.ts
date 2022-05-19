@@ -11,7 +11,7 @@ export const IndividualsContentsList = styled(ContentsList)`
 `;
 
 export const ContentWrapper = styled.div`
-  height: 120px;
+  height: 100px;
   display: block;
   padding: 15px 20px;
   overflow: hidden;
@@ -26,7 +26,7 @@ export const IndividualContentWrapper = styled.div`
 `;
 
 export const TreatmentContentWrapper = styled.div`
-  height: 160px;
+  height: 140px;
   padding: 10px 20px 0px 20px;
   overflow: auto;
   box-shadow: 0 2px 2px #c1ced7;

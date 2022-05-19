@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import * as React from 'react';
 import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { postTreatment } from 'apis/treatments';
 import { HTTP_STATUS_CODE } from 'states';
+import SelectIndividualDialog from 'components/molecules/SelectIndividualDialog';
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -17,6 +18,11 @@ interface CustomProps {
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
 `;
 
 const IndividualIdInput = React.forwardRef<NumberFormat<number>, CustomProps>(
@@ -65,8 +71,8 @@ const BodyTemperatureInput = React.forwardRef<
         });
       }}
       isNumericString
-      format="##.#"
-      placeholder="**.*"
+      format="##.#℃"
+      placeholder="**.*℃"
       mask="*"
     />
   );
@@ -78,7 +84,6 @@ interface TreatmentState {
   bodyTemperature: number | null;
   symptom: string;
   content: string;
-  gotDosage: boolean;
   userId: number | null;
   userName: string;
 }
@@ -90,10 +95,17 @@ const NewTreatment: FC = () => {
     bodyTemperature: null,
     symptom: '',
     content: '',
-    gotDosage: false,
     userId: null,
     userName: '',
   });
+
+  const initialSelectState = {
+    isOpenSelectDialog: false,
+  };
+
+  const [individualState, setIndividual] = useState(initialSelectState);
+  console.log(individualState);
+  console.log(setIndividual);
 
   const navigate = useNavigate();
 
@@ -110,10 +122,9 @@ const NewTreatment: FC = () => {
     postTreatment({
       individualId: values.individualId,
       datetime: values.datetime,
-      bodyTemperature: values.bodyTemperature ?? 0,
+      bodyTemperature: values.bodyTemperature ? values.bodyTemperature / 10 : 0,
       symptom: values.symptom,
       content: values.content,
-      gotDosage: values.gotDosage,
       userId: values.userId ?? 0,
       userName: values.userName,
     })
@@ -127,7 +138,6 @@ const NewTreatment: FC = () => {
             bodyTemperature: null,
             symptom: '',
             content: '',
-            gotDosage: false,
             userId: null,
             userName: '',
           });
@@ -147,6 +157,19 @@ const NewTreatment: FC = () => {
             },
           }}
         >
+          <ButtonDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                setIndividual({
+                  isOpenSelectDialog: true,
+                })
+              }
+            >
+              個体の選択
+            </Button>
+          </ButtonDiv>
           <Row>
             耳標番号(必須)：
             <TextField
@@ -157,18 +180,18 @@ const NewTreatment: FC = () => {
                 inputComponent: IndividualIdInput as never,
               }}
               variant="standard"
-              sx={{ width: 120, textAlign: 'right' }}
+              sx={{ width: 100, textAlign: 'right' }}
             />
           </Row>
           <Row>
-            日付(必須)：
+            日時(必須)：
             <TextField
-              type="date"
+              type="datetime-local"
               value={values.datetime}
               onChange={handleChange}
               name="datetime"
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 160 }}
             />
           </Row>
 
@@ -182,7 +205,7 @@ const NewTreatment: FC = () => {
                 inputComponent: BodyTemperatureInput as never,
               }}
               variant="standard"
-              sx={{ width: 120, textAlign: 'right' }}
+              sx={{ width: 55, textAlign: 'right' }}
             />
           </Row>
 
@@ -193,7 +216,9 @@ const NewTreatment: FC = () => {
               onChange={handleChange}
               name="symptom"
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 250 }}
+              multiline
+              maxRows={4}
             />
           </Row>
 
@@ -204,21 +229,36 @@ const NewTreatment: FC = () => {
               onChange={handleChange}
               name="content"
               variant="standard"
-              sx={{ width: 120 }}
+              sx={{ width: 250 }}
+              multiline
+              maxRows={4}
             />
           </Row>
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            onClick={onSubmit}
-            disabled
-          >
-            登録
-          </Button>
+          <ButtonDiv>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              onClick={onSubmit}
+              disabled={
+                !!(
+                  !values.individualId ||
+                  !values.bodyTemperature ||
+                  !values.datetime
+                )
+              }
+            >
+              登録
+            </Button>
+          </ButtonDiv>
         </Box>
       </Container>
+      {individualState.isOpenSelectDialog && (
+        <SelectIndividualDialog
+          isOpen={individualState.isOpenSelectDialog}
+          onClose={() => setIndividual({ isOpenSelectDialog: false })}
+        />
+      )}
     </>
   );
 };

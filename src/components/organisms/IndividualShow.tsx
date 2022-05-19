@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { FC } from 'react';
 import { TREATMENT } from 'apis/treatments';
 import theme from 'components/theme';
@@ -39,7 +38,9 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Divider />
       <Row>
         <p>出生日：</p>
-        <p>{handleToDate(individual.date_of_birth!)}</p>
+        <p>
+          {individual.dateOfBirth ? handleToDate(individual.dateOfBirth) : '-'}
+        </p>
       </Row>
       <Divider />
       <Row>
@@ -50,44 +51,44 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Row>
         <p>導入日：</p>
         <p>
-          {individual.date_of_introduction
-            ? handleToDate(individual.date_of_introduction)
+          {individual.dateOfIntroduction
+            ? handleToDate(individual.dateOfIntroduction)
             : '-'}
         </p>
       </Row>
       <Divider />
       <Row>
         <p>性別：</p>
-        <p>{['去勢', 'オス', 'メス'][individual.sex!]}</p>
+        <p>{['去勢', 'オス', 'メス'][individual.sex] ?? '-'}</p>
       </Row>
       <Divider />
       <Row>
         <p>種別：</p>
-        <p>{['肥育', '繁殖', '子牛', '育成'][individual.category!]}</p>
+        <p>{['肥育', '繁殖', '子牛', '育成'][individual.category] ?? '-'}</p>
       </Row>
       <Divider />
       <Row>
         <p>品種：</p>
-        <p>{['黒毛和種', 'F1'][individual.breed_type!]}</p>
+        <p>{['黒毛和種', 'F1'][individual.breedType] ?? '-'}</p>
       </Row>
       <Divider />
       <Row>
         <p>場所：</p>
         <p>
-          {individual.name ?? '-'} {individual.No ?? ' '}
+          {individual.name ?? '-'} {individual.no ?? ' '}
         </p>
       </Row>
       <Divider />
       <Row>
         <p>母牛の個体識別番号：</p>
         <div>
-          {individual.mother_id ? (
+          {individual.motherId ? (
             <p>
-              {individual.mother_id?.slice(0, 5)}.
+              {individual.motherId?.slice(0, 5)}.
               <span style={{ fontWeight: 'bold' }}>
-                {individual.mother_id?.slice(5, 9)}
+                {individual.motherId?.slice(5, 9)}
               </span>
-              .{individual.mother_id?.slice(9, 10)}
+              .{individual.motherId?.slice(9, 10)}
             </p>
           ) : (
             '-'
@@ -97,12 +98,12 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       <Divider />
       <Row>
         <p>父牛：</p>
-        <p>{individual.father_name ? individual.father_name : '-'}</p>
+        <p>{individual.fatherName ? individual.fatherName : '-'}</p>
       </Row>
       <Divider />
       <Row>
         <p>母の父牛：</p>
-        <p>{individual.grandfather_name ? individual.grandfather_name : '-'}</p>
+        <p>{individual.grandfatherName ? individual.grandfatherName : '-'}</p>
       </Row>
       <Divider />
       <Row>
@@ -121,7 +122,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
               </Datetime>
               <p>
                 体温：
-                {treatment.body_temperature.toFixed(1)}℃
+                {treatment.bodyTemperature.toFixed(1)}℃
               </p>
             </Row>
             <div className="row2">
@@ -129,8 +130,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
               <p>治療内容：{treatment.content}</p>
             </div>
             <div className="row3">
-              <p>投薬の有無：{treatment.gotDosage ? 'あり' : 'なし'} </p>
-              <p>登録者：{treatment.user_name}</p>
+              <p>登録者：{treatment.userName}</p>
             </div>
           </MainWrapper>
         </ThemeProvider>

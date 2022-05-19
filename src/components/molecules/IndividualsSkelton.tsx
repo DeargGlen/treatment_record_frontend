@@ -8,6 +8,7 @@ const IndividualsSkelton: FC = () => (
       <IndividualContentWrapper key={value}>
         <MainWrapper>
           <Skeleton width="20%" style={{ marginTop: 4, marginBottom: 4 }} />
+          <Skeleton width="40%" style={{ marginTop: 4, marginBottom: 4 }} />
           <Skeleton width="100%" style={{ marginBottom: 4 }} />
           <Skeleton width="100%" />
         </MainWrapper>

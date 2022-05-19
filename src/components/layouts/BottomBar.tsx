@@ -110,7 +110,7 @@ const BottomBar: FC = () => {
                 className={classes.button}
                 icon={<AccountCircle />}
                 component={RouterLink}
-                to="/users"
+                to="/settings"
                 sx={{ width: 105 }}
               />
             </BottomNavigation>
