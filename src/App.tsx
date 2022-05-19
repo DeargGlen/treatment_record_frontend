@@ -38,7 +38,7 @@ const App: FC = () => {
   const sidebarWidth = 160;
   const headerNavigationHeightSmall = 40;
   const headerNavigationHeightBig = 56;
-  const bottomNavigationHeight = 56;
+  const bottomNavigationHeight = 70;
 
   const ResponsiveDrawer = styled('div')(() => ({
     flexGrow: 1,

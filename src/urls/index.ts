@@ -1,4 +1,4 @@
-export const DEFAULT_API_LOCALHOST = 'http://192.168.11.6:3000/api/v1';
+export const DEFAULT_API_LOCALHOST = 'http://172.20.10.3:3000/api/v1';
 export const individualsIndex = `${DEFAULT_API_LOCALHOST}/individuals.json`;
 export const individualShow = (individualId: string) =>
   `${DEFAULT_API_LOCALHOST}/individuals/${individualId}.json`;
