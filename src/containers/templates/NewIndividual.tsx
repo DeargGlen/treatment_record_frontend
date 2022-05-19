@@ -64,7 +64,7 @@ const breedTypeList = [
   },
 ];
 
-const NumberFormatCustom = React.forwardRef<NumberFormat<number>, CustomProps>(
+const IndividualIdInput = React.forwardRef<NumberFormat<number>, CustomProps>(
   (props, ref) => {
     const { onChange, ...other } = props;
 
@@ -183,7 +183,7 @@ const NewIndividual: FC = () => {
               onChange={handleChange}
               name="individualId"
               InputProps={{
-                inputComponent: NumberFormatCustom as never,
+                inputComponent: IndividualIdInput as never,
               }}
               variant="standard"
               sx={{ width: 120, textAlign: 'right' }}
@@ -303,7 +303,7 @@ const NewIndividual: FC = () => {
               onChange={handleChange}
               name="motherId"
               InputProps={{
-                inputComponent: NumberFormatCustom as never,
+                inputComponent: IndividualIdInput as never,
               }}
               variant="standard"
               sx={{ width: 120 }}
