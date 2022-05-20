@@ -21,6 +21,11 @@ const RowTreatment = styled.div`
   justify-content: space-between;
 `;
 const Datetime = styled.p``;
+const Data = styled.p`
+  margin-top: auto;
+  margin-bottom: auto;
+  line-height: 24px;
+`;
 
 const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   individual,
@@ -47,63 +52,65 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         </div>
         <Row>
           <p>個体識別番号：</p>
-          <p>
+          <Data>
             {individual.id?.slice(0, 5)}.
             <span style={{ fontWeight: 'bold' }}>
               {individual.id?.slice(5, 9)}
             </span>
             .{individual.id?.slice(9, 10)}
-          </p>
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>出生日：</p>
-          <p>
+          <Data>
             {individual.dateOfBirth
               ? handleToDate(individual.dateOfBirth)
               : '-'}
-          </p>
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>月齢：</p>
-          <p>{individual.age}</p>
+          <Data>{individual.age}</Data>
         </Row>
         <Divider />
         <Row>
           <p>導入日：</p>
-          <p>
+          <Data>
             {individual.dateOfIntroduction
               ? handleToDate(individual.dateOfIntroduction)
               : '-'}
-          </p>
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>性別：</p>
-          <p>{['去勢', 'オス', 'メス'][individual.sex] ?? '-'}</p>
+          <Data>{['去勢', 'オス', 'メス'][individual.sex] ?? '-'}</Data>
         </Row>
         <Divider />
         <Row>
           <p>種別：</p>
-          <p>{['肥育', '繁殖', '子牛', '育成'][individual.category] ?? '-'}</p>
+          <Data>
+            {['肥育', '繁殖', '子牛', '育成'][individual.category] ?? '-'}
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>品種：</p>
-          <p>{['黒毛和種', 'F1'][individual.breedType] ?? '-'}</p>
+          <Data>{['黒毛和種', 'F1'][individual.breedType] ?? '-'}</Data>
         </Row>
         <Divider />
         <Row>
           <p>場所：</p>
-          <p>
+          <Data>
             {individual.name ?? '-'} {individual.no ?? ' '}
-          </p>
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>母牛の個体識別番号：</p>
-          <div>
+          <Data>
             {individual.motherId ? (
               <p>
                 {individual.motherId?.slice(0, 5)}.
@@ -115,22 +122,24 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
             ) : (
               '-'
             )}
-          </div>
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>父牛：</p>
-          <p>{individual.fatherName ? individual.fatherName : '-'}</p>
+          <Data>{individual.fatherName ? individual.fatherName : '-'}</Data>
         </Row>
         <Divider />
         <Row>
           <p>母の父牛：</p>
-          <p>{individual.grandfatherName ? individual.grandfatherName : '-'}</p>
+          <Data>
+            {individual.grandfatherName ? individual.grandfatherName : '-'}
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>治療記録件数：</p>
-          <p>{individual?.treatments?.length}</p>
+          <Data>{individual?.treatments?.length}</Data>
         </Row>
         <Divider />
       </MainWrapper>

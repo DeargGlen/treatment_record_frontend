@@ -44,23 +44,17 @@ const App: FC = () => {
     flexGrow: 1,
     paddingTop: `calc(5px + ${headerNavigationHeightSmall}px)`,
     paddingBottom: `calc(10px + ${bottomNavigationHeight}px)`,
-    paddingLeft: 0,
-    paddingRight: 0,
+    marginLeft: 0,
+    marginRight: 0,
+    width: '100%',
     [theme.breakpoints.up('sm')]: {
       paddingTop: `calc(10px + ${headerNavigationHeightBig}px)`,
       paddingBottom: 10,
       paddingLeft: `calc(20px + ${sidebarWidth}px)`,
       paddingRight: 20,
-    },
-    [theme.breakpoints.up('md')]: {
-      paddingBottom: 10,
-      paddingLeft: `calc(120px + ${sidebarWidth}px)`,
-      paddingRight: 120,
-    },
-    [theme.breakpoints.up('lg')]: {
-      paddingBottom: 10,
-      paddingLeft: `calc(250px + ${sidebarWidth}px)`,
-      paddingRight: 250,
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: 500,
     },
   }));
 
