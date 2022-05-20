@@ -6,6 +6,13 @@ export interface SignUpParams {
   confirmSuccessUrl: string;
 }
 
+export interface UserInfoUpdateParams {
+  email?: string;
+  password?: string;
+  passwordConfirmation?: string;
+  name?: string;
+}
+
 export interface SignInParams {
   email: string;
   password: string;

@@ -10,7 +10,6 @@ import {
 } from 'react-router-dom';
 import { User, currentUserRes } from 'interfaces/index';
 import { getCurrentUser } from 'apis/users';
-import Settings from 'containers/Settings';
 import { styled } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material';
 import theme from 'components/theme';
@@ -21,6 +20,7 @@ import Treatments from 'containers/Treatments';
 import Header from 'components/layouts/Header';
 import SignIn from 'containers/SignIn';
 import SignUp from 'containers/SignUp';
+import Settings from 'containers/Settings';
 import BottomBar from 'components/layouts/BottomBar';
 
 export const AuthContext = createContext(
@@ -61,7 +61,6 @@ const App: FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [isSignedIn, setIsSignedIn] = useState<boolean>(false);
   const [currentUser, setCurrentUser] = useState<User | undefined>();
-  const [headers, setHeaders] = useState<Headers | undefined>();
 
   const handleGetCurrentUser = async () => {
     try {

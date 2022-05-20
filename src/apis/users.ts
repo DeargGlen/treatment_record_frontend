@@ -2,11 +2,25 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import Cookies from 'js-cookie';
-import { SignUpParams, SignInParams, currentUserRes } from 'interfaces/index';
+import {
+  SignUpParams,
+  SignInParams,
+  currentUserRes,
+  UserInfoUpdateParams,
+} from 'interfaces/index';
 import { signUpUrl, signInUrl, signOutUrl, getCurrentUserUrl } from 'urls';
 import client from './client';
 
 export const signUp = (params: SignUpParams) => client.post(signUpUrl, params);
+
+export const userInfoUpdate = (params: UserInfoUpdateParams) =>
+  client.put(signUpUrl, params, {
+    headers: {
+      'access-token': Cookies.get('_access_token') || '',
+      client: Cookies.get('_client') || '',
+      uid: Cookies.get('_uid') || '',
+    },
+  });
 
 // サインイン（ログイン）
 export const signIn = (params: SignInParams) =>
