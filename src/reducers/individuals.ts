@@ -3,11 +3,13 @@ import { INDIVIDUAL } from 'apis/individuals';
 
 type IndividualState = {
   fetchState: string;
-  individualsList: void | INDIVIDUAL[];
+  individualsList: INDIVIDUAL[];
 };
+
+const emptyIndividualsList: INDIVIDUAL[] = [];
 export const initialState: IndividualState = {
   fetchState: REQUEST_STATE.INITIAL,
-  individualsList: [],
+  individualsList: emptyIndividualsList,
 };
 
 type ValueOf<T> = T[keyof T];
@@ -34,8 +36,7 @@ export const individualsReducer = (
     case individualsActionTypes.FETCH_SUCCESS:
       return {
         fetchState: REQUEST_STATE.OK,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        individualsList: action.payload!.individuals,
+        individualsList: action.payload?.individuals ?? emptyIndividualsList,
       };
     default:
       throw new Error();

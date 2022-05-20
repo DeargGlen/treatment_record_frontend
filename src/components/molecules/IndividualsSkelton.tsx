@@ -1,18 +1,22 @@
 import { FC } from 'react';
-import { Skeleton } from '@mui/material';
+import { Skeleton, Divider } from '@mui/material';
 import { IndividualContentWrapper, MainWrapper } from 'Style';
 
 const IndividualsSkelton: FC = () => (
   <>
+    <Divider />
     {[...Array(8).keys()].map((value) => (
-      <IndividualContentWrapper key={value}>
-        <MainWrapper>
-          <Skeleton width="20%" style={{ marginTop: 4, marginBottom: 4 }} />
-          <Skeleton width="40%" style={{ marginTop: 4, marginBottom: 4 }} />
-          <Skeleton width="100%" style={{ marginBottom: 4 }} />
-          <Skeleton width="100%" />
-        </MainWrapper>
-      </IndividualContentWrapper>
+      <div key={value}>
+        <IndividualContentWrapper>
+          <MainWrapper>
+            <Skeleton width="20%" style={{ marginTop: 4 }} />
+            <Skeleton width="80%" style={{ marginTop: 2 }} />
+            <Skeleton width="100%" style={{ marginTop: 2 }} />
+            <Skeleton width="100%" style={{ marginTop: 2 }} />
+          </MainWrapper>
+        </IndividualContentWrapper>
+        <Divider />
+      </div>
     ))}
   </>
 );

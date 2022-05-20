@@ -54,13 +54,13 @@ const App: FC = () => {
     },
     [theme.breakpoints.up('md')]: {
       paddingBottom: 10,
-      paddingLeft: `calc(80px + ${sidebarWidth}px)`,
-      paddingRight: 80,
+      paddingLeft: `calc(120px + ${sidebarWidth}px)`,
+      paddingRight: 120,
     },
     [theme.breakpoints.up('lg')]: {
       paddingBottom: 10,
-      paddingLeft: `calc(100px + ${sidebarWidth}px)`,
-      paddingRight: 100,
+      paddingLeft: `calc(250px + ${sidebarWidth}px)`,
+      paddingRight: 250,
     },
   }));
 
@@ -145,7 +145,7 @@ const App: FC = () => {
                 />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />} />
-                <Route path="/" element={<Navigate to="/signin" />} />
+                <Route path="/" element={<Navigate to="/individuals" />} />
               </Routes>
             </ResponsiveDrawer>
           </ThemeProvider>

@@ -1,11 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-import { FC, useEffect, useReducer, useState } from 'react';
-import {
-  fetchIndividuals,
-  INDIVIDUALS_DATA,
-  INDIVIDUAL,
-} from 'apis/individuals';
+import { FC, useEffect, useState } from 'react';
+import { INDIVIDUALS_DATA, INDIVIDUAL } from 'apis/individuals';
 import {
   Dialog,
   DialogTitle,
@@ -14,11 +10,7 @@ import {
   ListItemButton,
 } from '@mui/material';
 import styled from 'styled-components';
-import {
-  initialState,
-  individualsActionTypes,
-  individualsReducer,
-} from 'reducers/individuals';
+
 import EarTagImage from 'images/ear.png';
 import SearchIcon from '@mui/icons-material/Search';
 import EarTagFormat from 'containers/func/earTagFormat';
@@ -44,10 +36,10 @@ export const SelectIndividualDialog: FC<{
   isOpen: boolean;
   onClose: (value: string) => void;
   selectedIndividual: string;
-}> = ({ isOpen, onClose, selectedIndividual }) => {
-  const [state, dispatch] = useReducer(individualsReducer, initialState);
+  individualsList: void | INDIVIDUAL[];
+}> = ({ isOpen, onClose, selectedIndividual, individualsList }) => {
   const [selectedList, setIndividualsList] = useState<INDIVIDUAL[]>(
-    state.individualsList!,
+    individualsList!,
   );
   const [inputValue, setInputValue] = useState('');
 
@@ -58,33 +50,17 @@ export const SelectIndividualDialog: FC<{
   };
 
   useEffect(() => {
-    dispatch({ type: individualsActionTypes.FETCHING });
-    fetchIndividuals()
-      .then((data: void | INDIVIDUALS_DATA) => {
-        console.log(data);
-        dispatch({
-          type: individualsActionTypes.FETCH_SUCCESS,
-          payload: {
-            individuals: data?.individuals,
-          },
-        });
-      })
-
-      .catch(() => 1);
-  }, []);
-
-  useEffect(() => {
     if (inputValue.match(/\S/g)) {
-      const filteredList: INDIVIDUAL[] = state.individualsList!.filter(
+      const filteredList: INDIVIDUAL[] = individualsList!.filter(
         (individual: INDIVIDUAL) =>
-          individual.id.slice(5, 9).startsWith(inputValue),
+          individual.id?.slice(5, 9).startsWith(inputValue),
       );
       setIndividualsList(filteredList);
 
       return;
     }
-    setIndividualsList(state.individualsList!);
-  }, [state.individualsList, inputValue]);
+    setIndividualsList(individualsList!);
+  }, [individualsList, inputValue]);
 
   const handleIndividualClick = (value: string) => {
     onClose(value);
@@ -117,19 +93,19 @@ export const SelectIndividualDialog: FC<{
       <Divider />
       <>
         {selectedList?.map((individual: INDIVIDUAL) => (
-          <div>
+          <div key={individual.id}>
             <ListItemButton
-              key={individual.id}
               onClick={() => handleIndividualClick(individual.id)}
               sx={{
                 width: '100%',
                 display: 'flex',
                 justifyContent: 'space-between',
+                height: 50,
               }}
             >
               <Num>
                 <img src={EarTagImage} alt="tag-number" width="15" />
-                {individual.id.slice(0, 5)}.
+                {individual.id?.slice(0, 5)}.
                 <span style={{ fontWeight: 'bold' }}>
                   {individual.id.slice(5, 9)}
                 </span>

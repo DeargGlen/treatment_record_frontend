@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
-/* eslint-disable @typescript-eslint/unbound-method */
 import { FC, useEffect, useReducer, useState } from 'react';
 import * as React from 'react';
 import {
@@ -10,7 +5,7 @@ import {
   INDIVIDUALS_DATA,
   INDIVIDUAL,
 } from 'apis/individuals';
-import { Fab, Tooltip, Typography, Container, TextField } from '@mui/material';
+import { Fab, Tooltip, Typography, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import IndividualsList from 'components/organisms/IndividualsList';
 import { Link as RouterLink } from 'react-router-dom';
@@ -33,27 +28,21 @@ import {
 
 const SearchBar = styled.div`
   margin-left: auto;
-  margin-right: 0;
+  margin-right: 10px;
   width: 95px;
   background-color: #f5f5f5;
 `;
 
-const fabStyle = {
-  position: 'fixed',
-  bottom: 70,
-  right: 20,
-};
-
 const AllIndividuals: FC = () => {
   const [state, dispatch] = useReducer(individualsReducer, initialState);
   const [selectedList, setIndividualsList] = useState<INDIVIDUAL[]>(
-    state.individualsList!,
+    state.individualsList,
   );
   const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     if (inputValue.match(/\S/g)) {
-      const filteredList: INDIVIDUAL[] = state.individualsList!.filter(
+      const filteredList: INDIVIDUAL[] = state.individualsList.filter(
         (individual: INDIVIDUAL) =>
           individual.id.slice(5, 9).startsWith(inputValue),
       );
@@ -61,7 +50,7 @@ const AllIndividuals: FC = () => {
 
       return;
     }
-    setIndividualsList(state.individualsList!);
+    setIndividualsList(state.individualsList);
   }, [state.individualsList, inputValue]);
 
   const handleChange = (
@@ -74,7 +63,6 @@ const AllIndividuals: FC = () => {
     dispatch({ type: individualsActionTypes.FETCHING });
     fetchIndividuals()
       .then((data: void | INDIVIDUALS_DATA) => {
-        console.log(data);
         dispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -88,26 +76,24 @@ const AllIndividuals: FC = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
-        <SearchBar>
-          <SearchIcon sx={{ mt: 0.5, mb: 1 }} />
-          <TextField
-            value={inputValue}
-            onChange={handleChange}
-            margin="none"
-            sx={{ width: 65 }}
-            variant="standard"
-            InputProps={{ inputComponent: EarTagFormat as never }}
-          />
-        </SearchBar>
-        {state.fetchState === REQUEST_STATE.LOADING ? (
-          <>
-            <IndividualSkelton />
-          </>
-        ) : (
-          <IndividualsList individuals={selectedList} />
-        )}
-      </Container>
+      <SearchBar>
+        <SearchIcon sx={{ mt: 0.5, mb: 1 }} />
+        <TextField
+          value={inputValue}
+          onChange={handleChange}
+          margin="none"
+          sx={{ width: 65 }}
+          variant="standard"
+          InputProps={{ inputComponent: EarTagFormat as never }}
+        />
+      </SearchBar>
+      {state.fetchState === REQUEST_STATE.LOADING ? (
+        <>
+          <IndividualSkelton />
+        </>
+      ) : (
+        <IndividualsList individuals={selectedList} />
+      )}
 
       <Tooltip title={<Typography fontSize={15}>個体の登録</Typography>}>
         <Fab
@@ -115,7 +101,7 @@ const AllIndividuals: FC = () => {
           aria-label="add"
           component={RouterLink}
           to="/individuals/new"
-          sx={fabStyle}
+          sx={{ position: 'fixed', bottom: 75, right: 20 }}
         >
           <AddIcon />
         </Fab>

@@ -57,7 +57,6 @@ const SignIn: FC = () => {
     };
     signIn(params)
       .then((res) => {
-        console.log(res);
         if (res.status === 200) {
           Cookies.set('_access_token', res.headers['access-token']);
           Cookies.set('_client', res.headers.client);
@@ -67,8 +66,6 @@ const SignIn: FC = () => {
           setCurrentUser(res.data.data);
 
           navigate('/individuals');
-
-          console.log('Signed in successfully!');
         } else {
           setAlertMessageOpen(true);
         }

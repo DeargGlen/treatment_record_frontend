@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { INDIVIDUAL } from 'apis/individuals';
 import theme from 'components/theme';
+import { Divider } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
@@ -25,6 +26,7 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
   individuals,
 }) => (
   <>
+    <Divider />
     {individuals?.map((individual: INDIVIDUAL) => (
       <ThemeProvider theme={theme} key={individual.id}>
         <IndividualContentWrapper>
@@ -69,6 +71,7 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
             </Row>
           </MainWrapper>
         </IndividualContentWrapper>
+        <Divider />
       </ThemeProvider>
     ))}
   </>

@@ -6,18 +6,18 @@ import client from './client';
 export type INDIVIDUAL = {
   id: string;
   dateOfBirth: string;
-  age: number;
+  age: number | null;
   sex: number;
   category: number;
   breedType: number;
-  motherId?: string;
-  fatherName?: string;
-  grandfatherName?: string;
-  dateOfIntroduction: string;
-  name: string;
-  no: string;
-  created_at: string;
-  updated_at: string;
+  motherId?: string | null;
+  fatherName?: string | null;
+  grandfatherName?: string | null;
+  dateOfIntroduction: string | null;
+  name: string | null;
+  no: string | null;
+  created_at: string | null;
+  updated_at: string | null;
 };
 
 export type INDIVIDUALS_DATA = {

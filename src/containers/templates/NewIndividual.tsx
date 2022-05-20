@@ -1,18 +1,33 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { FC } from 'react';
+import { FC, useState, useEffect, useReducer } from 'react';
 import * as React from 'react';
 import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
-import { postIndividual } from 'apis/individuals';
+import {
+  postIndividual,
+  fetchIndividuals,
+  INDIVIDUALS_DATA,
+} from 'apis/individuals';
 import { HTTP_STATUS_CODE } from 'states';
+import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
+import {
+  initialState,
+  individualsActionTypes,
+  individualsReducer,
+} from 'reducers/individuals';
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
   name: string;
 }
+
+const ButtonDiv = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
 
 const Row = styled.div`
   display: flex;
@@ -96,17 +111,12 @@ interface State {
   sex: string;
   category: string;
   breedType: string;
-  motherId?: string;
-  fatherName?: string;
-  grandfatherName?: string;
+  motherId: string;
+  fatherName: string;
+  grandfatherName: string;
   dateOfIntroduction: string;
   blockId: number;
 }
-
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
 
 const NewIndividual: FC = () => {
   const [values, setValues] = React.useState<State>({
@@ -119,7 +129,14 @@ const NewIndividual: FC = () => {
     fatherName: '',
     grandfatherName: '',
     blockId: 1,
+    motherId: '',
   });
+
+  const initialSelectState = {
+    isOpenSelectDialog: false,
+  };
+
+  const [individualState, setIndividual] = useState(initialSelectState);
 
   const navigate = useNavigate();
 
@@ -130,6 +147,29 @@ const NewIndividual: FC = () => {
       ...values,
       [event.target.name]: event.target.value,
     });
+  };
+
+  const [state, dispatch] = useReducer(individualsReducer, initialState);
+
+  useEffect(() => {
+    dispatch({ type: individualsActionTypes.FETCHING });
+    fetchIndividuals()
+      .then((data: void | INDIVIDUALS_DATA) => {
+        console.log(data);
+        dispatch({
+          type: individualsActionTypes.FETCH_SUCCESS,
+          payload: {
+            individuals: data?.individuals,
+          },
+        });
+      })
+
+      .catch(() => 1);
+  }, []);
+
+  const handleClose = (value: string) => {
+    setIndividual({ isOpenSelectDialog: false });
+    setValues({ ...values, motherId: value });
   };
 
   const onSubmit = () => {
@@ -309,6 +349,19 @@ const NewIndividual: FC = () => {
               sx={{ width: 100 }}
             />
           </Row>
+          <ButtonDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                setIndividual({
+                  isOpenSelectDialog: true,
+                })
+              }
+            >
+              個体の選択
+            </Button>
+          </ButtonDiv>
           <Row>
             父牛の名前：
             <TextField
@@ -351,6 +404,14 @@ const NewIndividual: FC = () => {
           </ButtonDiv>
         </Box>
       </Container>
+      {individualState.isOpenSelectDialog && (
+        <SelectIndividualDialog
+          isOpen={individualState.isOpenSelectDialog}
+          onClose={handleClose}
+          selectedIndividual={values.motherId}
+          individualsList={state.individualsList}
+        />
+      )}
     </>
   );
 };

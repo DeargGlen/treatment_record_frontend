@@ -8,6 +8,7 @@ import handleToDateAndTime from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
 import { TreatmentContentWrapper, MainWrapper } from 'Style';
 import styled from 'styled-components';
+import { Divider } from '@mui/material';
 
 const Row = styled.div`
   display: flex;
@@ -37,9 +38,10 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
 
   return (
     <>
+      <Divider />
       {Sortedtreatments?.map((treatment: TREATMENT) => (
-        <TreatmentContentWrapper key={treatment.id}>
-          <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme} key={treatment.id}>
+          <TreatmentContentWrapper>
             <MainWrapper>
               <div className="tag-num">
                 <Link
@@ -69,8 +71,9 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
                 <User>登録者：{treatment.userName}</User>
               </Row>
             </MainWrapper>
-          </ThemeProvider>
-        </TreatmentContentWrapper>
+          </TreatmentContentWrapper>{' '}
+          <Divider />
+        </ThemeProvider>
       ))}
     </>
   );

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { FC, useState } from 'react';
+import { FC, useState, useEffect, useReducer } from 'react';
 import * as React from 'react';
 import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
@@ -8,7 +8,13 @@ import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
 import { postTreatment } from 'apis/treatments';
 import { HTTP_STATUS_CODE } from 'states';
-import SelectIndividualDialog from 'components/molecules/SelectIndividualDialog';
+import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
+import { fetchIndividuals, INDIVIDUALS_DATA } from 'apis/individuals';
+import {
+  initialState,
+  individualsActionTypes,
+  individualsReducer,
+} from 'reducers/individuals';
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -150,6 +156,24 @@ const NewTreatment: FC = () => {
     setValues({ ...values, individualId: value });
   };
 
+  const [state, dispatch] = useReducer(individualsReducer, initialState);
+
+  useEffect(() => {
+    dispatch({ type: individualsActionTypes.FETCHING });
+    fetchIndividuals()
+      .then((data: void | INDIVIDUALS_DATA) => {
+        console.log(data);
+        dispatch({
+          type: individualsActionTypes.FETCH_SUCCESS,
+          payload: {
+            individuals: data?.individuals,
+          },
+        });
+      })
+
+      .catch(() => 1);
+  }, []);
+
   return (
     <>
       <Container maxWidth="sm">
@@ -261,6 +285,7 @@ const NewTreatment: FC = () => {
           isOpen={individualState.isOpenSelectDialog}
           onClose={handleClose}
           selectedIndividual={values.individualId}
+          individualsList={state.individualsList}
         />
       )}
     </>

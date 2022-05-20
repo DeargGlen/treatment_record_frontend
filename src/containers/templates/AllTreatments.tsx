@@ -4,7 +4,7 @@ import { fetchTreatments, TREATMENT } from 'apis/treatments';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 import TreatmentsList from 'components/organisms/TreatmentsList';
-import { Container, Tooltip, Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 
 // components
@@ -44,20 +44,18 @@ const AllTreatments: FC = () => {
 
   return (
     <>
-      <Container maxWidth="sm">
-        {state.fetchState === REQUEST_STATE.LOADING ? (
-          <>
-            <TreatmentSkelton />
-          </>
-        ) : (
-          <TreatmentsList treatments={state.treatmentsList} />
-        )}
-      </Container>
+      {state.fetchState === REQUEST_STATE.LOADING ? (
+        <>
+          <TreatmentSkelton />
+        </>
+      ) : (
+        <TreatmentsList treatments={state.treatmentsList} />
+      )}
       <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
         <Fab
           sx={{
             position: 'fixed',
-            bottom: 70,
+            bottom: 75,
             right: 20,
           }}
           color="primary"
