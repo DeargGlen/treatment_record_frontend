@@ -104,8 +104,6 @@ const NewTreatment: FC = () => {
   };
 
   const [individualState, setIndividual] = useState(initialSelectState);
-  console.log(individualState);
-  console.log(setIndividual);
 
   const navigate = useNavigate();
 
@@ -147,6 +145,11 @@ const NewTreatment: FC = () => {
       });
   };
 
+  const handleClose = (value: string) => {
+    setIndividual({ isOpenSelectDialog: false });
+    setValues({ ...values, individualId: value });
+  };
+
   return (
     <>
       <Container maxWidth="sm">
@@ -157,19 +160,6 @@ const NewTreatment: FC = () => {
             },
           }}
         >
-          <ButtonDiv>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                setIndividual({
-                  isOpenSelectDialog: true,
-                })
-              }
-            >
-              個体の選択
-            </Button>
-          </ButtonDiv>
           <Row>
             耳標番号(必須)：
             <TextField
@@ -183,6 +173,19 @@ const NewTreatment: FC = () => {
               sx={{ width: 100, textAlign: 'right' }}
             />
           </Row>
+          <ButtonDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                setIndividual({
+                  isOpenSelectDialog: true,
+                })
+              }
+            >
+              個体の選択
+            </Button>
+          </ButtonDiv>
           <Row>
             日時(必須)：
             <TextField
@@ -256,7 +259,8 @@ const NewTreatment: FC = () => {
       {individualState.isOpenSelectDialog && (
         <SelectIndividualDialog
           isOpen={individualState.isOpenSelectDialog}
-          onClose={() => setIndividual({ isOpenSelectDialog: false })}
+          onClose={handleClose}
+          selectedIndividual={values.individualId}
         />
       )}
     </>

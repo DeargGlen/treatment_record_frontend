@@ -16,7 +16,7 @@ import IndividualsList from 'components/organisms/IndividualsList';
 import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import styled from 'styled-components';
-import NumberFormat from 'react-number-format';
+import EarTagFormat from 'containers/func/earTagFormat';
 
 // components
 import IndividualSkelton from 'components/molecules/IndividualsSkelton';
@@ -43,36 +43,6 @@ const fabStyle = {
   bottom: 70,
   right: 20,
 };
-
-interface CustomProps {
-  onChange: (event: { target: { value: string } }) => void;
-  name: string;
-}
-
-const NumberFormatCustom = React.forwardRef<NumberFormat<number>, CustomProps>(
-  (props, ref) => {
-    const { onChange, ...other } = props;
-
-    return (
-      <NumberFormat
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...other}
-        getInputRef={ref}
-        onValueChange={(values) => {
-          onChange({
-            target: {
-              value: values.value,
-            },
-          });
-        }}
-        isNumericString
-        format="####"
-        placeholder="耳標番号"
-        mask="*"
-      />
-    );
-  },
-);
 
 const AllIndividuals: FC = () => {
   const [state, dispatch] = useReducer(individualsReducer, initialState);
@@ -127,7 +97,7 @@ const AllIndividuals: FC = () => {
             margin="none"
             sx={{ width: 65 }}
             variant="standard"
-            InputProps={{ inputComponent: NumberFormatCustom as never }}
+            InputProps={{ inputComponent: EarTagFormat as never }}
           />
         </SearchBar>
         {state.fetchState === REQUEST_STATE.LOADING ? (
