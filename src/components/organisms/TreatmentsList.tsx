@@ -14,6 +14,9 @@ const Row = styled.div`
   display: flex;
   justify-content: space-between;
 `;
+const TagNum = styled.div`
+  font-size: 24px;
+`;
 const Datetime = styled.p``;
 const Temperature = styled.p``;
 const Symptom = styled.p``;
@@ -43,35 +46,35 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
         <ThemeProvider theme={theme} key={treatment.id}>
           <TreatmentContentWrapper>
             <MainWrapper>
-              <div className="tag-num">
-                <Link
-                  component={RouterLink}
-                  to={`/individuals/${treatment.individualId}`}
-                  style={{ fontSize: 24, color: 'black' }}
-                >
+              <Link
+                component={RouterLink}
+                to={`/individuals/${treatment.individualId}`}
+                style={{ fontSize: 16, color: 'black' }}
+              >
+                <TagNum>
                   <img src={EarTagImage} alt="tag-number" width="20" />
                   {treatment.individualId.slice(5, 9)}{' '}
-                </Link>
-              </div>{' '}
-              <Row>
-                <Datetime>
-                  日時：{handleToDateAndTime(treatment.datetime)}
-                </Datetime>
-                <Temperature>
-                  体温：{treatment.bodyTemperature.toFixed(1)}℃
-                </Temperature>
-              </Row>
-              <Row>
-                <Symptom>症状：{treatment.symptom}</Symptom>
-              </Row>
-              <Row>
-                <Content>治療内容：{treatment.content}</Content>
-              </Row>
-              <Row>
-                <User>登録者：{treatment.userName}</User>
-              </Row>
+                </TagNum>
+                <Row>
+                  <Datetime>
+                    日時：{handleToDateAndTime(treatment.datetime)}
+                  </Datetime>
+                  <Temperature>
+                    体温：{treatment.bodyTemperature.toFixed(1)}℃
+                  </Temperature>
+                </Row>
+                <Row>
+                  <Symptom>症状：{treatment.symptom}</Symptom>
+                </Row>
+                <Row>
+                  <Content>治療内容：{treatment.content}</Content>
+                </Row>
+                <Row>
+                  <User>登録者：{treatment.userName}</User>
+                </Row>
+              </Link>
             </MainWrapper>
-          </TreatmentContentWrapper>{' '}
+          </TreatmentContentWrapper>
           <Divider />
         </ThemeProvider>
       ))}

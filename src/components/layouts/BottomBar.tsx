@@ -50,7 +50,7 @@ const BottomBar: FC = () => {
       num = 0;
     } else if (location.pathname.includes('/treatments')) {
       num = 1;
-    } else if (location.pathname.includes('/users')) {
+    } else if (location.pathname.includes('/settings')) {
       num = 2;
     } else {
       num = -1;
