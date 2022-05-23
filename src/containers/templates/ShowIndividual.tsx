@@ -27,6 +27,7 @@ const ShowIndividual: FC = () => {
     dispatch({ type: individualActionTypes.FETCHING });
     fetchIndividual(individualId ?? '-')
       .then((data: void | INDIVIDUAL_SHOW_DATA) => {
+        console.log(data);
         dispatch({
           type: individualActionTypes.FETCH_SUCCESS,
           payload: {
@@ -43,7 +44,7 @@ const ShowIndividual: FC = () => {
       {individualState.fetchState === REQUEST_STATE.LOADING ? (
         <IndividualSkelton />
       ) : (
-        <IndividualShow individual={individualState.individualList} />
+        <IndividualShow individual={individualState.individual} />
       )}
       <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
         <Fab

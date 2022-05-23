@@ -14,7 +14,8 @@ export type INDIVIDUAL = {
   fatherName?: string | null;
   grandfatherName?: string | null;
   dateOfIntroduction: string | null;
-  name: string | null;
+  areaName: string | null;
+  barnName: string | null;
   no: string | null;
   created_at: string | null;
   updated_at: string | null;
@@ -38,7 +39,8 @@ export type INDIVIDUAL_SHOW_DATA = {
   fatherName?: string | null;
   grandfatherName?: string | null;
   dateOfIntroduction: string | null;
-  name: string | null;
+  areaName: string | null;
+  barnName: string | null;
   no: string | null;
   created_at: string | null;
   updated_at: string | null;

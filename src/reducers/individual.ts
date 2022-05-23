@@ -3,10 +3,10 @@ import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 
 type IndividualState = {
   fetchState: string;
-  individualList: INDIVIDUAL_SHOW_DATA;
+  individual: INDIVIDUAL_SHOW_DATA;
 };
 
-const emptyIndividualList: INDIVIDUAL_SHOW_DATA = {
+const emptyIndividual: INDIVIDUAL_SHOW_DATA = {
   id: null,
   dateOfBirth: null,
   age: null,
@@ -17,7 +17,8 @@ const emptyIndividualList: INDIVIDUAL_SHOW_DATA = {
   fatherName: null,
   grandfatherName: null,
   dateOfIntroduction: null,
-  name: null,
+  areaName: null,
+  barnName: null,
   no: null,
   created_at: null,
   updated_at: null,
@@ -26,7 +27,7 @@ const emptyIndividualList: INDIVIDUAL_SHOW_DATA = {
 
 export const initialState: IndividualState = {
   fetchState: REQUEST_STATE.INITIAL,
-  individualList: emptyIndividualList,
+  individual: emptyIndividual,
 };
 
 type ValueOf<T> = T[keyof T];
@@ -53,7 +54,7 @@ export const individualReducer = (
     case individualActionTypes.FETCH_SUCCESS:
       return {
         fetchState: REQUEST_STATE.OK,
-        individualList: action.payload?.individual ?? emptyIndividualList,
+        individual: action.payload?.individual ?? emptyIndividual,
       };
     default:
       throw new Error();

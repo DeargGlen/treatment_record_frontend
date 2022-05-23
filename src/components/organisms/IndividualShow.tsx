@@ -21,7 +21,7 @@ const RowTreatment = styled.div`
   justify-content: space-between;
 `;
 const Datetime = styled.p``;
-const Data = styled.p`
+const Data = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   line-height: 24px;
@@ -104,7 +104,8 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         <Row>
           <p>場所：</p>
           <Data>
-            {individual.name ?? '-'} {individual.no ?? ' '}
+            {individual.areaName ?? '-'}
+            {individual.barnName ?? '-'} {individual.no ?? ' '}
           </Data>
         </Row>
         <Divider />

@@ -13,11 +13,27 @@ import {
 } from 'apis/individuals';
 import { HTTP_STATUS_CODE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
+import { SelectLocationDialog } from 'components/molecules/SelectLocationDialog';
+import { SelectBlockDialog } from 'components/molecules/SelectBlockDialog';
 import {
   initialState,
   individualsActionTypes,
   individualsReducer,
 } from 'reducers/individuals';
+import {
+  fetchAreas,
+  AREAS_DATA,
+  fetchBarn,
+  BARN_SHOW_DATA,
+} from 'apis/locations';
+
+import {
+  initialAreaState,
+  areasActionTypes,
+  areasReducer,
+} from 'reducers/areas';
+
+import { initialBarnState, barnActionTypes, barnReducer } from 'reducers/barn';
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -138,6 +154,23 @@ const NewIndividual: FC = () => {
 
   const [individualState, setIndividual] = useState(initialSelectState);
 
+  const initialLocationState = {
+    isOpenLocationDialog: false,
+  };
+
+  const [locationState, setLocation] = useState(initialLocationState);
+
+  const [barnId, setBarnId] = useState(0);
+  const [barnName, setBarnName] = useState('');
+  const [areaName, setAreaName] = useState('');
+  const [blockNo, setBlockNo] = useState('');
+
+  const initialBlockState = {
+    isOpenBlockDialog: false,
+  };
+
+  const [blockState, setBlock] = useState(initialBlockState);
+
   const navigate = useNavigate();
 
   const handleChange = (
@@ -167,9 +200,64 @@ const NewIndividual: FC = () => {
       .catch(() => 1);
   }, []);
 
-  const handleClose = (value: string) => {
+  const [areasState, areaDispatch] = useReducer(areasReducer, initialAreaState);
+  const [barnState, barnDispatch] = useReducer(barnReducer, initialBarnState);
+
+  useEffect(() => {
+    areaDispatch({ type: areasActionTypes.FETCHING });
+    fetchAreas()
+      .then((data: void | AREAS_DATA) => {
+        areaDispatch({
+          type: areasActionTypes.FETCH_SUCCESS,
+          payload: {
+            areas: data?.areas,
+          },
+        });
+      })
+
+      .catch(() => 1);
+  }, []);
+
+  useEffect(() => {
+    if (barnId === 0) {
+      return;
+    }
+
+    barnDispatch({ type: barnActionTypes.FETCHING });
+    fetchBarn(barnId ?? 0)
+      .then((data: void | BARN_SHOW_DATA) => {
+        barnDispatch({
+          type: barnActionTypes.FETCH_SUCCESS,
+          payload: {
+            barn: data,
+          },
+        });
+      })
+      .catch(() => 1);
+  }, [barnId]);
+
+  const handleIndividualClose = (value: string) => {
     setIndividual({ isOpenSelectDialog: false });
     setValues({ ...values, motherId: value });
+  };
+
+  const handleLocationClose = (
+    value: number,
+    barnNameValue: string,
+    areaNameValue: string,
+    willOpenBlockDialog: boolean,
+  ) => {
+    setLocation({ isOpenLocationDialog: false });
+    setBarnId(value);
+    setBarnName(barnNameValue);
+    setAreaName(areaNameValue);
+    setBlock({ isOpenBlockDialog: willOpenBlockDialog });
+  };
+
+  const handleBlockClose = (value: number, blockNoValue: string) => {
+    setBlock({ isOpenBlockDialog: false });
+    setBlockNo(blockNoValue);
+    setValues({ ...values, blockId: value });
   };
 
   const onSubmit = () => {
@@ -326,6 +414,25 @@ const NewIndividual: FC = () => {
           </Row>
 
           <Row>
+            <div>場所：</div>
+            <div>
+              {areaName} {barnName} {blockNo}
+            </div>
+          </Row>
+          <ButtonDiv>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() =>
+                setLocation({
+                  isOpenLocationDialog: true,
+                })
+              }
+            >
+              場所の選択
+            </Button>
+          </ButtonDiv>
+          <Row>
             導入日：
             <TextField
               type="date"
@@ -407,9 +514,28 @@ const NewIndividual: FC = () => {
       {individualState.isOpenSelectDialog && (
         <SelectIndividualDialog
           isOpen={individualState.isOpenSelectDialog}
-          onClose={handleClose}
+          onClose={handleIndividualClose}
           selectedIndividual={values.motherId}
           individualsList={state.individualsList}
+        />
+      )}
+      {locationState.isOpenLocationDialog && (
+        <SelectLocationDialog
+          isOpen={locationState.isOpenLocationDialog}
+          onClose={handleLocationClose}
+          selectedBarnId={barnId}
+          selectedBarnName={barnName}
+          selectedAreaName={areaName}
+          areasList={areasState.areasList}
+        />
+      )}
+      {blockState.isOpenBlockDialog && (
+        <SelectBlockDialog
+          isOpen={blockState.isOpenBlockDialog}
+          onClose={handleBlockClose}
+          selectedBlockId={values.blockId}
+          selectedBlockNo={blockNo}
+          barn={barnState.barn}
         />
       )}
     </>

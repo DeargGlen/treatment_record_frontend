@@ -112,7 +112,8 @@ export const SelectIndividualDialog: FC<{
                 .{individual.id.slice(9, 10)}
               </Num>
               <Location>
-                {individual.name} {individual.no}
+                {individual.areaName}
+                {individual.barnName} {individual.no}
               </Location>
             </ListItemButton>
             <Divider />

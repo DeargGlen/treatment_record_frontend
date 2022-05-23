@@ -68,7 +68,8 @@ const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                   {['肥育', '繁殖', '子牛', '育成'][individual.category]}
                 </Category>
                 <Location>
-                  場所：{individual.name} {individual.no}{' '}
+                  場所：{individual.areaName} {individual.barnName}{' '}
+                  {individual.no}{' '}
                 </Location>
               </Row>
             </Link>

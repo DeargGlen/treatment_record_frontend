@@ -63,6 +63,7 @@ const AllIndividuals: FC = () => {
     dispatch({ type: individualsActionTypes.FETCHING });
     fetchIndividuals()
       .then((data: void | INDIVIDUALS_DATA) => {
+        console.log(data);
         dispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
           payload: {
