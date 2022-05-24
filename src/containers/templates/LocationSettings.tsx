@@ -29,7 +29,7 @@ const LocationSettings: FC = () => {
   return (
     <>
       {state.fetchState === REQUEST_STATE.LOADING ? (
-        <>ロード中</>
+        <div style={{ fontSize: 24 }}>エリア名の設定</div>
       ) : (
         <AreasList areas={state.areasList} />
       )}

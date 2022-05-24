@@ -164,7 +164,6 @@ const AreasList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
       </div>
       {areas?.map((area: AREA_WITH_BARNS) => (
         <Accordion
-          sx={{ width: '100%' }}
           expanded={expanded === area.id || editState}
           onChange={handleChangeExpand(area.id)}
           key={area.id}
@@ -187,7 +186,7 @@ const AreasList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
             ) : null}
           </AccordionSummary>
 
-          <Divider />
+          {area.barns.length ? <Divider /> : null}
           {area.barns?.map((barn: BARN) => {
             const link = `/settings/barns/${barn.id}`;
 
@@ -216,23 +215,25 @@ const AreasList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
             );
           })}
           {editState ? (
-            <div>
+            <>
               <Divider />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => handleClickOpenBarn(area.id)}
-                sx={{
-                  mt: '6.25px',
-                  mb: '6.25px',
-                  ml: '427.5px',
-                  mr: 0,
-                  height: 24,
-                }}
-              >
-                追加
-              </Button>
-            </div>
+              <div style={{ display: 'flex' }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleClickOpenBarn(area.id)}
+                  sx={{
+                    mt: '6.25px',
+                    mb: '6.25px',
+                    ml: 'auto',
+                    mr: 1,
+                    height: 24,
+                  }}
+                >
+                  追加
+                </Button>
+              </div>
+            </>
           ) : null}
         </Accordion>
       ))}
