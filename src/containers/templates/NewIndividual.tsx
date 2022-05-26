@@ -501,7 +501,8 @@ const NewIndividual: FC = () => {
                   !values.dateOfBirth ||
                   !values.sex ||
                   !values.category ||
-                  !values.breedType
+                  !values.breedType ||
+                  !blockNo
                 )
               }
               sx={{ width: 120 }}
