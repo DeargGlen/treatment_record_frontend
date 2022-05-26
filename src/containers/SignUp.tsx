@@ -36,7 +36,7 @@ const SignUp: FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
-  const confirmSuccessUrl = 'http://localhost:3001/signin';
+  const confirmSuccessUrl = process.env.REACT_APP_CONFIRM_SUCCESS_URL ?? '';
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
