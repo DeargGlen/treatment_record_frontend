@@ -1,7 +1,7 @@
 import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 import Cookies from 'js-cookie';
-import client from './client';
+import client from 'apis/client';
 
 export type INDIVIDUAL = {
   id: string;
