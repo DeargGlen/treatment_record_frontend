@@ -68,7 +68,7 @@ const SignUp: FC = () => {
       .catch((err) => {
         console.log(err);
         if (
-          err.response.data.erros[0] ===
+          err.response.data.errors[0] ===
           'ログインもしくはアカウント登録してください。'
         ) {
           setAlertMessageOpen2(true);
