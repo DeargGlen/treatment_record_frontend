@@ -38,6 +38,7 @@ const SignUp: FC = () => {
   const [passwordConfirmation, setPasswordConfirmation] = useState<string>('');
   const confirmSuccessUrl = process.env.REACT_APP_CONFIRM_SUCCESS_URL ?? '';
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+  const [alertMessageOpen2, setAlertMessageOpen2] = useState<boolean>(false);
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -56,6 +57,7 @@ const SignUp: FC = () => {
 
         if (res.status === 200) {
           navigate('/individuals');
+          // eslint-disable-next-line no-alert
           alert('メールを確認してアカウントを有効化してください');
 
           console.log('Signed up successfully!');
@@ -65,7 +67,14 @@ const SignUp: FC = () => {
       })
       .catch((err) => {
         console.log(err);
-        setAlertMessageOpen(true);
+        if (
+          err.response.data.erros[0] ===
+          'ログインもしくはアカウント登録してください。'
+        ) {
+          setAlertMessageOpen2(true);
+        } else {
+          setAlertMessageOpen(true);
+        }
       });
   };
 
@@ -140,6 +149,12 @@ const SignUp: FC = () => {
           setOpen={setAlertMessageOpen}
           severity="error"
           message="無効なメールアドレス/パスワードです"
+        />
+        <AlertMessage
+          open={alertMessageOpen2}
+          setOpen={setAlertMessageOpen2}
+          severity="error"
+          message="サインインしたユーザーのみがユーザーを追加できます"
         />
       </Container>
     </>
