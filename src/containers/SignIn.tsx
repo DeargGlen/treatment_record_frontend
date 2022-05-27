@@ -1,19 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import React, { useState, useContext, FC } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
 import { makeStyles } from '@mui/styles';
 import {
-  Typography,
   Container,
   TextField,
   Card,
   CardContent,
   CardHeader,
   Button,
-  Box,
 } from '@mui/material';
 
 import { AuthContext } from 'App';
@@ -115,14 +113,6 @@ const SignIn: FC = () => {
               >
                 ログイン
               </Button>
-              <Box textAlign="center" className={classes.box}>
-                <Typography variant="body2">
-                  アカウントを持っていない場合：
-                  <Link to="/signup" className={classes.link}>
-                    ユーザー登録する
-                  </Link>
-                </Typography>
-              </Box>
             </CardContent>
           </Card>
         </form>
