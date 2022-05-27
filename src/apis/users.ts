@@ -11,7 +11,14 @@ import {
 import { signUpUrl, signInUrl, signOutUrl, getCurrentUserUrl } from 'urls';
 import client from './client';
 
-export const signUp = (params: SignUpParams) => client.post(signUpUrl, params);
+export const signUp = (params: SignUpParams) =>
+  client.post(signUpUrl, params, {
+    headers: {
+      'access-token': Cookies.get('_access_token') || '',
+      client: Cookies.get('_client') || '',
+      uid: Cookies.get('_uid') || '',
+    },
+  });
 
 export const userInfoUpdate = (params: UserInfoUpdateParams) =>
   client.put(signUpUrl, params, {
