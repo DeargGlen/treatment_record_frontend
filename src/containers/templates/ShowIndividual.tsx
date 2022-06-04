@@ -44,23 +44,27 @@ const ShowIndividual: FC = () => {
       {individualState.fetchState === REQUEST_STATE.LOADING ? (
         <IndividualSkelton />
       ) : (
-        <IndividualShow individual={individualState.individual} />
+        <>
+          <IndividualShow individual={individualState.individual} />
+
+          <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
+            <Fab
+              sx={{
+                position: 'fixed',
+                bottom: 70,
+                right: 20,
+              }}
+              color="primary"
+              aria-label="add"
+              component={RouterLink}
+              to="/treatments/new"
+              state={{ sentIndividualId: individualState.individual.id }}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </>
       )}
-      <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
-        <Fab
-          sx={{
-            position: 'fixed',
-            bottom: 70,
-            right: 20,
-          }}
-          color="primary"
-          aria-label="add"
-          component={RouterLink}
-          to="/treatments/new"
-        >
-          <AddIcon />
-        </Fab>
-      </Tooltip>
     </>
   );
 };

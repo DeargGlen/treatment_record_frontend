@@ -1,41 +1,95 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FC } from 'react';
-import { TREATMENT } from 'apis/treatments';
+import * as React from 'react';
+import { TREATMENT_SHOW_DATA } from 'apis/treatments';
+import { COMMENT, postComment } from 'apis/comments';
 import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
 import { ContentWrapper, MainWrapper } from 'Style';
 import handleToDateAndTime from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
-import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 import styled from 'styled-components';
-import handleToDate from 'containers/func/handleToDate';
-import Divider from '@mui/material/Divider';
+import { Divider, Link, TextField, Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+import { HTTP_STATUS_CODE } from 'states';
 
+const TagNum = styled.div`
+  font-size: 22px;
+  text-align: center;
+`;
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
   padding-left: 10px;
   padding-right: 10px;
 `;
-const RowTreatment = styled.div`
+const RowContent = styled.div`
+  padding-left: 10px;
+  padding-right: 10px;
+`;
+const RowComment = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-const Datetime = styled.p``;
 const Data = styled.div`
   margin-top: auto;
   margin-bottom: auto;
   line-height: 24px;
 `;
 
-const TreatmentShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
-  individual,
-}) => {
-  const Sortedtreatments: TREATMENT[] | undefined = individual.treatments?.sort(
+interface CommentState {
+  treatmentId: number | null;
+  content: string;
+  userId: number | null;
+}
+
+const TreatmentShow: FC<{
+  treatment: TREATMENT_SHOW_DATA;
+  changedCount: number;
+  setChangedCount: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ treatment, changedCount, setChangedCount }) => {
+  const [values, setValues] = React.useState<CommentState>({
+    treatmentId: null,
+    content: '',
+    userId: null,
+  });
+
+  const handleChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  const onSubmit = () => {
+    postComment({
+      treatmentId: treatment.id,
+      content: values.content,
+      userId: values.userId ?? 0,
+    })
+      .then(() => setChangedCount(changedCount + 1))
+      .catch((e) => {
+        if (e.response.status === HTTP_STATUS_CODE.NOT_ACCEPTABLE) {
+          setValues({
+            ...values,
+            treatmentId: null,
+            content: '',
+            userId: null,
+          });
+        } else {
+          throw e;
+        }
+      });
+  };
+
+  const Sortedcomments: COMMENT[] | undefined = treatment.treatComments?.sort(
     (n1, n2) => {
-      if (n1.datetime < n2.datetime) {
+      if (n1.createdAt > n2.createdAt) {
         return 1;
       }
-      if (n1.datetime > n2.datetime) {
+      if (n1.createdAt < n2.createdAt) {
         return -1;
       }
 
@@ -46,129 +100,83 @@ const TreatmentShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   return (
     <>
       <MainWrapper>
-        <div className="tag-num" style={{ fontSize: 22, paddingLeft: 10 }}>
-          <img src={EarTagImage} alt="tag-number" width="20" />
-          {individual.id?.slice(5, 9)}
-        </div>
+        <Link
+          component={RouterLink}
+          to={`/individuals/${treatment.individualId ?? '-'}`}
+          style={{ fontSize: 22, color: 'black' }}
+        >
+          <TagNum>
+            <img src={EarTagImage} alt="tag-number" width="20" />
+            {treatment.individualId?.slice(5, 9)}{' '}
+          </TagNum>
+        </Link>
         <Row>
-          <p>個体識別番号：</p>
-          <Data>
-            {individual.id?.slice(0, 5)}.
-            <span style={{ fontWeight: 'bold' }}>
-              {individual.id?.slice(5, 9)}
-            </span>
-            .{individual.id?.slice(9, 10)}
-          </Data>
+          <p>日時：</p>
+          <Data>{handleToDateAndTime(treatment.datetime ?? '-')}</Data>
         </Row>
         <Divider />
         <Row>
-          <p>出生日：</p>
-          <Data>
-            {individual.dateOfBirth
-              ? handleToDate(individual.dateOfBirth)
-              : '-'}
-          </Data>
+          <p>体温：</p>
+          <Data>{treatment.bodyTemperature?.toFixed(1)}℃</Data>
         </Row>
         <Divider />
-        <Row>
-          <p>月齢：</p>
-          <Data>{individual.age}</Data>
-        </Row>
+        <RowContent>
+          <p>症状：</p>
+          <div>{treatment.symptom}</div>
+        </RowContent>
+        <Divider />
+        <RowContent>
+          <p>治療内容：</p>
+          <div>{treatment.content}</div>
+        </RowContent>
         <Divider />
         <Row>
-          <p>導入日：</p>
-          <Data>
-            {individual.dateOfIntroduction
-              ? handleToDate(individual.dateOfIntroduction)
-              : '-'}
-          </Data>
+          <p>登録者：</p>
+          <Data>{treatment.userName}</Data>
         </Row>
         <Divider />
-        <Row>
-          <p>性別：</p>
-          <Data>{['去勢', 'オス', 'メス'][individual.sex] ?? '-'}</Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>種別：</p>
-          <Data>
-            {['肥育', '繁殖', '子牛', '育成'][individual.category] ?? '-'}
-          </Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>品種：</p>
-          <Data>{['黒毛和種', 'F1'][individual.breedType] ?? '-'}</Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>場所：</p>
-          <Data>
-            {individual.areaName ?? '-'}
-            {individual.barnName ?? '-'} {individual.no ?? ' '}
-          </Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>母牛の個体識別番号：</p>
-          <Data>
-            {individual.motherId ? (
-              <p>
-                {individual.motherId?.slice(0, 5)}.
-                <span style={{ fontWeight: 'bold' }}>
-                  {individual.motherId?.slice(5, 9)}
-                </span>
-                .{individual.motherId?.slice(9, 10)}
-              </p>
-            ) : (
-              '-'
-            )}
-          </Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>父牛：</p>
-          <Data>{individual.fatherName ? individual.fatherName : '-'}</Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>母の父牛：</p>
-          <Data>
-            {individual.grandfatherName ? individual.grandfatherName : '-'}
-          </Data>
-        </Row>
-        <Divider />
-        <Row>
-          <p>治療記録件数：</p>
-          <Data>{individual?.treatments?.length}</Data>
-        </Row>
+        <div style={{ textAlign: 'center' }}>コメント</div>
         <Divider />
       </MainWrapper>
-      {Sortedtreatments.map((treatment: TREATMENT) => (
-        <ThemeProvider theme={theme} key={treatment.id}>
+
+      {Sortedcomments.map((comment: COMMENT) => (
+        <ThemeProvider theme={theme} key={comment.id}>
           <ContentWrapper>
             <MainWrapper>
-              <RowTreatment>
-                <Datetime>
-                  日時：{handleToDateAndTime(treatment.datetime)}
-                </Datetime>
-                <p>
-                  体温：
-                  {treatment.bodyTemperature.toFixed(1)}℃
+              <RowComment>
+                <p style={{ fontWeight: 500 }}>{comment.userName}</p>
+                <p style={{ color: 'GrayText' }}>
+                  {handleToDateAndTime(comment.createdAt ?? '-')}
                 </p>
-              </RowTreatment>
-              <div className="row2">
-                <p>症状：{treatment.symptom}</p>
-                <p>治療内容：{treatment.content}</p>
-              </div>
-              <div className="row3">
-                <p>登録者：{treatment.userName}</p>
-              </div>
+              </RowComment>
+              <div>{comment.content}</div>
             </MainWrapper>
           </ContentWrapper>
           <Divider />
         </ThemeProvider>
       ))}
+      <Row>
+        <TextField
+          value={values.content}
+          onChange={handleChange}
+          name="content"
+          variant="standard"
+          sx={{ width: 410 }}
+          multiline
+          placeholder="コメントを追加"
+          maxRows={4}
+        />
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          onClick={onSubmit}
+          style={{ height: 36.5 }}
+          disabled={!values.content.length}
+        >
+          送信
+        </Button>
+      </Row>
     </>
   );
 };

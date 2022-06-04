@@ -1,48 +1,54 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { fetchIndividual, INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
+import { fetchTreatment, TREATMENT_SHOW_DATA } from 'apis/treatments';
 import TreatmentShow from 'components/organisms/TreatmentShow';
-import IndividualSkelton from 'components/molecules/IndividualSkelton';
+import TreatmentSkelton from 'components/molecules/TreatmentSkelton';
 
 // reducers
 import {
   initialState,
-  individualActionTypes,
-  individualReducer,
-} from 'reducers/individual';
+  treatmentActionTypes,
+  treatmentReducer,
+} from 'reducers/treatment';
 
 // constants
 import { REQUEST_STATE } from 'states';
 
 const ShowIndividual: FC = () => {
-  const [individualState, dispatch] = useReducer(
-    individualReducer,
+  const [treatmentShowState, dispatch] = useReducer(
+    treatmentReducer,
     initialState,
   );
-  const { individualId } = useParams();
+  const { treatmentId } = useParams();
+  const treatmentIdNum = Number(treatmentId);
+  const [changedCount, setChangedCount] = useState(0);
 
   useEffect(() => {
-    dispatch({ type: individualActionTypes.FETCHING });
-    fetchIndividual(individualId ?? '-')
-      .then((data: void | INDIVIDUAL_SHOW_DATA) => {
+    dispatch({ type: treatmentActionTypes.FETCHING });
+    fetchTreatment(treatmentIdNum ?? 0)
+      .then((data: void | TREATMENT_SHOW_DATA) => {
         console.log(data);
         dispatch({
-          type: individualActionTypes.FETCH_SUCCESS,
+          type: treatmentActionTypes.FETCH_SUCCESS,
           payload: {
-            individual: data,
+            treatment: data,
           },
         });
       })
       .catch(() => 1);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [changedCount]);
 
   return (
     <>
-      {individualState.fetchState === REQUEST_STATE.LOADING ? (
-        <IndividualSkelton />
+      {treatmentShowState.fetchState === REQUEST_STATE.LOADING ? (
+        <TreatmentSkelton />
       ) : (
-        <TreatmentShow individual={individualState.individual} />
+        <TreatmentShow
+          treatment={treatmentShowState.treatment}
+          changedCount={changedCount}
+          setChangedCount={setChangedCount}
+        />
       )}
     </>
   );

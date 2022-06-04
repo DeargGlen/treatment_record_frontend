@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { FC, useState, useEffect, useReducer } from 'react';
 import * as React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import { postTreatment } from 'apis/treatments';
 import { HTTP_STATUS_CODE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
@@ -15,6 +15,10 @@ import {
   individualsActionTypes,
   individualsReducer,
 } from 'reducers/individuals';
+
+interface State {
+  sentIndividualId: string;
+}
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -95,9 +99,14 @@ interface TreatmentState {
 }
 
 const NewTreatment: FC = () => {
+  const location = useLocation();
+  const { sentIndividualId } = (location.state as State) ?? '';
+  const now = new Date();
+  now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+  const setDate = now.toISOString().slice(0, -8);
   const [values, setValues] = React.useState<TreatmentState>({
-    individualId: '',
-    datetime: '',
+    individualId: sentIndividualId ?? '',
+    datetime: setDate ?? '',
     bodyTemperature: null,
     symptom: '',
     content: '',

@@ -4,6 +4,8 @@ export const individualShow = (individualId: string) =>
 export const individualCreate = `/individuals`;
 export const treatmentsIndex = `/treatments.json`;
 export const treatmentCreate = `/treatments`;
+export const treatmentShow = (treatmentId: number) =>
+  `/treatments/${treatmentId}.json`;
 export const signUpUrl = `/auth`;
 export const signInUrl = `/auth/sign_in`;
 export const signOutUrl = `/auth/sign_out`;
@@ -16,3 +18,4 @@ export const barnCreate = `/barns`;
 export const barnDestroy = (barnId: number) => `/barns/${barnId}`;
 export const blockCreate = `/blocks`;
 export const blockDestroy = (blockId: number) => `/blocks/${blockId}`;
+export const treatCommentCreate = `/treat_comments`;

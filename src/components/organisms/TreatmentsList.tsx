@@ -46,15 +46,22 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
         <ThemeProvider theme={theme} key={treatment.id}>
           <TreatmentContentWrapper>
             <MainWrapper>
+              <TagNum>
+                <img src={EarTagImage} alt="tag-number" width="20" />{' '}
+                <Link
+                  component={RouterLink}
+                  to={`/individuals/${treatment.individualId}`}
+                  style={{ fontSize: 24, color: 'black' }}
+                >
+                  {treatment.individualId.slice(5, 9)}{' '}
+                </Link>
+              </TagNum>
+
               <Link
                 component={RouterLink}
-                to={`/individuals/${treatment.individualId}`}
+                to={`/treatments/${treatment.id}`}
                 style={{ fontSize: 16, color: 'black' }}
               >
-                <TagNum>
-                  <img src={EarTagImage} alt="tag-number" width="20" />
-                  {treatment.individualId.slice(5, 9)}{' '}
-                </TagNum>
                 <Row>
                   <Datetime>
                     日時：{handleToDateAndTime(treatment.datetime)}

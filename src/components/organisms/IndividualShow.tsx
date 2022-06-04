@@ -9,7 +9,13 @@ import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 import styled from 'styled-components';
 import handleToDate from 'containers/func/handleToDate';
 import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
+const TagNum = styled.div`
+  font-size: 22px;
+  text-align: center;
+`;
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
@@ -46,10 +52,10 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   return (
     <>
       <MainWrapper>
-        <div className="tag-num" style={{ fontSize: 22, paddingLeft: 10 }}>
+        <TagNum>
           <img src={EarTagImage} alt="tag-number" width="20" />
           {individual.id?.slice(5, 9)}
-        </div>
+        </TagNum>
         <Row>
           <p>個体識別番号：</p>
           <Data>
@@ -148,22 +154,28 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         <ThemeProvider theme={theme} key={treatment.id}>
           <ContentWrapper>
             <MainWrapper>
-              <RowTreatment>
-                <Datetime>
-                  日時：{handleToDateAndTime(treatment.datetime)}
-                </Datetime>
-                <p>
-                  体温：
-                  {treatment.bodyTemperature.toFixed(1)}℃
-                </p>
-              </RowTreatment>
-              <div className="row2">
-                <p>症状：{treatment.symptom}</p>
-                <p>治療内容：{treatment.content}</p>
-              </div>
-              <div className="row3">
-                <p>登録者：{treatment.userName}</p>
-              </div>
+              <Link
+                component={RouterLink}
+                to={`/treatments/${treatment.id}`}
+                style={{ fontSize: 16, color: 'black' }}
+              >
+                <RowTreatment>
+                  <Datetime>
+                    日時：{handleToDateAndTime(treatment.datetime)}
+                  </Datetime>
+                  <p>
+                    体温：
+                    {treatment.bodyTemperature.toFixed(1)}℃
+                  </p>
+                </RowTreatment>
+                <div className="row2">
+                  <p>症状：{treatment.symptom}</p>
+                  <p>治療内容：{treatment.content}</p>
+                </div>
+                <div className="row3">
+                  <p>登録者：{treatment.userName}</p>
+                </div>
+              </Link>
             </MainWrapper>
           </ContentWrapper>
           <Divider />
