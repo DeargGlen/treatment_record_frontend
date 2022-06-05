@@ -114,7 +114,7 @@ const AllTreatments: FC = () => {
         <Fab
           sx={{
             position: 'fixed',
-            bottom: 75,
+            bottom: 85,
             right: 20,
           }}
           color="primary"

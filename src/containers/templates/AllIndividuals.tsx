@@ -103,7 +103,7 @@ const AllIndividuals: FC = () => {
           aria-label="add"
           component={RouterLink}
           to="/individuals/new"
-          sx={{ position: 'fixed', bottom: 75, right: 20 }}
+          sx={{ position: 'fixed', bottom: 85, right: 20 }}
         >
           <AddIcon />
         </Fab>

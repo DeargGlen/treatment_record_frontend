@@ -75,7 +75,7 @@ const BottomBar: FC = () => {
               bottom: 0,
               left: 0,
               right: 0,
-              height: 70,
+              height: 80,
               display: 'flex',
               justifyContent: 'center',
             }}
@@ -98,7 +98,7 @@ const BottomBar: FC = () => {
                 icon={<HomeIcon />}
                 component={RouterLink}
                 to="/"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
               <BottomNavigationAction
                 label="個体管理"
@@ -106,7 +106,7 @@ const BottomBar: FC = () => {
                 icon={<img src={CattleImg} alt="tag-number" width="25" />}
                 component={RouterLink}
                 to="/individuals"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
               <BottomNavigationAction
                 label="治療管理"
@@ -114,7 +114,7 @@ const BottomBar: FC = () => {
                 icon={<CreateIcon />}
                 component={RouterLink}
                 to="/treatments"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
               <BottomNavigationAction
                 label="設定"
@@ -122,7 +122,7 @@ const BottomBar: FC = () => {
                 icon={<AccountCircle />}
                 component={RouterLink}
                 to="/settings"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
             </BottomNavigation>
           </Paper>
