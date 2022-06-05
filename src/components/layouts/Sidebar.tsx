@@ -7,6 +7,7 @@ import theme from 'components/theme';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import AccoutntCircle from '@mui/icons-material/AccountCircle';
+import CattleImg from 'images/cattle.png';
 
 const SidebarWrapper = styled.div`
   height: 100%;
@@ -23,11 +24,22 @@ const Sidebar: FC = () => {
         <ThemeProvider theme={theme}>
           <ListItem>
             <ListItemButton
+              selected={location.pathname === '/'}
+              component={RouterLink}
+              to="/"
+            >
+              <HomeIcon />
+              <ListItemText primary="ホーム" />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemButton
               selected={location.pathname.includes('/individuals')}
               component={RouterLink}
               to="/individuals"
             >
-              <HomeIcon />
+              <img src={CattleImg} alt="tag-number" width="25" />
               <ListItemText primary="個体管理" />
             </ListItemButton>
           </ListItem>

@@ -3,12 +3,13 @@ import { TREATMENT } from 'apis/treatments';
 
 type TreatmentState = {
   fetchState: string;
-  treatmentsList: void | TREATMENT[];
+  treatmentsList: TREATMENT[];
 };
 export const initialState: TreatmentState = {
   fetchState: REQUEST_STATE.INITIAL,
   treatmentsList: [],
 };
+const emptyTreatmentsList: TREATMENT[] = [];
 
 type ValueOf<T> = T[keyof T];
 type TreatmentAction = {
@@ -34,8 +35,7 @@ export const treatmentsReducer = (
     case treatmentsActionTypes.FETCH_SUCCESS:
       return {
         fetchState: REQUEST_STATE.OK,
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        treatmentsList: action.payload!.treatments,
+        treatmentsList: action.payload?.treatments ?? emptyTreatmentsList,
       };
     default:
       throw new Error();

@@ -9,6 +9,7 @@ import { makeStyles } from '@mui/styles';
 import theme from 'components/theme';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CattleImg from 'images/Cattle.svg';
 
 const useStyles = makeStyles({
   palette: {
@@ -46,12 +47,14 @@ const BottomBar: FC = () => {
 
   const select = () => {
     let num = -1;
-    if (location.pathname.includes('/individuals')) {
+    if (location.pathname === '/') {
       num = 0;
-    } else if (location.pathname.includes('/treatments')) {
+    } else if (location.pathname.includes('/individuals')) {
       num = 1;
-    } else if (location.pathname.includes('/settings')) {
+    } else if (location.pathname.includes('/treatments')) {
       num = 2;
+    } else if (location.pathname.includes('/settings')) {
+      num = 3;
     } else {
       num = -1;
     }
@@ -90,9 +93,17 @@ const BottomBar: FC = () => {
               className={classes.root}
             >
               <BottomNavigationAction
-                label="個体管理"
+                label="ホーム"
                 className={classes.button}
                 icon={<HomeIcon />}
+                component={RouterLink}
+                to="/"
+                sx={{ width: 105 }}
+              />
+              <BottomNavigationAction
+                label="個体管理"
+                className={classes.button}
+                icon={<img src={CattleImg} alt="tag-number" width="25" />}
                 component={RouterLink}
                 to="/individuals"
                 sx={{ width: 105 }}

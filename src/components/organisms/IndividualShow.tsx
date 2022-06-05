@@ -117,15 +117,20 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         <Divider />
         <Row>
           <p>母牛の個体識別番号：</p>
+
           <Data>
             {individual.motherId ? (
-              <p>
+              <Link
+                component={RouterLink}
+                to={`/individuals/${individual.motherId ?? '-'}`}
+                style={{ fontSize: 16, color: 'black' }}
+              >
                 {individual.motherId?.slice(0, 5)}.
                 <span style={{ fontWeight: 'bold' }}>
                   {individual.motherId?.slice(5, 9)}
                 </span>
                 .{individual.motherId?.slice(9, 10)}
-              </p>
+              </Link>
             ) : (
               '-'
             )}

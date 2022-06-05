@@ -88,6 +88,7 @@ const AllIndividuals: FC = () => {
           InputProps={{ inputComponent: EarTagFormat as never }}
         />
       </SearchBar>
+
       {state.fetchState === REQUEST_STATE.LOADING ? (
         <>
           <IndividualSkelton />
