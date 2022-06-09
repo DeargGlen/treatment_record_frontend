@@ -4,7 +4,7 @@ import SettingsIndex from 'containers/templates/SettingsIndex';
 import UserSettings from 'containers/templates/UserSettings';
 import FarmSettings from 'containers/templates/FarmSettings';
 import LocationSettings from 'containers/templates/LocationSettings';
-import ShowBarn from 'containers/templates/ShowBarn';
+import ShowSettingBarn from 'containers/templates/ShowSettingBarn';
 
 const Settings: FC = () => (
   <>
@@ -13,7 +13,7 @@ const Settings: FC = () => (
       <Route path="/user" element={<UserSettings />} />
       <Route path="/farm" element={<FarmSettings />} />
       <Route path="/farm/locations" element={<LocationSettings />} />
-      <Route path="/barns/:barnId" element={<ShowBarn />} />
+      <Route path="/barns/:barnId" element={<ShowSettingBarn />} />
     </Routes>
   </>
 );

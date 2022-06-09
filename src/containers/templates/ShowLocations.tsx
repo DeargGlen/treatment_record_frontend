@@ -1,7 +1,7 @@
 import { FC, useEffect, useReducer } from 'react';
 import { fetchAreas, AREAS_DATA } from 'apis/locations';
 import { REQUEST_STATE } from 'states';
-import AreasSettingList from 'components/organisms/AreasSettingList';
+import AreasList from 'components/organisms/AreasList';
 
 import {
   initialAreaState,
@@ -9,7 +9,7 @@ import {
   areasReducer,
 } from 'reducers/areas';
 
-const LocationSettings: FC = () => {
+const ShowLocations: FC = () => {
   const [state, dispatch] = useReducer(areasReducer, initialAreaState);
   useEffect(() => {
     dispatch({ type: areasActionTypes.FETCHING });
@@ -29,12 +29,12 @@ const LocationSettings: FC = () => {
   return (
     <>
       {state.fetchState === REQUEST_STATE.LOADING ? (
-        <div style={{ fontSize: 24 }}>エリア名の設定</div>
+        <div style={{ fontSize: 24 }}>場所ごとの個体を表示</div>
       ) : (
-        <AreasSettingList areas={state.areasList} />
+        <AreasList areas={state.areasList} />
       )}
     </>
   );
 };
 
-export default LocationSettings;
+export default ShowLocations;
