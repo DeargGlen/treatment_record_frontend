@@ -56,7 +56,11 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
   },
 }));
 
-const AreasSettingList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
+const AreasSettingList: FC<{
+  areas: AREA_WITH_BARNS[];
+  changedCount: number;
+  setChangedCount: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ areas, changedCount, setChangedCount }) => {
   const [areaName, setAreaName] = useState('');
   const [editState, setEdit] = useState(false);
   const [barnName, setBarnName] = useState('');
@@ -113,7 +117,8 @@ const AreasSettingList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
   const submitDestroyArea = (areaId: number) => {
     destroyArea(areaId)
       .then(() => {
-        navigate('/settings/farm');
+        navigate('/settings/farm/locations');
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };
@@ -124,7 +129,9 @@ const AreasSettingList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
     })
       .then(() => {
         setAreaId(0);
-        navigate('/settings/farm');
+        navigate('/settings/farm/locations');
+        handleCloseArea();
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };
@@ -132,7 +139,9 @@ const AreasSettingList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
   const submitDestroyBarn = (barnId: number) => {
     destroyBarn(barnId)
       .then(() => {
-        navigate('/settings/farm');
+        navigate('/settings/farm/locations');
+        handleCloseBarn();
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };
@@ -143,7 +152,8 @@ const AreasSettingList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
       id: areaIdForSubmit,
     })
       .then(() => {
-        navigate('/settings/farm');
+        navigate('/settings/farm/locations');
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };

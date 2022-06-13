@@ -6,25 +6,25 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Link as RouterLink } from 'react-router-dom';
 
-const SettingsIndex: FC = () => (
+const TagSettings: FC = () => (
   <>
     <List>
       <Divider />
       <ListItem disablePadding>
-        <ListItemButton component={RouterLink} to="/settings/user">
-          <ListItemText primary="ユーザー設定" />
+        <ListItemButton component={RouterLink} to="/settings/tags/individual">
+          <ListItemText primary="個体タグ" />
         </ListItemButton>
       </ListItem>
       <Divider />
       <ListItem disablePadding>
-        <ListItemButton component={RouterLink} to="/settings/farm">
-          <ListItemText primary="牧場設定" />
+        <ListItemButton component={RouterLink} to="/settings/tags/symptom">
+          <ListItemText primary="症状タグ" />
         </ListItemButton>
       </ListItem>
       <Divider />
       <ListItem disablePadding>
-        <ListItemButton component={RouterLink} to="/settings/tags">
-          <ListItemText primary="タグ設定" />
+        <ListItemButton component={RouterLink} to="/settings/tags/disease">
+          <ListItemText primary="疾病タグ" />
         </ListItemButton>
       </ListItem>
       <Divider />
@@ -32,4 +32,4 @@ const SettingsIndex: FC = () => (
   </>
 );
 
-export default SettingsIndex;
+export default TagSettings;

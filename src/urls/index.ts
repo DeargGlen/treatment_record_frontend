@@ -19,3 +19,14 @@ export const barnDestroy = (barnId: number) => `/barns/${barnId}`;
 export const blockCreate = `/blocks`;
 export const blockDestroy = (blockId: number) => `/blocks/${blockId}`;
 export const treatCommentCreate = `/treat_comments`;
+export const treatCommentsIndex = `/treat_comments.json`;
+export const symptomTagsIndex = `/symptom_tags.json`;
+export const symptomTagCreate = `/symptom_tags`;
+export const symptomTagDestroy = (tagId: number) => `/symptom_tags/${tagId}`;
+export const diseaseTagsIndex = `/disease_tags.json`;
+export const diseaseTagCreate = `/disease_tags`;
+export const diseaseTagDestroy = (tagId: number) => `/disease_tags/${tagId}`;
+export const individualTagsIndex = `/individual_tags.json`;
+export const individualTagCreate = `/individual_tags`;
+export const individualTagDestroy = (tagId: number) =>
+  `/individual_tags/${tagId}`;

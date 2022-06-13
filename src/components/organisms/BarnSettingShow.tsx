@@ -18,7 +18,11 @@ const ButtonDiv = styled.div`
   justify-content: flex-end;
 `;
 
-const BarnSettingShow: FC<{ barn: BARN_SHOW_DATA }> = ({ barn }) => {
+const BarnSettingShow: FC<{
+  barn: BARN_SHOW_DATA;
+  changedCount: number;
+  setChangedCount: React.Dispatch<React.SetStateAction<number>>;
+}> = ({ barn, changedCount, setChangedCount }) => {
   const Sortedblocks: BLOCK[] | undefined = barn.blocks?.sort((n1, n2) => {
     if (n1.no > n2.no) {
       return 1;
@@ -55,7 +59,9 @@ const BarnSettingShow: FC<{ barn: BARN_SHOW_DATA }> = ({ barn }) => {
       id: barn.id ?? 0,
     })
       .then(() => {
-        navigate('/settings/farm');
+        navigate(`/settings/barns/${barn.id ?? 0}`);
+        handleClose();
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };
@@ -63,7 +69,8 @@ const BarnSettingShow: FC<{ barn: BARN_SHOW_DATA }> = ({ barn }) => {
   const submitDestroyBlock = (blockId: number) => {
     destroyBlock(blockId)
       .then(() => {
-        navigate('/settings/farm');
+        navigate(`/settings/barns/${barn.id ?? 0}`);
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };

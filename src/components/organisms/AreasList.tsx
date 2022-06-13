@@ -49,11 +49,8 @@ const AreasList: FC<{ areas: AREA_WITH_BARNS[] }> = ({ areas }) => {
 
   return (
     <>
-      <div style={{ display: 'flex' }}>
-        <div style={{ fontSize: 24, textAlign: 'center' }}>
-          場所から個体の表示
-        </div>
-      </div>
+      <div style={{ fontSize: 24, textAlign: 'center' }}>個体の表示</div>
+
       {areas?.map((area: AREA_WITH_BARNS) => (
         <Accordion
           expanded={expanded === area.id}

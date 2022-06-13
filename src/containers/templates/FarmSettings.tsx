@@ -6,7 +6,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import { Link as RouterLink } from 'react-router-dom';
 
-const SettingsIndex: FC = () => (
+const FarmSettings: FC = () => (
   <>
     <List>
       <Divider />
@@ -20,4 +20,4 @@ const SettingsIndex: FC = () => (
   </>
 );
 
-export default SettingsIndex;
+export default FarmSettings;

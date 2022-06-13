@@ -11,10 +11,18 @@ import handleToDate from 'containers/func/handleToDate';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import { breedTypeList, categoryList, sexList } from 'constant';
+import DisplayTags from 'components/molecules/DisplayTags';
+import { Button } from '@mui/material';
 
 const TagNum = styled.div`
   font-size: 22px;
   text-align: center;
+  margin-left: 220px;
+  margin-right: 80px;
+`;
+const TopRow = styled.div`
+  display: flex;
 `;
 const Row = styled.div`
   display: flex;
@@ -52,10 +60,26 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   return (
     <>
       <MainWrapper>
-        <TagNum>
-          <img src={EarTagImage} alt="tag-number" width="20" />
-          {individual.id?.slice(5, 9)}
-        </TagNum>
+        <TopRow>
+          <TagNum>
+            <img src={EarTagImage} alt="tag-number" width="20" />
+            {individual.id?.slice(5, 9)}
+          </TagNum>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ height: 20, mt: '5px' }}
+          >
+            編集
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ height: 20, mt: '5px' }}
+          >
+            削除
+          </Button>
+        </TopRow>
         <Row>
           <p>個体識別番号：</p>
           <Data>
@@ -92,19 +116,27 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         <Divider />
         <Row>
           <p>性別：</p>
-          <Data>{['去勢', 'オス', 'メス'][individual.sex] ?? '-'}</Data>
+          <Data>
+            {individual.sex != null ? sexList[individual.sex]?.label : '-'}
+          </Data>
         </Row>
         <Divider />
         <Row>
           <p>種別：</p>
           <Data>
-            {['肥育', '繁殖', '子牛', '育成'][individual.category] ?? '-'}
+            {individual.category != null
+              ? categoryList[individual.category]?.label
+              : '-'}
           </Data>
         </Row>
         <Divider />
         <Row>
           <p>品種：</p>
-          <Data>{['黒毛和種', 'F1'][individual.breedType] ?? '-'}</Data>
+          <Data>
+            {individual.breedType != null
+              ? breedTypeList[individual.breedType]?.label
+              : '-'}
+          </Data>
         </Row>
         <Divider />
         <Row>
@@ -112,6 +144,14 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
           <Data>
             {individual.areaName ?? '-'}
             {individual.barnName ?? '-'} {individual.no ?? ' '}
+          </Data>
+        </Row>
+        <Divider />
+
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>個体タグ：</p>
+          <Data>
+            <DisplayTags tags={individual.individualTags} />
           </Data>
         </Row>
         <Divider />
@@ -138,14 +178,23 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         </Row>
         <Divider />
         <Row>
-          <p>父牛：</p>
+          <p>父：</p>
           <Data>{individual.fatherName ? individual.fatherName : '-'}</Data>
         </Row>
         <Divider />
         <Row>
-          <p>母の父牛：</p>
+          <p>母の父：</p>
           <Data>
             {individual.grandfatherName ? individual.grandfatherName : '-'}
+          </Data>
+        </Row>
+        <Divider />
+        <Row>
+          <p>祖母の父：</p>
+          <Data>
+            {individual.grandGrandfatherName
+              ? individual.grandGrandfatherName
+              : '-'}
           </Data>
         </Row>
         <Divider />

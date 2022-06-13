@@ -54,8 +54,9 @@ export const getCurrentUser = () => {
     !Cookies.get('_access_token') ||
     !Cookies.get('_client') ||
     !Cookies.get('_uid')
-  )
+  ) {
     return;
+  }
 
   // eslint-disable-next-line consistent-return
   return client

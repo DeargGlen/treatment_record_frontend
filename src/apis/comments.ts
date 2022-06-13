@@ -1,14 +1,15 @@
-import { treatCommentCreate } from 'urls';
+import { treatCommentCreate, treatCommentsIndex } from 'urls';
 import Cookies from 'js-cookie';
 import client from './client';
 
 export type COMMENT = {
-  id?: number;
+  id: number;
   content: string;
   userId: number;
   userName: string;
   createdAt: string;
-  treatmentId?: number;
+  treatmentId: number;
+  individualId: string;
 };
 
 export type COMMENT_POST = {
@@ -19,8 +20,14 @@ export type COMMENT_POST = {
   treatmentId?: number;
 };
 
-type COMMENT_RES = {
+type COMMENT_POST_RES = {
   data: COMMENT;
+};
+
+type COMMENT_RES = {
+  data: {
+    treatComments: COMMENT[];
+  };
 };
 
 export const postComment = (params: COMMENT_POST) =>
@@ -39,7 +46,20 @@ export const postComment = (params: COMMENT_POST) =>
         },
       },
     )
-    .then((res: COMMENT_RES) => res.data)
+    .then((res: COMMENT_POST_RES) => res.data)
     .catch((e) => {
       throw e;
     });
+
+export const fetchTreatComments = () =>
+  client
+    .get(treatCommentsIndex, {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
+    .then((res: COMMENT_RES) => res.data)
+    // eslint-disable-next-line no-console
+    .catch((e) => console.error(e));

@@ -9,7 +9,7 @@ import EarTagImage from 'images/ear.png';
 import { IndividualContentWrapper, MainWrapper } from 'Style';
 import styled from 'styled-components';
 import handleToDate from 'containers/func/handleToDate';
-import { breedTypeList, categoryList, sexList } from 'constant';
+import { breedTypeList, sexList, categoryList } from 'constant';
 
 const Row = styled.div`
   display: flex;
@@ -18,12 +18,17 @@ const Row = styled.div`
 const TagNum = styled.div`
   font-size: 24px;
 `;
+const InvidividualId = styled.p``;
+const DateOfBirth = styled.p``;
+const Age = styled.p``;
+const Sex = styled.p``;
+const Category = styled.p``;
+const BreedType = styled.p``;
 
-const IndividualsListForLoc: FC<{ individuals: void | INDIVIDUAL[] }> = ({
+const IndividualsList: FC<{ individuals: void | INDIVIDUAL[] }> = ({
   individuals,
 }) => (
   <>
-    <Divider />
     {individuals?.map((individual: INDIVIDUAL) => (
       <ThemeProvider theme={theme} key={individual.id}>
         <IndividualContentWrapper>
@@ -38,48 +43,30 @@ const IndividualsListForLoc: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                 {individual.id.slice(5, 9)}{' '}
               </TagNum>
               <Row>
-                <p>
+                <InvidividualId>
                   個体識別番号：{individual.id.slice(0, 5)}.
                   <span style={{ fontWeight: 'bold' }}>
                     {individual.id.slice(5, 9)}
                   </span>
                   .{individual.id.slice(9, 10)}
-                </p>
+                </InvidividualId>
               </Row>
               <Row>
-                <p>出生日：{handleToDate(individual.dateOfBirth)}</p>
-                <p>月齢：{individual.age}</p>
-                <p>品種：{breedTypeList[individual.breedType]?.label}</p>
+                <DateOfBirth>
+                  出生日：{handleToDate(individual.dateOfBirth)}
+                </DateOfBirth>
+                <Age>月齢：{individual.age}</Age>
+                <BreedType>
+                  品種：{breedTypeList[individual.breedType]?.label}
+                </BreedType>
               </Row>
               <Row>
-                <p>性別：{sexList[individual.sex]?.label}</p>
-                <p>
+                <Sex>性別：{sexList[individual.sex]?.label}</Sex>
+                <Category>
                   種別：
                   {categoryList[individual.category]?.label}
-                </p>
-                <p>
-                  場所：{individual.areaName} {individual.barnName}{' '}
-                  {individual.no}{' '}
-                </p>
+                </Category>
               </Row>
-              {individual.breedType === 0 ? (
-                <>
-                  <Row>
-                    <p>
-                      父：
-                      {individual.fatherName ? individual.fatherName : '-'}
-                    </p>
-                    <p>
-                      母の父：
-                      {individual.fatherName ? individual.fatherName : '-'}
-                    </p>
-                    <p>
-                      祖母の父：
-                      {individual.fatherName ? individual.fatherName : '-'}
-                    </p>
-                  </Row>
-                </>
-              ) : null}
             </Link>
           </MainWrapper>
         </IndividualContentWrapper>
@@ -89,4 +76,4 @@ const IndividualsListForLoc: FC<{ individuals: void | INDIVIDUAL[] }> = ({
   </>
 );
 
-export default IndividualsListForLoc;
+export default IndividualsList;

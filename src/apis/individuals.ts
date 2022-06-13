@@ -2,6 +2,7 @@ import { individualsIndex, individualShow, individualCreate } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 import Cookies from 'js-cookie';
 import client from 'apis/client';
+import { IndividualTagOptionType } from './individualtags';
 
 export type INDIVIDUAL = {
   id: string;
@@ -13,12 +14,14 @@ export type INDIVIDUAL = {
   motherId?: string | null;
   fatherName?: string | null;
   grandfatherName?: string | null;
+  grandGrandfatherName?: string | null;
   dateOfIntroduction: string | null;
   areaName: string | null;
   barnName: string | null;
   no: string | null;
   created_at: string | null;
   updated_at: string | null;
+  individualTags: IndividualTagOptionType[];
 };
 
 export type INDIVIDUALS_DATA = {
@@ -27,17 +30,23 @@ export type INDIVIDUALS_DATA = {
 type INDIVIDUALS_RES = {
   data: INDIVIDUALS_DATA;
 };
+type INDIVIDUAL_TAG = {
+  id: number;
+  name: string;
+  individualTagId: number;
+};
 
 export type INDIVIDUAL_SHOW_DATA = {
   id: string | null;
   dateOfBirth: string | null;
   age: number | null;
-  sex: number;
-  category: number;
-  breedType: number;
+  sex: number | null;
+  category: number | null;
+  breedType: number | null;
   motherId?: string | null;
   fatherName?: string | null;
   grandfatherName?: string | null;
+  grandGrandfatherName?: string | null;
   dateOfIntroduction: string | null;
   areaName: string | null;
   barnName: string | null;
@@ -45,6 +54,7 @@ export type INDIVIDUAL_SHOW_DATA = {
   created_at: string | null;
   updated_at: string | null;
   treatments: TREATMENT[];
+  individualTags: INDIVIDUAL_TAG[];
 };
 type INDIVIDUAL_SHOW_RES = {
   data: INDIVIDUAL_SHOW_DATA;
@@ -53,14 +63,16 @@ type INDIVIDUAL_SHOW_RES = {
 type INDIVIDUAL_POST_PROPS = {
   individualId: string;
   dateOfBirth: string;
-  sex: string;
-  category: string;
-  breedType: string;
+  sex: number | null;
+  category: number | null;
+  breedType: number | null;
   motherId?: string;
   fatherName?: string;
   grandfatherName?: string;
+  grandGrandfatherName?: string;
   dateOfIntroduction: string;
   blockId: number;
+  individualTags: number[];
 };
 
 export const fetchIndividuals = () =>
@@ -102,8 +114,10 @@ export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
         mother_id: params.motherId,
         father_name: params.fatherName,
         grandfather_name: params.grandfatherName,
+        grand_grandfather_name: params.grandGrandfatherName,
         date_of_introduction: params.dateOfIntroduction,
         block_id: params.blockId,
+        individual_tags: params.individualTags,
       },
       {
         headers: {

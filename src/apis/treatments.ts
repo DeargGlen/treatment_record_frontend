@@ -2,6 +2,8 @@ import { treatmentsIndex, treatmentCreate, treatmentShow } from 'urls/index';
 import Cookies from 'js-cookie';
 import { COMMENT } from 'apis/comments';
 import client from './client';
+import { SymptomTagOptionType } from './symptomtags';
+import { DiseaseTagOptionType } from './diseasetags';
 
 export type TREATMENT = {
   id: number;
@@ -14,6 +16,8 @@ export type TREATMENT = {
   userName: string;
   createdAt?: string;
   updatedAt?: string;
+  symptomTags: SymptomTagOptionType[];
+  diseaseTags: DiseaseTagOptionType[];
 };
 
 export type TREATMENT_POST_PROPS = {
@@ -24,8 +28,27 @@ export type TREATMENT_POST_PROPS = {
   content: string;
   userId: number;
   userName: string;
+  symptomTags: number[];
+  diseaseTags: number[];
   createdAt?: string;
   updatedAt?: string;
+  stool: number | null;
+  feed: number | null;
+  cough: number | null;
+  nose: number | null;
+  condition: number | null;
+};
+
+type SYMPTOM_TAG = {
+  id: number;
+  name: string;
+  symptomTagId: number;
+};
+
+type DISEASE_TAG = {
+  id: number;
+  name: string;
+  diseaseTagId: number;
 };
 
 export type TREATMENT_SHOW_DATA = {
@@ -37,9 +60,16 @@ export type TREATMENT_SHOW_DATA = {
   content: string | null;
   userId: number | null;
   userName: string | null;
-  created_at?: string | null;
-  updated_at?: string | null;
+  createdAt?: string | null;
+  updatedAt?: string | null;
+  symptomTags: SYMPTOM_TAG[];
+  diseaseTags: DISEASE_TAG[];
   treatComments: COMMENT[];
+  stool: number | null;
+  feed: number | null;
+  cough: number | null;
+  nose: number | null;
+  condition: number | null;
 };
 
 type TREATMENT_SHOW_RES = {
@@ -79,6 +109,13 @@ export const postTreatment = (params: TREATMENT_POST_PROPS) =>
         content: params.content,
         user_id: params.userId,
         user_name: params.userName,
+        symptom_tags: params.symptomTags,
+        disease_tags: params.diseaseTags,
+        stool: params.stool,
+        feed: params.feed,
+        cough: params.cough,
+        nose: params.nose,
+        condition: params.condition,
       },
       {
         headers: {

@@ -67,7 +67,12 @@ const TreatmentsList: FC<{ treatments: void | TREATMENT[] }> = ({
                     日時：{handleToDateAndTime(treatment.datetime)}
                   </Datetime>
                   <Temperature>
-                    体温：{treatment.bodyTemperature.toFixed(1)}℃
+                    体温：
+                    {treatment.bodyTemperature !== 0 ? (
+                      <>{treatment.bodyTemperature?.toFixed(1)}℃</>
+                    ) : (
+                      '-'
+                    )}
                   </Temperature>
                 </Row>
                 <Row>

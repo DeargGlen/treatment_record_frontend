@@ -12,10 +12,23 @@ import styled from 'styled-components';
 import { Divider, Link, TextField, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { HTTP_STATUS_CODE } from 'states';
+import DisplayTags from 'components/molecules/DisplayTags';
+import {
+  conditionList,
+  coughList,
+  feedList,
+  stoolList,
+  noseList,
+} from 'constant';
 
 const TagNum = styled.div`
   font-size: 22px;
   text-align: center;
+  margin-left: 220px;
+  margin-right: 80px;
+`;
+const TopRow = styled.div`
+  display: flex;
 `;
 const Row = styled.div`
   display: flex;
@@ -100,16 +113,32 @@ const TreatmentShow: FC<{
   return (
     <>
       <MainWrapper>
-        <Link
-          component={RouterLink}
-          to={`/individuals/${treatment.individualId ?? '-'}`}
-          style={{ fontSize: 22, color: 'black' }}
-        >
-          <TagNum>
-            <img src={EarTagImage} alt="tag-number" width="20" />
-            {treatment.individualId?.slice(5, 9)}{' '}
-          </TagNum>
-        </Link>
+        <TopRow>
+          <Link
+            component={RouterLink}
+            to={`/individuals/${treatment.individualId ?? '-'}`}
+            style={{ fontSize: 22, color: 'black' }}
+          >
+            <TagNum>
+              <img src={EarTagImage} alt="tag-number" width="20" />
+              {treatment.individualId?.slice(5, 9)}{' '}
+            </TagNum>
+          </Link>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ height: 20, mt: '5px' }}
+          >
+            編集
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{ height: 20, mt: '5px' }}
+          >
+            削除
+          </Button>
+        </TopRow>
         <Row>
           <p>日時：</p>
           <Data>{handleToDateAndTime(treatment.datetime ?? '-')}</Data>
@@ -117,7 +146,20 @@ const TreatmentShow: FC<{
         <Divider />
         <Row>
           <p>体温：</p>
-          <Data>{treatment.bodyTemperature?.toFixed(1)}℃</Data>
+          <Data>
+            {treatment.bodyTemperature !== 0 ? (
+              <>{treatment.bodyTemperature?.toFixed(1)}℃</>
+            ) : (
+              '-'
+            )}
+          </Data>
+        </Row>
+        <Divider />
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>症状タグ：</p>
+          <Data>
+            <DisplayTags tags={treatment.symptomTags} />
+          </Data>
         </Row>
         <Divider />
         <RowContent>
@@ -125,10 +167,50 @@ const TreatmentShow: FC<{
           <div>{treatment.symptom}</div>
         </RowContent>
         <Divider />
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>疾病タグ：</p>
+          <Data>
+            <DisplayTags tags={treatment.diseaseTags} />
+          </Data>
+        </Row>
+        <Divider />
         <RowContent>
           <p>治療内容：</p>
           <div>{treatment.content}</div>
         </RowContent>
+        <Divider />
+        <Row>
+          <p>便の状態：</p>
+          <Data>
+            {treatment.stool != null ? stoolList[treatment.stool]?.label : '-'}
+          </Data>
+        </Row>
+        <Row>
+          <p>餌の食べ具合：</p>
+          <Data>
+            {treatment.feed != null ? feedList[treatment.feed]?.label : '-'}
+          </Data>
+        </Row>
+        <Row>
+          <p>咳の様子：</p>
+          <Data>
+            {treatment.cough != null ? coughList[treatment.cough]?.label : '-'}
+          </Data>
+        </Row>
+        <Row>
+          <p>鼻水の様子：</p>
+          <Data>
+            {treatment.nose != null ? noseList[treatment.nose]?.label : '-'}
+          </Data>
+        </Row>
+        <Row>
+          <p>全体的な様子：</p>
+          <Data>
+            {treatment.condition != null
+              ? conditionList[treatment.condition]?.label
+              : '-'}
+          </Data>
+        </Row>
         <Divider />
         <Row>
           <p>登録者：</p>

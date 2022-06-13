@@ -50,7 +50,7 @@ const ShowIndividual: FC = () => {
             <Fab
               sx={{
                 position: 'fixed',
-                bottom: 70,
+                bottom: 85,
                 right: 20,
               }}
               color="primary"

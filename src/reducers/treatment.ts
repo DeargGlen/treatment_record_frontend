@@ -15,8 +15,15 @@ const emptyTreatment: TREATMENT_SHOW_DATA = {
   content: null,
   userId: null,
   userName: null,
-  created_at: null,
+  createdAt: null,
+  symptomTags: [],
+  diseaseTags: [],
   treatComments: [],
+  stool: null,
+  feed: null,
+  nose: null,
+  cough: null,
+  condition: null,
 };
 
 export const initialState: TreatmentShowState = {

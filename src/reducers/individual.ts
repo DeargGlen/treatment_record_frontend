@@ -23,6 +23,7 @@ const emptyIndividual: INDIVIDUAL_SHOW_DATA = {
   created_at: null,
   updated_at: null,
   treatments: [],
+  individualTags: [],
 };
 
 export const initialState: IndividualState = {

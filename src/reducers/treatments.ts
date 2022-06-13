@@ -5,7 +5,7 @@ type TreatmentState = {
   fetchState: string;
   treatmentsList: TREATMENT[];
 };
-export const initialState: TreatmentState = {
+export const initialTreatmentsState: TreatmentState = {
   fetchState: REQUEST_STATE.INITIAL,
   treatmentsList: [],
 };

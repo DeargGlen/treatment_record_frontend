@@ -6,6 +6,7 @@ import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
 import styled from 'styled-components';
 import { useNavigate } from 'react-router-dom';
+import AlertMessage from 'components/molecules/AlertMessage';
 import {
   postIndividual,
   fetchIndividuals,
@@ -15,6 +16,8 @@ import { HTTP_STATUS_CODE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
 import { SelectLocationDialog } from 'components/molecules/SelectLocationDialog';
 import { SelectBlockDialog } from 'components/molecules/SelectBlockDialog';
+import IndividualTagRegister from 'components/molecules/IndividualTagRegister';
+import { IndividualTagOptionType } from 'apis/individualtags';
 import {
   initialState,
   individualsActionTypes,
@@ -26,13 +29,12 @@ import {
   fetchBarn,
   BARN_SHOW_DATA,
 } from 'apis/locations';
-
+import { sexList, categoryList, breedTypeList } from 'constant';
 import {
   initialAreaState,
   areasActionTypes,
   areasReducer,
 } from 'reducers/areas';
-
 import { initialBarnState, barnActionTypes, barnReducer } from 'reducers/barn';
 
 interface CustomProps {
@@ -40,60 +42,14 @@ interface CustomProps {
   name: string;
 }
 
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
 const Row = styled.div`
   display: flex;
   justify-content: space-between;
 `;
-
-const sexList = [
-  {
-    value: '0',
-    label: '去勢',
-  },
-  {
-    value: '1',
-    label: 'オス',
-  },
-  {
-    value: '2',
-    label: 'メス',
-  },
-];
-
-const categoryList = [
-  {
-    value: '0',
-    label: '肥育',
-  },
-  {
-    value: '1',
-    label: '繁殖',
-  },
-  {
-    value: '2',
-    label: '子牛',
-  },
-  {
-    value: '3',
-    label: '育成',
-  },
-];
-
-const breedTypeList = [
-  {
-    value: '0',
-    label: '黒毛和種',
-  },
-  {
-    value: '1',
-    label: 'F1',
-  },
-];
+const WrapBox = styled.div`
+  margin-top: 20px;
+  margin-bottom: 20px;
+`;
 
 const IndividualIdInput = React.forwardRef<NumberFormat<number>, CustomProps>(
   (props, ref) => {
@@ -124,12 +80,13 @@ const IndividualIdInput = React.forwardRef<NumberFormat<number>, CustomProps>(
 interface State {
   individualId: string;
   dateOfBirth: string;
-  sex: string;
-  category: string;
-  breedType: string;
+  sex: number | null;
+  category: number | null;
+  breedType: number | null;
   motherId: string;
   fatherName: string;
   grandfatherName: string;
+  grandGrandfatherName: string;
   dateOfIntroduction: string;
   blockId: number;
 }
@@ -138,12 +95,13 @@ const NewIndividual: FC = () => {
   const [values, setValues] = React.useState<State>({
     individualId: '',
     dateOfBirth: '',
-    sex: '',
-    category: '',
-    breedType: '',
+    sex: null,
+    category: null,
+    breedType: null,
     dateOfIntroduction: '',
     fatherName: '',
     grandfatherName: '',
+    grandGrandfatherName: '',
     blockId: 1,
     motherId: '',
   });
@@ -164,6 +122,9 @@ const NewIndividual: FC = () => {
   const [barnName, setBarnName] = useState('');
   const [areaName, setAreaName] = useState('');
   const [blockNo, setBlockNo] = useState('');
+  const [individualTagsList, setIndividualTagsList] = useState<
+    IndividualTagOptionType[]
+  >([]);
 
   const initialBlockState = {
     isOpenBlockDialog: false,
@@ -202,6 +163,7 @@ const NewIndividual: FC = () => {
 
   const [areasState, areaDispatch] = useReducer(areasReducer, initialAreaState);
   const [barnState, barnDispatch] = useReducer(barnReducer, initialBarnState);
+  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
   useEffect(() => {
     areaDispatch({ type: areasActionTypes.FETCHING });
@@ -261,6 +223,11 @@ const NewIndividual: FC = () => {
   };
 
   const onSubmit = () => {
+    const individualEntries: number[] = [];
+    individualTagsList.forEach((elem) => {
+      individualEntries.push(elem.id ?? 0);
+    });
+    console.log(individualEntries);
     postIndividual({
       individualId: values.individualId,
       dateOfBirth: values.dateOfBirth,
@@ -270,23 +237,30 @@ const NewIndividual: FC = () => {
       motherId: values.motherId ?? '',
       fatherName: values.fatherName ?? '',
       grandfatherName: values.grandfatherName ?? '',
+      grandGrandfatherName: values.grandGrandfatherName ?? '',
       dateOfIntroduction: values.dateOfIntroduction,
       blockId: values.blockId ?? 1,
+      individualTags: individualEntries,
     })
       .then(() => navigate('/individuals'))
       .catch((e) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+        if (e?.response?.data?.indexOf('{"id"')) {
+          setAlertMessageOpen(true);
+        }
         if (e.response.status === HTTP_STATUS_CODE.NOT_ACCEPTABLE) {
           setValues({
             ...values,
             individualId: '',
             dateOfBirth: '',
-            sex: '',
-            category: '',
-            breedType: '',
+            sex: null,
+            category: null,
+            breedType: null,
             dateOfIntroduction: '',
             fatherName: '',
             grandfatherName: '',
           });
+          setIndividualTagsList([]);
         } else {
           throw e;
         }
@@ -296,200 +270,234 @@ const NewIndividual: FC = () => {
   return (
     <>
       <Container maxWidth="sm">
-        <Box
-          sx={{
-            '& > :not(style)': {
-              m: 1,
-            },
-          }}
-        >
-          <Row>
-            個体識別番号(必須)：
-            <TextField
-              required
-              value={values.individualId}
-              onChange={handleChange}
-              name="individualId"
-              InputProps={{
-                inputComponent: IndividualIdInput as never,
-              }}
-              variant="standard"
-              sx={{ width: 100, textAlign: 'right' }}
-            />
-          </Row>
-          <Row>
-            生年月日(必須)：
-            <TextField
-              type="date"
-              required
-              value={values.dateOfBirth}
-              onChange={handleChange}
-              name="dateOfBirth"
-              variant="standard"
-              sx={{ width: 110 }}
-            />
-          </Row>
-
-          <Row>
-            性別(必須)：
+        <div style={{ fontSize: 24, textAlign: 'center' }}>個体の登録</div>
+        <Box>
+          <WrapBox style={{ marginTop: 10 }}>
             <div>
-              <TextField
-                select
-                required
-                label="性別"
-                value={values.sex}
-                onChange={handleChange}
-                variant="standard"
-                name="sex"
-                sx={{ width: 60 }}
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                <option disabled value="">
-                  {' '}
-                </option>
-                {sexList.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+              個体識別番号(必須)：
+              <Row>
+                <TextField
+                  required
+                  value={values.individualId}
+                  onChange={handleChange}
+                  name="individualId"
+                  InputProps={{
+                    inputComponent: IndividualIdInput as never,
+                  }}
+                  variant="standard"
+                  sx={{ width: 100, textAlign: 'right' }}
+                />
+              </Row>
             </div>
-          </Row>
-
-          <Row>
-            種別(必須)：
+          </WrapBox>
+          <WrapBox>
             <div>
-              <TextField
-                select
-                required
-                label="種別"
-                value={values.category}
-                onChange={handleChange}
-                variant="standard"
-                name="category"
-                sx={{ width: 60 }}
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                <option disabled value="">
-                  {' '}
-                </option>
-                {categoryList.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </TextField>
+              生年月日(必須)：
+              <Row>
+                <TextField
+                  type="date"
+                  required
+                  value={values.dateOfBirth}
+                  onChange={handleChange}
+                  name="dateOfBirth"
+                  variant="standard"
+                  sx={{ width: 110 }}
+                />
+              </Row>
             </div>
-          </Row>
-          <Row>
-            品種(必須)：
+          </WrapBox>
+          <WrapBox>
             <div>
-              <TextField
-                select
-                required
-                label="品種"
-                value={values.breedType}
-                onChange={handleChange}
-                variant="standard"
-                name="breedType"
-                sx={{ width: 90 }}
-                SelectProps={{
-                  native: true,
-                }}
-              >
-                <option disabled value="">
-                  {' '}
-                </option>
-                {breedTypeList.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+              性別(必須)：
+              <Row>
+                <TextField
+                  select
+                  required
+                  value={values.sex ?? ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  name="sex"
+                  sx={{ width: 60 }}
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  <option disabled value="">
+                    {' '}
                   </option>
-                ))}
-              </TextField>
+                  {sexList.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Row>
             </div>
-          </Row>
+          </WrapBox>
 
-          <Row>
+          <WrapBox>
+            <div>
+              種別(必須)：
+              <Row>
+                <TextField
+                  select
+                  required
+                  value={values.category ?? ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  name="category"
+                  sx={{ width: 60 }}
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  <option disabled value="">
+                    {' '}
+                  </option>
+                  {categoryList.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Row>
+            </div>
+          </WrapBox>
+          <WrapBox>
+            <div>
+              品種(必須)：
+              <Row>
+                <TextField
+                  select
+                  required
+                  value={values.breedType ?? ''}
+                  onChange={handleChange}
+                  variant="standard"
+                  name="breedType"
+                  sx={{ width: 90 }}
+                  SelectProps={{
+                    native: true,
+                  }}
+                >
+                  <option disabled value="">
+                    {' '}
+                  </option>
+                  {breedTypeList.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </TextField>
+              </Row>
+            </div>
+          </WrapBox>
+
+          <WrapBox>
             <div>場所：</div>
+            <Row>
+              <p>
+                {areaName} {barnName} {blockNo}
+              </p>
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  setLocation({
+                    isOpenLocationDialog: true,
+                  })
+                }
+              >
+                場所の選択
+              </Button>
+            </Row>
+          </WrapBox>
+          <WrapBox>
+            <div>個体タグ：</div>
             <div>
-              {areaName} {barnName} {blockNo}
+              <IndividualTagRegister
+                selectedTagsList={individualTagsList}
+                setSelectedTagsList={setIndividualTagsList}
+              />
             </div>
-          </Row>
-          <ButtonDiv>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                setLocation({
-                  isOpenLocationDialog: true,
-                })
-              }
-            >
-              場所の選択
-            </Button>
-          </ButtonDiv>
-          <Row>
-            導入日：
-            <TextField
-              type="date"
-              value={values.dateOfIntroduction}
-              onChange={handleChange}
-              name="dateOfIntroduction"
-              variant="standard"
-              sx={{ width: 110 }}
-            />
-          </Row>
-          <Row>
-            母牛の個体識別番号：
-            <TextField
-              value={values.motherId}
-              onChange={handleChange}
-              name="motherId"
-              InputProps={{
-                inputComponent: IndividualIdInput as never,
-              }}
-              variant="standard"
-              sx={{ width: 100 }}
-            />
-          </Row>
-          <ButtonDiv>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() =>
-                setIndividual({
-                  isOpenSelectDialog: true,
-                })
-              }
-            >
-              個体の選択
-            </Button>
-          </ButtonDiv>
-          <Row>
-            父牛の名前：
-            <TextField
-              value={values.fatherName}
-              onChange={handleChange}
-              name="fatherName"
-              variant="standard"
-              sx={{ width: 120 }}
-            />
-          </Row>
-          <Row>
-            父の父の名前：
-            <TextField
-              value={values.grandfatherName}
-              onChange={handleChange}
-              name="grandfatherName"
-              variant="standard"
-              sx={{ width: 120 }}
-            />
-          </Row>
-          <ButtonDiv>
+          </WrapBox>
+          <WrapBox>
+            <div>導入日：</div>
+            <div>
+              <TextField
+                type="date"
+                value={values.dateOfIntroduction}
+                onChange={handleChange}
+                name="dateOfIntroduction"
+                variant="standard"
+                sx={{ width: 110 }}
+              />
+            </div>
+          </WrapBox>
+          <WrapBox>
+            <div>母牛の個体識別番号：</div>
+            <Row>
+              <TextField
+                value={values.motherId}
+                onChange={handleChange}
+                name="motherId"
+                InputProps={{
+                  inputComponent: IndividualIdInput as never,
+                }}
+                variant="standard"
+                sx={{ width: 100 }}
+              />
+
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() =>
+                  setIndividual({
+                    isOpenSelectDialog: true,
+                  })
+                }
+              >
+                個体の選択
+              </Button>
+            </Row>
+          </WrapBox>
+          <WrapBox>
+            <div>父の名前：</div>
+            <div>
+              <TextField
+                value={values.fatherName}
+                onChange={handleChange}
+                name="fatherName"
+                variant="standard"
+                sx={{ width: 120 }}
+              />
+            </div>
+          </WrapBox>
+          <WrapBox>
+            <div>母の父の名前：</div>
+            <div>
+              <TextField
+                value={values.grandfatherName}
+                onChange={handleChange}
+                name="grandfatherName"
+                variant="standard"
+                sx={{ width: 120 }}
+              />
+            </div>
+          </WrapBox>
+          <WrapBox>
+            <div>祖母の父の名前：</div>
+            <div>
+              <TextField
+                value={values.grandGrandfatherName}
+                onChange={handleChange}
+                name="grandGrandfatherName"
+                variant="standard"
+                sx={{ width: 120 }}
+              />
+            </div>
+          </WrapBox>
+          <div style={{ textAlign: 'right' }}>
             <Button
               type="submit"
               variant="contained"
@@ -509,8 +517,14 @@ const NewIndividual: FC = () => {
             >
               登録
             </Button>
-          </ButtonDiv>
+          </div>
         </Box>
+        <AlertMessage
+          open={alertMessageOpen}
+          setOpen={setAlertMessageOpen}
+          severity="error"
+          message="既に登録されている個体識別番号です"
+        />
       </Container>
       {individualState.isOpenSelectDialog && (
         <SelectIndividualDialog

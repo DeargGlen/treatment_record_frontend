@@ -26,14 +26,11 @@ const ShowBarn: FC = () => {
         });
       })
       .catch(() => 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [barnIdNum]);
 
   return (
     <>
-      {barnState.fetchState === REQUEST_STATE.LOADING ? (
-        <div>ロード中</div>
-      ) : (
+      {barnState.fetchState === REQUEST_STATE.LOADING ? null : (
         <BarnShow barn={barnState.barn} />
       )}
     </>

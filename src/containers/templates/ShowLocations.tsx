@@ -29,7 +29,7 @@ const ShowLocations: FC = () => {
   return (
     <>
       {state.fetchState === REQUEST_STATE.LOADING ? (
-        <div style={{ fontSize: 24 }}>場所ごとの個体を表示</div>
+        <div style={{ fontSize: 24, textAlign: 'center' }}>個体の表示</div>
       ) : (
         <AreasList areas={state.areasList} />
       )}
