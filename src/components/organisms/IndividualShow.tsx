@@ -18,11 +18,11 @@ import { Button } from '@mui/material';
 const TagNum = styled.div`
   font-size: 22px;
   text-align: center;
-  margin-left: 220px;
-  margin-right: 80px;
+  margin-left: 40%;
 `;
 const TopRow = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 const Row = styled.div`
   display: flex;
@@ -65,20 +65,22 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
             <img src={EarTagImage} alt="tag-number" width="20" />
             {individual.id?.slice(5, 9)}
           </TagNum>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ height: 20, mt: '5px' }}
-          >
-            編集
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ height: 20, mt: '5px' }}
-          >
-            削除
-          </Button>
+          <TopRow>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ height: 20, mt: '5px' }}
+            >
+              編集
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ height: 20, mt: '5px' }}
+            >
+              削除
+            </Button>
+          </TopRow>
         </TopRow>
         <Row>
           <p>個体識別番号：</p>

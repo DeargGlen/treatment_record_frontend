@@ -24,11 +24,11 @@ import {
 const TagNum = styled.div`
   font-size: 22px;
   text-align: center;
-  margin-left: 220px;
-  margin-right: 80px;
+  margin-left: 40%;
 `;
 const TopRow = styled.div`
   display: flex;
+  justify-content: space-between;
 `;
 const Row = styled.div`
   display: flex;
@@ -114,30 +114,33 @@ const TreatmentShow: FC<{
     <>
       <MainWrapper>
         <TopRow>
-          <Link
-            component={RouterLink}
-            to={`/individuals/${treatment.individualId ?? '-'}`}
-            style={{ fontSize: 22, color: 'black' }}
-          >
-            <TagNum>
+          <TagNum>
+            <Link
+              component={RouterLink}
+              to={`/individuals/${treatment.individualId ?? '-'}`}
+              style={{ fontSize: 22, color: 'black' }}
+            >
               <img src={EarTagImage} alt="tag-number" width="20" />
               {treatment.individualId?.slice(5, 9)}{' '}
-            </TagNum>
-          </Link>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ height: 20, mt: '5px' }}
-          >
-            編集
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ height: 20, mt: '5px' }}
-          >
-            削除
-          </Button>
+            </Link>
+          </TagNum>
+
+          <TopRow>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ height: 20, mt: '5px' }}
+            >
+              編集
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{ height: 20, mt: '5px' }}
+            >
+              削除
+            </Button>
+          </TopRow>
         </TopRow>
         <Row>
           <p>日時：</p>

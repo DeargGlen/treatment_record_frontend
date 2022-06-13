@@ -56,17 +56,14 @@ const SignUp: FC = () => {
         console.log(res);
 
         if (res.status === 200) {
-          navigate('/individuals');
+          navigate('/signup');
           // eslint-disable-next-line no-alert
           alert('メールを確認してアカウントを有効化してください');
-
-          console.log('Signed up successfully!');
         } else {
           setAlertMessageOpen(true);
         }
       })
       .catch((err) => {
-        console.log(err);
         if (
           err.response.data.errors[0] ===
           'ログインもしくはアカウント登録してください。'

@@ -208,7 +208,7 @@ const AllTreatments: FC = () => {
           onChange={handleTagChange}
           variant="standard"
           name="symptomTag"
-          sx={{ width: 140, mr: 7, mt: 0.5 }}
+          sx={{ width: 100, mr: 7, mt: 0.5 }}
           SelectProps={{
             native: true,
           }}
@@ -229,7 +229,7 @@ const AllTreatments: FC = () => {
           onChange={handleTagChange}
           variant="standard"
           name="diseaseTag"
-          sx={{ width: 140, mt: 0.5 }}
+          sx={{ width: 100, mt: 0.5 }}
           SelectProps={{
             native: true,
           }}

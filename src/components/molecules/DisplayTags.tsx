@@ -8,18 +8,20 @@ type Tags = {
   name: string;
   symptomTagId?: number;
   diseaseTagId?: number;
+  individualTagId?: number;
 };
 
 const DisplayTags: FC<{ tags: Tags[] }> = ({ tags }) => {
   const navigate = useNavigate();
   const handleClick = (tag: Tags) => {
     if (tag.symptomTagId) {
-      console.log('s');
       navigate('/treatments', { state: { setSymptomTagId: tag.id } });
     }
     if (tag.diseaseTagId) {
-      console.log('d');
       navigate('/treatments', { state: { setDiseaseTagId: tag.id } });
+    }
+    if (tag.individualTagId) {
+      navigate('/individuals', { state: { setIndividualTagId: tag.id } });
     }
   };
 

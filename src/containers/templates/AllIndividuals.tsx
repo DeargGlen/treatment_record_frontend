@@ -43,6 +43,10 @@ const SearchBar = styled.div`
 const Row = styled.div`
   display: flex;
 `;
+const SecondRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 const AllIndividuals: FC = () => {
   const location = useLocation();
@@ -149,7 +153,7 @@ const AllIndividuals: FC = () => {
           onChange={handleTagChange}
           variant="standard"
           name="individualTag"
-          sx={{ width: 120, mt: 0.5 }}
+          sx={{ width: 140, mt: 0.5 }}
           SelectProps={{
             native: true,
           }}
@@ -173,68 +177,74 @@ const AllIndividuals: FC = () => {
           />
         </SearchBar>
       </Row>
-      <Row>
-        <p style={{ lineHeight: 2.5 }}>性別：</p>
-        <TextField
-          select
-          required
-          value={tagValues.sex ?? ''}
-          onChange={handleTagChange}
-          variant="standard"
-          name="sex"
-          sx={{ width: 60, mr: 8, mt: 0.5 }}
-          SelectProps={{
-            native: true,
-          }}
-        >
-          <option value=""> </option>
-          {sexList.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </TextField>
-        <p style={{ lineHeight: 2.5 }}>種別：</p>
-        <TextField
-          select
-          required
-          value={tagValues.category ?? ''}
-          onChange={handleTagChange}
-          variant="standard"
-          name="category"
-          sx={{ width: 60, mr: 9, mt: 0.5 }}
-          SelectProps={{
-            native: true,
-          }}
-        >
-          <option value=""> </option>
-          {categoryList.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </TextField>
-        <p style={{ lineHeight: 2.5 }}>品種：</p>
-        <TextField
-          select
-          required
-          value={tagValues.breedType ?? ''}
-          onChange={handleTagChange}
-          variant="standard"
-          name="breedType"
-          sx={{ width: 90, mt: 0.5 }}
-          SelectProps={{
-            native: true,
-          }}
-        >
-          <option value=""> </option>
-          {breedTypeList.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </TextField>
-      </Row>
+      <SecondRow>
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>性別：</p>
+          <TextField
+            select
+            required
+            value={tagValues.sex ?? ''}
+            onChange={handleTagChange}
+            variant="standard"
+            name="sex"
+            sx={{ width: 60, mt: 0.5 }}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value=""> </option>
+            {sexList.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </TextField>
+        </Row>
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>種別：</p>
+          <TextField
+            select
+            required
+            value={tagValues.category ?? ''}
+            onChange={handleTagChange}
+            variant="standard"
+            name="category"
+            sx={{ width: 60, mt: 0.5 }}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value=""> </option>
+            {categoryList.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </TextField>
+        </Row>
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>品種：</p>
+          <TextField
+            select
+            required
+            value={tagValues.breedType ?? ''}
+            onChange={handleTagChange}
+            variant="standard"
+            name="breedType"
+            sx={{ width: 90, mt: 0.5 }}
+            SelectProps={{
+              native: true,
+            }}
+          >
+            <option value=""> </option>
+            {breedTypeList.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </TextField>
+        </Row>
+      </SecondRow>
 
       {state.fetchState === REQUEST_STATE.LOADING ? (
         <>

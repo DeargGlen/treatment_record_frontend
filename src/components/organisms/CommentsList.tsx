@@ -15,6 +15,7 @@ const Row = styled.div`
 
 const CommentsList: FC<{ comments: COMMENT[] }> = ({ comments }) => (
   <>
+    {comments.length ? <Divider /> : null}
     {comments?.map((comment: COMMENT) => (
       <div key={comment.id}>
         <ContentWrapper>

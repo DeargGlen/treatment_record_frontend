@@ -63,7 +63,7 @@ const SignIn: FC = () => {
           setIsSignedIn(true);
           setCurrentUser(res.data.data);
 
-          navigate('/individuals');
+          navigate('/');
         } else {
           setAlertMessageOpen(true);
         }
