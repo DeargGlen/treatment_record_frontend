@@ -1,4 +1,9 @@
-import { individualsIndex, individualShow, individualCreate } from 'urls/index';
+import {
+  individualsIndex,
+  individualShow,
+  individualCreate,
+  individualDestroy,
+} from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 import Cookies from 'js-cookie';
 import client from 'apis/client';
@@ -131,3 +136,17 @@ export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
     .catch((e) => {
       throw e;
     });
+
+export const destroyIndividual = (individualId: string) =>
+  client
+    .delete(individualDestroy(individualId), {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
+    .then((res: INDIVIDUAL_SHOW_RES) => {
+      console.log(res);
+    })
+    .catch((e) => console.error(e));

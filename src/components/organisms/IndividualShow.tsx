@@ -1,19 +1,19 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { TREATMENT } from 'apis/treatments';
 import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
 import { ContentWrapper, MainWrapper } from 'Style';
 import handleToDateAndTime from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
-import { INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
+import { destroyIndividual, INDIVIDUAL_SHOW_DATA } from 'apis/individuals';
 import styled from 'styled-components';
 import handleToDate from 'containers/func/handleToDate';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { breedTypeList, categoryList, sexList } from 'constant';
 import DisplayTags from 'components/molecules/DisplayTags';
-import { Button } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
 
 const TagNum = styled.div`
   font-size: 22px;
@@ -44,6 +44,22 @@ const Data = styled.div`
 const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   individual,
 }) => {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleDestroy = () => {
+    setOpen(false);
+    destroyIndividual(individual.id ?? '')
+      .then(() => {
+        navigate('/individuals');
+      })
+      .catch((e) => console.log(e));
+  };
   const Sortedtreatments: TREATMENT[] | undefined = individual.treatments?.sort(
     (n1, n2) => {
       if (n1.datetime < n2.datetime) {
@@ -77,6 +93,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
               variant="contained"
               color="primary"
               sx={{ height: 20, mt: '5px' }}
+              onClick={handleClick}
             >
               削除
             </Button>
@@ -237,6 +254,15 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
           <Divider />
         </ThemeProvider>
       ))}
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle>個体の記録を削除しますか？</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>いいえ</Button>
+          <Button onClick={handleDestroy} autoFocus>
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

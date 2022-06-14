@@ -2,10 +2,14 @@ export const individualsIndex = `/individuals.json`;
 export const individualShow = (individualId: string) =>
   `/individuals/${individualId}.json`;
 export const individualCreate = `/individuals`;
+export const individualDestroy = (individualId: string) =>
+  `/individuals/${individualId}`;
 export const treatmentsIndex = `/treatments.json`;
 export const treatmentCreate = `/treatments`;
 export const treatmentShow = (treatmentId: number) =>
   `/treatments/${treatmentId}.json`;
+export const treatmentDestroy = (treatmentId: number) =>
+  `/treatments/${treatmentId}`;
 export const signUpUrl = `/auth`;
 export const signInUrl = `/auth/sign_in`;
 export const signOutUrl = `/auth/sign_out`;

@@ -1,4 +1,9 @@
-import { treatmentsIndex, treatmentCreate, treatmentShow } from 'urls/index';
+import {
+  treatmentsIndex,
+  treatmentCreate,
+  treatmentShow,
+  treatmentDestroy,
+} from 'urls/index';
 import Cookies from 'js-cookie';
 import { COMMENT } from 'apis/comments';
 import client from './client';
@@ -133,6 +138,18 @@ export const postTreatment = (params: TREATMENT_POST_PROPS) =>
 export const fetchTreatment = (treatmentId: number) =>
   client
     .get(treatmentShow(treatmentId), {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
+    .then((res: TREATMENT_SHOW_RES) => res.data)
+    .catch((e) => console.error(e));
+
+export const destroyTreatment = (treatmentId: number) =>
+  client
+    .delete(treatmentDestroy(treatmentId), {
       headers: {
         'access-token': Cookies.get('_access_token') || '',
         client: Cookies.get('_client') || '',

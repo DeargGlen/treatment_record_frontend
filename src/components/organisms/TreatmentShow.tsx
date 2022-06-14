@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import * as React from 'react';
-import { TREATMENT_SHOW_DATA } from 'apis/treatments';
+import { TREATMENT_SHOW_DATA, destroyTreatment } from 'apis/treatments';
 import { COMMENT, postComment } from 'apis/comments';
 import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
@@ -9,8 +9,16 @@ import { ContentWrapper, MainWrapper } from 'Style';
 import handleToDateAndTime from 'containers/func/handleToDateAndTime';
 import EarTagImage from 'images/ear.png';
 import styled from 'styled-components';
-import { Divider, Link, TextField, Button } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
+import {
+  Divider,
+  Link,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+} from '@mui/material';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { HTTP_STATUS_CODE } from 'states';
 import DisplayTags from 'components/molecules/DisplayTags';
 import {
@@ -61,6 +69,23 @@ const TreatmentShow: FC<{
   changedCount: number;
   setChangedCount: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ treatment, changedCount, setChangedCount }) => {
+  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleDestroy = () => {
+    setOpen(false);
+    destroyTreatment(treatment.id ?? '')
+      .then(() => {
+        navigate('/treatments');
+      })
+      .catch((e) => console.log(e));
+  };
+
   const [values, setValues] = React.useState<CommentState>({
     treatmentId: null,
     content: '',
@@ -137,6 +162,7 @@ const TreatmentShow: FC<{
               variant="contained"
               color="primary"
               sx={{ height: 20, mt: '5px' }}
+              onClick={handleClick}
             >
               削除
             </Button>
@@ -262,6 +288,15 @@ const TreatmentShow: FC<{
           送信
         </Button>
       </Row>
+      <Dialog onClose={handleClose} open={open}>
+        <DialogTitle>個体の記録を削除しますか？</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleClose}>いいえ</Button>
+          <Button onClick={handleDestroy} autoFocus>
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
