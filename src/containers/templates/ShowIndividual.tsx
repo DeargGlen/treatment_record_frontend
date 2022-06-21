@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 // reducers
 import {
-  initialState,
+  initialIndividualState,
   individualActionTypes,
   individualReducer,
 } from 'reducers/individual';
@@ -19,7 +19,7 @@ import { REQUEST_STATE } from 'states';
 const ShowIndividual: FC = () => {
   const [individualState, dispatch] = useReducer(
     individualReducer,
-    initialState,
+    initialIndividualState,
   );
   const { individualId } = useParams();
 

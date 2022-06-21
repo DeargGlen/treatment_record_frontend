@@ -1,4 +1,8 @@
-import { treatCommentCreate, treatCommentsIndex } from 'urls';
+import {
+  treatCommentCreate,
+  treatCommentsIndex,
+  treatCommentDestroy,
+} from 'urls';
 import Cookies from 'js-cookie';
 import client from './client';
 
@@ -61,5 +65,16 @@ export const fetchTreatComments = () =>
       },
     })
     .then((res: COMMENT_RES) => res.data)
-    // eslint-disable-next-line no-console
+    .catch((e) => console.error(e));
+
+export const destroyTreatComment = (Id: number) =>
+  client
+    .delete(treatCommentDestroy(Id), {
+      headers: {
+        'access-token': Cookies.get('_access_token') || '',
+        client: Cookies.get('_client') || '',
+        uid: Cookies.get('_uid') || '',
+      },
+    })
+    .then((res: COMMENT_RES) => res.data)
     .catch((e) => console.error(e));

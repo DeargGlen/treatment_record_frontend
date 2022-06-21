@@ -7,6 +7,7 @@ import theme from 'components/theme';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import AccoutntCircle from '@mui/icons-material/AccountCircle';
+import MovingIcon from '@mui/icons-material/Moving';
 import CattleImg from 'images/cattle.png';
 
 const SidebarWrapper = styled.div`
@@ -52,6 +53,17 @@ const Sidebar: FC = () => {
             >
               <CreateIcon />
               <ListItemText primary="治療管理" />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname.includes('/transfers')}
+              component={RouterLink}
+              to="/transfers"
+            >
+              <MovingIcon />
+              <ListItemText primary="移動" />
             </ListItemButton>
           </ListItem>
           <Divider />

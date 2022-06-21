@@ -1,16 +1,19 @@
 import { FC, useState, useEffect, useReducer } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+
 import * as React from 'react';
 import NumberFormat from 'react-number-format';
 import { Box, TextField, Button, Container } from '@mui/material';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
 import AlertMessage from 'components/molecules/AlertMessage';
 import {
-  postIndividual,
+  updateIndividual,
   fetchIndividuals,
   INDIVIDUALS_DATA,
+  fetchIndividual,
+  INDIVIDUAL_SHOW_DATA,
 } from 'apis/individuals';
-import { HTTP_STATUS_CODE } from 'states';
+import { HTTP_STATUS_CODE, REQUEST_STATE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
 import { SelectLocationDialog } from 'components/molecules/SelectLocationDialog';
 import { SelectBlockDialog } from 'components/molecules/SelectBlockDialog';
@@ -22,11 +25,17 @@ import {
   individualsReducer,
 } from 'reducers/individuals';
 import {
+  initialIndividualState,
+  individualActionTypes,
+  individualReducer,
+} from 'reducers/individual';
+import {
   fetchAreas,
   AREAS_DATA,
   fetchBarn,
   BARN_SHOW_DATA,
 } from 'apis/locations';
+
 import { sexList, categoryList, breedTypeList } from 'constant';
 import {
   initialAreaState,
@@ -89,8 +98,14 @@ interface State {
   blockId: number;
 }
 
-const NewIndividual: FC = () => {
-  const [values, setValues] = React.useState<State>({
+const EditIndividual: FC = () => {
+  const [individualState, individualDispatch] = useReducer(
+    individualReducer,
+    initialIndividualState,
+  );
+  const { individualId } = useParams();
+
+  const [values, setValues] = useState<State>({
     individualId: '',
     dateOfBirth: '',
     sex: null,
@@ -100,21 +115,9 @@ const NewIndividual: FC = () => {
     fatherName: '',
     grandfatherName: '',
     grandGrandfatherName: '',
-    blockId: 1,
+    blockId: 0,
     motherId: '',
   });
-
-  const initialSelectState = {
-    isOpenSelectDialog: false,
-  };
-
-  const [individualState, setIndividual] = useState(initialSelectState);
-
-  const initialLocationState = {
-    isOpenLocationDialog: false,
-  };
-
-  const [locationState, setLocation] = useState(initialLocationState);
 
   const [barnId, setBarnId] = useState(0);
   const [barnName, setBarnName] = useState('');
@@ -123,6 +126,55 @@ const NewIndividual: FC = () => {
   const [individualTagsList, setIndividualTagsList] = useState<
     IndividualTagOptionType[]
   >([]);
+  const [initialIndividualTagsList, setInitialIndividualTagsList] = useState<
+    IndividualTagOptionType[]
+  >([]);
+
+  useEffect(() => {
+    individualDispatch({ type: individualActionTypes.FETCHING });
+    fetchIndividual(individualId ?? '-')
+      .then((data: void | INDIVIDUAL_SHOW_DATA) => {
+        console.log('data', data);
+        individualDispatch({
+          type: individualActionTypes.FETCH_SUCCESS,
+          payload: {
+            individual: data,
+          },
+        });
+        setValues({
+          individualId: data?.id ?? '',
+          dateOfBirth: data?.dateOfBirth ?? '',
+          sex: data?.sex ?? null,
+          category: data?.category ?? null,
+          breedType: data?.breedType ?? null,
+          dateOfIntroduction: data?.dateOfIntroduction ?? '',
+          fatherName: data?.fatherName ?? '',
+          grandfatherName: data?.grandfatherName ?? '',
+          grandGrandfatherName: data?.grandGrandfatherName ?? '',
+          blockId: data?.blockId ?? 1,
+          motherId: data?.motherId ?? '',
+        });
+        setAreaName(data?.areaName ?? '');
+        setBarnName(data?.barnName ?? '');
+        setBlockNo(data?.no ?? '');
+        setIndividualTagsList(data?.individualTags ?? []);
+        setInitialIndividualTagsList(data?.individualTags ?? []);
+      })
+      .catch(() => 1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [individualId]);
+
+  const initialSelectState = {
+    isOpenSelectDialog: false,
+  };
+
+  const [motherState, setIndividual] = useState(initialSelectState);
+
+  const initialLocationState = {
+    isOpenLocationDialog: false,
+  };
+
+  const [locationState, setLocation] = useState(initialLocationState);
 
   const initialBlockState = {
     isOpenBlockDialog: false,
@@ -141,17 +193,17 @@ const NewIndividual: FC = () => {
     });
   };
 
-  const [state, dispatch] = useReducer(
+  const [state, individualsDispatch] = useReducer(
     individualsReducer,
     initialIndividualsState,
   );
 
   useEffect(() => {
-    dispatch({ type: individualsActionTypes.FETCHING });
+    individualsDispatch({ type: individualsActionTypes.FETCHING });
     fetchIndividuals()
       .then((data: void | INDIVIDUALS_DATA) => {
         console.log(data);
-        dispatch({
+        individualsDispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
           payload: {
             individuals: data?.individuals,
@@ -229,7 +281,7 @@ const NewIndividual: FC = () => {
       individualEntries.push(elem.id ?? 0);
     });
     console.log(individualEntries);
-    postIndividual({
+    updateIndividual({
       individualId: values.individualId,
       dateOfBirth: values.dateOfBirth,
       category: values.category,
@@ -252,11 +304,11 @@ const NewIndividual: FC = () => {
   return (
     <>
       <Container maxWidth="sm">
-        <div style={{ fontSize: 24, textAlign: 'center' }}>個体の登録</div>
+        <div style={{ fontSize: 24, textAlign: 'center' }}>個体情報の編集</div>
         <Box>
           <WrapBox style={{ marginTop: 10 }}>
             <div>
-              個体識別番号(必須)：
+              個体識別番号(変更不可)：
               <Row>
                 <TextField
                   required
@@ -264,7 +316,7 @@ const NewIndividual: FC = () => {
                   onChange={handleChange}
                   name="individualId"
                   InputProps={{
-                    inputComponent: IndividualIdInput as never,
+                    readOnly: true,
                   }}
                   variant="standard"
                   sx={{ width: 100, textAlign: 'right' }}
@@ -397,10 +449,13 @@ const NewIndividual: FC = () => {
           <WrapBox>
             <div>個体タグ：</div>
             <div>
-              <IndividualTagRegister
-                selectedTagsList={individualTagsList}
-                setSelectedTagsList={setIndividualTagsList}
-              />
+              {individualState.fetchState === REQUEST_STATE.LOADING ? null : (
+                <IndividualTagRegister
+                  initialTagsList={initialIndividualTagsList}
+                  selectedTagsList={individualTagsList}
+                  setSelectedTagsList={setIndividualTagsList}
+                />
+              )}
             </div>
           </WrapBox>
           <WrapBox>
@@ -489,9 +544,9 @@ const NewIndividual: FC = () => {
                 !!(
                   !values.individualId ||
                   !values.dateOfBirth ||
-                  !values.sex ||
-                  !values.category ||
-                  !values.breedType ||
+                  values.sex == null ||
+                  values.category == null ||
+                  values.breedType == null ||
                   !blockNo
                 )
               }
@@ -505,12 +560,12 @@ const NewIndividual: FC = () => {
           open={alertMessageOpen}
           setOpen={setAlertMessageOpen}
           severity="error"
-          message="エラーです"
+          message="既に登録されている個体識別番号です"
         />
       </Container>
-      {individualState.isOpenSelectDialog && (
+      {motherState.isOpenSelectDialog && (
         <SelectIndividualDialog
-          isOpen={individualState.isOpenSelectDialog}
+          isOpen={motherState.isOpenSelectDialog}
           onClose={handleIndividualClose}
           selectedIndividual={values.motherId}
           individualsList={state.individualsList}
@@ -539,4 +594,4 @@ const NewIndividual: FC = () => {
   );
 };
 
-export default NewIndividual;
+export default EditIndividual;

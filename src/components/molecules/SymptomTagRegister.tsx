@@ -22,13 +22,17 @@ import {
 const filter = createFilterOptions<SymptomTagOptionType>();
 
 const SymptomTagRegister: FC<{
+  // eslint-disable-next-line react/require-default-props
+  initialTagsList?: SymptomTagOptionType[];
   selectedTagsList: SymptomTagOptionType[];
   setSelectedTagsList: React.Dispatch<
     React.SetStateAction<SymptomTagOptionType[]>
   >;
-}> = ({ selectedTagsList, setSelectedTagsList }) => {
+}> = ({ initialTagsList, selectedTagsList, setSelectedTagsList }) => {
   const [, dispatch] = useReducer(symptomTagsReducer, initialSymptomTagState);
   const [tagsList, setTagsList] = useState<SymptomTagOptionType[]>([]);
+  const [changedCount, setChangedCount] = useState(0);
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     dispatch({ type: symptomTagsActionTypes.FETCHING });
@@ -44,34 +48,32 @@ const SymptomTagRegister: FC<{
       })
 
       .catch(() => 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [changedCount]);
 
   return (
     <Autocomplete
       multiple
       id="tags-standard"
+      defaultValue={initialTagsList ?? []}
       onChange={(event, newValue) => {
-        if (newValue.slice(-1)[0]?.inputValue) {
-          // Create a new value from the user input
-          setTagsList(
-            tagsList?.concat({
-              id: tagsList.length + 1,
-              name: newValue.slice(-1)[0].inputValue ?? '',
-            }),
-          );
-          setSelectedTagsList(
-            selectedTagsList?.concat({
-              id: tagsList.length + 1,
-              name: newValue.slice(-1)[0].inputValue ?? '',
-            }),
-          );
-
-          postSymptomTag({ name: newValue.slice(-1)[0]?.inputValue ?? '' })
-            .then()
+        if (newValue.slice(-1)[0]?.inputValue && newValue.length > length) {
+          postSymptomTag({
+            name: newValue.slice(-1)[0]?.inputValue ?? '',
+          })
+            .then(() => {
+              setChangedCount(changedCount + 1);
+              setSelectedTagsList(
+                selectedTagsList?.concat({
+                  id: tagsList.length + 1,
+                  name: newValue.slice(-1)[0].inputValue ?? '',
+                }),
+              );
+              setLength(newValue.length);
+            })
             .catch((e) => console.log(e));
         } else {
           setSelectedTagsList(newValue);
+          setLength(newValue.length);
         }
       }}
       filterOptions={(options, params) => {

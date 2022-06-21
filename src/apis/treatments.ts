@@ -3,12 +3,14 @@ import {
   treatmentCreate,
   treatmentShow,
   treatmentDestroy,
+  treatmentUpdate,
 } from 'urls/index';
 import Cookies from 'js-cookie';
 import { COMMENT } from 'apis/comments';
 import client from './client';
 import { SymptomTagOptionType } from './symptomtags';
 import { DiseaseTagOptionType } from './diseasetags';
+import { MedicineTagOptionType, MEDICINE_DISPLAY } from './medicinetags';
 
 export type TREATMENT = {
   id: number;
@@ -23,18 +25,23 @@ export type TREATMENT = {
   updatedAt?: string;
   symptomTags: SymptomTagOptionType[];
   diseaseTags: DiseaseTagOptionType[];
+  medicineTags: MedicineTagOptionType[];
 };
 
 export type TREATMENT_POST_PROPS = {
+  id?: number;
   individualId: string;
   datetime: string;
   bodyTemperature: number;
   symptom: string;
   content: string;
-  userId: number;
+  userId?: number;
   userName: string;
   symptomTags: number[];
   diseaseTags: number[];
+  medicineTags?: number[];
+  amountEntries?: number[];
+  typeEntries?: number[];
   createdAt?: string;
   updatedAt?: string;
   stool: number | null;
@@ -69,6 +76,7 @@ export type TREATMENT_SHOW_DATA = {
   updatedAt?: string | null;
   symptomTags: SYMPTOM_TAG[];
   diseaseTags: DISEASE_TAG[];
+  medicineTags: MEDICINE_DISPLAY[];
   treatComments: COMMENT[];
   stool: number | null;
   feed: number | null;
@@ -116,6 +124,9 @@ export const postTreatment = (params: TREATMENT_POST_PROPS) =>
         user_name: params.userName,
         symptom_tags: params.symptomTags,
         disease_tags: params.diseaseTags,
+        medicine_tags: params.medicineTags,
+        amount_entries: params.amountEntries,
+        typeEntries: params.typeEntries,
         stool: params.stool,
         feed: params.feed,
         cough: params.cough,
@@ -158,3 +169,39 @@ export const destroyTreatment = (treatmentId: number) =>
     })
     .then((res: TREATMENT_SHOW_RES) => res.data)
     .catch((e) => console.error(e));
+
+export const updateTreatment = (params: TREATMENT_POST_PROPS) =>
+  client
+    .put(
+      treatmentUpdate(params.id ?? 0),
+      {
+        individual_id: params.individualId,
+        datetime: params.datetime,
+        body_temperature: params.bodyTemperature,
+        symptom: params.symptom,
+        content: params.content,
+        user_id: params.userId,
+        user_name: params.userName,
+        symptom_tags: params.symptomTags,
+        disease_tags: params.diseaseTags,
+        medicine_tags: params.medicineTags,
+        amount_entries: params.amountEntries,
+        type_entries: params.typeEntries,
+        stool: params.stool,
+        feed: params.feed,
+        cough: params.cough,
+        nose: params.nose,
+        condition: params.condition,
+      },
+      {
+        headers: {
+          'access-token': Cookies.get('_access_token') || '',
+          client: Cookies.get('_client') || '',
+          uid: Cookies.get('_uid') || '',
+        },
+      },
+    )
+    .then((res: TREATMENT_RES) => res.data)
+    .catch((e) => {
+      throw e;
+    });

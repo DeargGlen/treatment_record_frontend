@@ -3,6 +3,7 @@ import {
   individualShow,
   individualCreate,
   individualDestroy,
+  individualUpdate,
 } from 'urls/index';
 import { TREATMENT } from 'apis/treatments';
 import Cookies from 'js-cookie';
@@ -56,6 +57,7 @@ export type INDIVIDUAL_SHOW_DATA = {
   areaName: string | null;
   barnName: string | null;
   no: string | null;
+  blockId: number | null;
   created_at: string | null;
   updated_at: string | null;
   treatments: TREATMENT[];
@@ -112,6 +114,36 @@ export const postIndividual = (params: INDIVIDUAL_POST_PROPS) =>
       individualCreate,
       {
         id: params.individualId,
+        date_of_birth: params.dateOfBirth,
+        sex: params.sex,
+        category: params.category,
+        breed_type: params.breedType,
+        mother_id: params.motherId,
+        father_name: params.fatherName,
+        grandfather_name: params.grandfatherName,
+        grand_grandfather_name: params.grandGrandfatherName,
+        date_of_introduction: params.dateOfIntroduction,
+        block_id: params.blockId,
+        individual_tags: params.individualTags,
+      },
+      {
+        headers: {
+          'access-token': Cookies.get('_access_token') || '',
+          client: Cookies.get('_client') || '',
+          uid: Cookies.get('_uid') || '',
+        },
+      },
+    )
+    .then((res: INDIVIDUAL_SHOW_RES) => res.data)
+    .catch((e) => {
+      throw e;
+    });
+
+export const updateIndividual = (params: INDIVIDUAL_POST_PROPS) =>
+  client
+    .put(
+      individualUpdate(params.individualId),
+      {
         date_of_birth: params.dateOfBirth,
         sex: params.sex,
         category: params.category,

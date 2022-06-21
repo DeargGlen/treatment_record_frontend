@@ -1,11 +1,25 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { FC, useState, useEffect, useReducer } from 'react';
 import * as React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import NumberFormat from 'react-number-format';
-import { Box, TextField, Button, Container, IconButton } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  Container,
+  IconButton,
+  createFilterOptions,
+  Autocomplete,
+} from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import styled from 'styled-components';
-import { postTreatment } from 'apis/treatments';
+import {
+  updateTreatment,
+  fetchTreatment,
+  TREATMENT_SHOW_DATA,
+} from 'apis/treatments';
+import { HTTP_STATUS_CODE, REQUEST_STATE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
 import { fetchIndividuals, INDIVIDUALS_DATA } from 'apis/individuals';
 import {
@@ -13,8 +27,6 @@ import {
   individualsActionTypes,
   individualsReducer,
 } from 'reducers/individuals';
-import DeleteIcon from '@mui/icons-material/Delete';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import SymptomTagRegister from 'components/molecules/SymptomTagRegister';
 import DiseaseTagRegister from 'components/molecules/DiseaseTagRegister';
 import { SymptomTagOptionType } from 'apis/symptomtags';
@@ -28,20 +40,23 @@ import {
   medicineTypeList,
 } from 'constant';
 import {
+  initialTreatmentState,
+  treatmentActionTypes,
+  treatmentReducer,
+} from 'reducers/treatment';
+import {
   initialMedicineTagState,
   medicineTagsActionTypes,
   medicineTagsReducer,
 } from 'reducers/medicinetags';
 import {
   fetchMedicineTags,
+  INITIAL_MEDICINE,
   MedicineTagOptionType,
+  MEDICINE_DISPLAY,
   MEDICINE_TAG_DATA,
   postMedicineTag,
 } from 'apis/medicinetags';
-
-interface State {
-  sentIndividualId: string;
-}
 
 interface CustomProps {
   onChange: (event: { target: { name: string; value: string } }) => void;
@@ -132,22 +147,20 @@ interface DosageTagType {
 
 interface DosageType {
   id: number;
-  tag: number | null;
+  tag?: number | null;
+  medicineTagId?: number;
   amount: number | null;
   amountType: number | null;
 }
 
 const filter = createFilterOptions<DosageTagType>();
 
-const NewTreatment: FC = () => {
-  const location = useLocation();
-  const { sentIndividualId } = (location.state as State) ?? '';
+const EditTreatment: FC = () => {
   const now = new Date();
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-  const setDate = now.toISOString().slice(0, -8);
   const [values, setValues] = React.useState<TreatmentState>({
-    individualId: sentIndividualId ?? '',
-    datetime: setDate ?? '',
+    individualId: '',
+    datetime: '',
     bodyTemperature: null,
     symptom: '',
     content: '',
@@ -165,6 +178,18 @@ const NewTreatment: FC = () => {
   const [diseaseTagsList, setDiseaseTagsList] = useState<
     DiseaseTagOptionType[]
   >([]);
+  const [medicineTagsList, setMedicineTagsList] = useState<
+    MedicineTagOptionType[]
+  >([]);
+  const [initialSymptomTagsList, setInitialSymptomTagsList] = useState<
+    SymptomTagOptionType[]
+  >([]);
+  const [initialDiseaseTagsList, setInitialDiseaseTagsList] = useState<
+    DiseaseTagOptionType[]
+  >([]);
+  const [initialMedicineTagsList, setInitialMedicineTagsList] = useState<
+    MedicineTagOptionType[]
+  >([]);
   const [dosages, setDosages] = useState<DosageType[]>([
     { id: Math.random(), tag: null, amount: null, amountType: null },
   ]);
@@ -172,10 +197,8 @@ const NewTreatment: FC = () => {
     medicineTagsReducer,
     initialMedicineTagState,
   );
-  const [tagsList, setTagsList] = useState<MedicineTagOptionType[]>([]);
-  const [changedCount, setChangedCount] = useState(0);
-  console.log('dosages', dosages);
 
+  const [changedCount, setChangedCount] = useState(0);
   useEffect(() => {
     medicineDispatch({ type: medicineTagsActionTypes.FETCHING });
     fetchMedicineTags()
@@ -186,11 +209,65 @@ const NewTreatment: FC = () => {
             medicineTags: data?.medicineTags,
           },
         });
-        setTagsList(data?.medicineTags ?? []);
+        setMedicineTagsList(data?.medicineTags ?? []);
       })
 
       .catch(() => 1);
   }, [changedCount]);
+
+  const { treatmentId } = useParams();
+  const [treatmentShowState, treatmentDispatch] = useReducer(
+    treatmentReducer,
+    initialTreatmentState,
+  );
+  useEffect(() => {
+    treatmentDispatch({ type: treatmentActionTypes.FETCHING });
+    fetchTreatment(Number(treatmentId) ?? 0)
+      .then((data: void | TREATMENT_SHOW_DATA) => {
+        treatmentDispatch({
+          type: treatmentActionTypes.FETCH_SUCCESS,
+          payload: {
+            treatment: data,
+          },
+        });
+        setValues({
+          individualId: data?.individualId ?? '',
+          datetime: data?.datetime?.slice(0, 16) ?? '',
+          bodyTemperature:
+            (data?.bodyTemperature && data?.bodyTemperature * 10) || 0,
+          symptom: data?.symptom ?? '',
+          content: data?.content ?? '',
+          userId: data?.userId ?? 0,
+          userName: data?.userName ?? '',
+          stool: data?.stool ?? 0,
+          feed: data?.feed ?? 0,
+          cough: data?.cough ?? 0,
+          nose: data?.nose ?? 0,
+          condition: data?.condition ?? 0,
+        });
+        setSymptomTagsList(data?.symptomTags ?? []);
+        setDiseaseTagsList(data?.diseaseTags ?? []);
+        setInitialSymptomTagsList(data?.symptomTags ?? []);
+        setInitialDiseaseTagsList(data?.diseaseTags ?? []);
+        setDosages(data?.medicineTags ?? []);
+        const initialDosages: INITIAL_MEDICINE[] = [];
+        const tags: MedicineTagOptionType[] = [];
+        data?.medicineTags.map((tag) =>
+          initialDosages.push({
+            id: tag.id,
+            tag: tag.medicineTagId,
+            amount: tag.amount,
+            amountType: tag.amountType,
+          }),
+        );
+        data?.medicineTags.map((tag) =>
+          tags.push({ tag: tag.id, name: tag.name }),
+        );
+        setInitialMedicineTagsList(tags ?? []);
+        setDosages(initialDosages ?? []);
+      })
+      .catch(() => 1);
+  }, [treatmentId]);
 
   const initialSelectState = {
     isOpenSelectDialog: false,
@@ -272,13 +349,13 @@ const NewTreatment: FC = () => {
       typeEntries.push(elem.amountType ?? 0);
     });
 
-    postTreatment({
+    updateTreatment({
+      id: Number(treatmentId),
       individualId: values.individualId,
       datetime: values.datetime,
       bodyTemperature: values.bodyTemperature ? values.bodyTemperature / 10 : 0,
       symptom: values.symptom,
       content: values.content,
-      userId: values.userId ?? 0,
       userName: values.userName,
       symptomTags: symptomEntries,
       diseaseTags: diseaseEntries,
@@ -385,10 +462,14 @@ const NewTreatment: FC = () => {
           <WrapBox>
             <div>症状タグ：</div>
             <div>
-              <SymptomTagRegister
-                selectedTagsList={symptomTagsList}
-                setSelectedTagsList={setSymptomTagsList}
-              />
+              {treatmentShowState.fetchState ===
+              REQUEST_STATE.LOADING ? null : (
+                <SymptomTagRegister
+                  initialTagsList={initialSymptomTagsList}
+                  selectedTagsList={symptomTagsList}
+                  setSelectedTagsList={setSymptomTagsList}
+                />
+              )}
             </div>
           </WrapBox>
           <WrapBox>
@@ -409,18 +490,22 @@ const NewTreatment: FC = () => {
           <WrapBox>
             <div>疾病タグ：</div>
             <div>
-              <DiseaseTagRegister
-                selectedTagsList={diseaseTagsList}
-                setSelectedTagsList={setDiseaseTagsList}
-              />
+              {treatmentShowState.fetchState ===
+              REQUEST_STATE.LOADING ? null : (
+                <DiseaseTagRegister
+                  initialTagsList={initialDiseaseTagsList}
+                  selectedTagsList={diseaseTagsList}
+                  setSelectedTagsList={setDiseaseTagsList}
+                />
+              )}
             </div>
           </WrapBox>
-
           <WrapBox>
             <div>投薬：</div>
             {dosages.map((dosage, index) => (
               <Row key={dosage.id}>
                 <Autocomplete
+                  defaultValue={initialMedicineTagsList[index]}
                   onChange={(event, newValue) => {
                     if (newValue && newValue.inputValue) {
                       postMedicineTag({
@@ -433,7 +518,7 @@ const NewTreatment: FC = () => {
                               i === index
                                 ? {
                                     id: dos.id,
-                                    tag: tagsList.length + 1,
+                                    tag: medicineTagsList.length + 1,
                                     amount: dos.amount,
                                     amountType: dos.amountType,
                                   }
@@ -478,10 +563,8 @@ const NewTreatment: FC = () => {
                   clearOnBlur
                   handleHomeEndKeys
                   id="medicine-tag"
-                  options={tagsList}
+                  options={medicineTagsList}
                   isOptionEqualToValue={(option, value) => {
-                    console.log('option', option);
-                    console.log('value', value);
                     if (value.inputValue) {
                       if (value.inputValue === option.name) {
                         return true;
@@ -683,7 +766,7 @@ const NewTreatment: FC = () => {
                   value={values.nose ?? ''}
                   onChange={handleChange}
                   variant="standard"
-                  name="nose"
+                  name="cnose"
                   sx={{ width: 200 }}
                   SelectProps={{
                     native: true,
@@ -762,4 +845,4 @@ const NewTreatment: FC = () => {
   );
 };
 
-export default NewTreatment;
+export default EditTreatment;

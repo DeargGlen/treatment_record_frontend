@@ -20,13 +20,14 @@ const emptyIndividual: INDIVIDUAL_SHOW_DATA = {
   areaName: null,
   barnName: null,
   no: null,
+  blockId: null,
   created_at: null,
   updated_at: null,
   treatments: [],
   individualTags: [],
 };
 
-export const initialState: IndividualState = {
+export const initialIndividualState: IndividualState = {
   fetchState: REQUEST_STATE.INITIAL,
   individual: emptyIndividual,
 };

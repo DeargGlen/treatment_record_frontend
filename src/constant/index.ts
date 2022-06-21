@@ -117,3 +117,14 @@ export const conditionList = [
     label: '元気がなさそう',
   },
 ];
+
+export const medicineTypeList = [
+  {
+    value: '0',
+    label: 'ml',
+  },
+  {
+    value: '1',
+    label: 'g',
+  },
+];

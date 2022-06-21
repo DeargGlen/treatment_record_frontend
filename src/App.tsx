@@ -23,6 +23,7 @@ import SignIn from 'containers/SignIn';
 import SignUp from 'containers/SignUp';
 import Settings from 'containers/Settings';
 import BottomBar from 'components/layouts/BottomBar';
+import Transfers from 'containers/Transfers';
 
 export const AuthContext = createContext(
   {} as {
@@ -134,6 +135,14 @@ const App: FC = () => {
                   element={
                     <Private>
                       <Treatments />
+                    </Private>
+                  }
+                />
+                <Route
+                  path="/transfers/*"
+                  element={
+                    <Private>
+                      <Transfers />
                     </Private>
                   }
                 />

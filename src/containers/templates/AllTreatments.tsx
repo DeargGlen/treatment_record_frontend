@@ -30,6 +30,12 @@ import {
   diseaseTagsActionTypes,
   diseaseTagsReducer,
 } from 'reducers/diseasetags';
+import {
+  initialMedicineTagState,
+  medicineTagsActionTypes,
+  medicineTagsReducer,
+} from 'reducers/medicinetags';
+import { fetchMedicineTags, MEDICINE_TAG_DATA } from 'apis/medicinetags';
 
 type DATA = {
   treatments: TREATMENT[];
@@ -41,10 +47,11 @@ const Row = styled.div`
 
 const AllTreatments: FC = () => {
   const location = useLocation();
-  const { setSymptomTagId, setDiseaseTagId } =
+  const { setSymptomTagId, setDiseaseTagId, setMedicineTagId } =
     (location.state as {
       setSymptomTagId: number | null;
       setDiseaseTagId: number | null;
+      setMedicineTagId: number | null;
     }) ?? '';
   const [state, treatmentsDispatch] = useReducer(
     treatmentsReducer,
@@ -64,14 +71,20 @@ const AllTreatments: FC = () => {
     diseaseTagsReducer,
     initialDiseaseTagState,
   );
+  const [medicineTagState, medicineTagDispatch] = useReducer(
+    medicineTagsReducer,
+    initialMedicineTagState,
+  );
   type TAGS = {
     symptomTag: number | null;
     diseaseTag: number | null;
+    medicineTag: number | null;
   };
 
   const [tagValues, setTagValues] = useState<TAGS>({
     symptomTag: setSymptomTagId ?? null,
     diseaseTag: setDiseaseTagId ?? null,
+    medicineTag: setMedicineTagId ?? null,
   });
 
   const handleChange = (
@@ -135,6 +148,10 @@ const AllTreatments: FC = () => {
           treatment.diseaseTags.find(
             ({ id }) => id === Number(tagValues.diseaseTag),
           )) &&
+        (!tagValues.medicineTag ||
+          treatment.medicineTags.find(
+            ({ id }) => id === Number(tagValues.medicineTag),
+          )) &&
         (!dateOfTreatment.match(/\S/g) ||
           treatment.datetime.startsWith(dateOfTreatment)),
     );
@@ -178,6 +195,20 @@ const AllTreatments: FC = () => {
           type: diseaseTagsActionTypes.FETCH_SUCCESS,
           payload: {
             diseaseTags: data?.diseaseTags,
+          },
+        });
+      })
+      .catch(() => 1);
+  }, []);
+
+  useEffect(() => {
+    medicineTagDispatch({ type: medicineTagsActionTypes.FETCHING });
+    fetchMedicineTags()
+      .then((data: void | MEDICINE_TAG_DATA) => {
+        medicineTagDispatch({
+          type: medicineTagsActionTypes.FETCH_SUCCESS,
+          payload: {
+            medicineTags: data?.medicineTags,
           },
         });
       })
@@ -236,6 +267,28 @@ const AllTreatments: FC = () => {
         >
           <option value=""> </option>
           {diseaseTagState.diseaseTagsList.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.name}
+            </option>
+          ))}
+        </TextField>
+      </Row>
+      <Row>
+        <p style={{ lineHeight: 2.5 }}>投薬：</p>
+        <TextField
+          select
+          required
+          value={tagValues.medicineTag ?? ''}
+          onChange={handleTagChange}
+          variant="standard"
+          name="medicineTag"
+          sx={{ width: 100, mr: 7, mt: 0.5 }}
+          SelectProps={{
+            native: true,
+          }}
+        >
+          <option value=""> </option>
+          {medicineTagState.medicineTagsList.map((option) => (
             <option key={option.id} value={option.id}>
               {option.name}
             </option>

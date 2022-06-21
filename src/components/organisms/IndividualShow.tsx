@@ -13,7 +13,16 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { breedTypeList, categoryList, sexList } from 'constant';
 import DisplayTags from 'components/molecules/DisplayTags';
-import { Button, Dialog, DialogTitle, DialogActions } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  IconButton,
+  Menu,
+  MenuItem,
+} from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 const TagNum = styled.div`
   font-size: 22px;
@@ -44,10 +53,20 @@ const Data = styled.div`
 const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
   individual,
 }) => {
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(true);
+    setAnchorEl(null);
   };
   const handleClose = () => {
     setOpen(false);
@@ -82,21 +101,36 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
             {individual.id?.slice(5, 9)}
           </TagNum>
           <TopRow>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ height: 20, mt: '5px' }}
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={menuOpen ? 'long-menu' : undefined}
+              aria-expanded={menuOpen ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuClick}
             >
-              編集
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ height: 20, mt: '5px' }}
-              onClick={handleClick}
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              MenuListProps={{
+                'aria-labelledby': 'long-button',
+              }}
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleMenuClose}
             >
-              削除
-            </Button>
+              <MenuItem
+                key="0"
+                component={RouterLink}
+                to={`/individuals/edit/${individual.id ?? ''}`}
+              >
+                編集
+              </MenuItem>
+              <MenuItem key="1" onClick={handleClick}>
+                削除
+              </MenuItem>
+            </Menu>
           </TopRow>
         </TopRow>
         <Row>

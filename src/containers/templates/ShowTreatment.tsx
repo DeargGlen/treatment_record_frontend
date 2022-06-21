@@ -6,7 +6,7 @@ import TreatmentSkelton from 'components/molecules/TreatmentSkelton';
 
 // reducers
 import {
-  initialState,
+  initialTreatmentState,
   treatmentActionTypes,
   treatmentReducer,
 } from 'reducers/treatment';
@@ -17,7 +17,7 @@ import { REQUEST_STATE } from 'states';
 const ShowIndividual: FC = () => {
   const [treatmentShowState, dispatch] = useReducer(
     treatmentReducer,
-    initialState,
+    initialTreatmentState,
   );
   const { treatmentId } = useParams();
   const treatmentIdNum = Number(treatmentId);
@@ -36,8 +36,7 @@ const ShowIndividual: FC = () => {
         });
       })
       .catch(() => 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changedCount]);
+  }, [changedCount, treatmentIdNum]);
 
   return (
     <>

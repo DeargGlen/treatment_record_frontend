@@ -1,10 +1,6 @@
 import { FC, useState } from 'react';
 import { ListItem, ListItemText, Button, Divider } from '@mui/material';
-import {
-  SYMPTOM_TAG_DATA,
-  SymptomTagOptionType,
-  destroySymptomTag,
-} from 'apis/symptomtags';
+import { SymptomTagOptionType, destroySymptomTag } from 'apis/symptomtags';
 import AlertMessage from 'components/molecules/AlertMessage';
 
 const SymptomTagSettingShow: FC<{

@@ -2,7 +2,7 @@
 import { FC, useState } from 'react';
 import * as React from 'react';
 import { TREATMENT_SHOW_DATA, destroyTreatment } from 'apis/treatments';
-import { COMMENT, postComment } from 'apis/comments';
+import { COMMENT, postComment, destroyTreatComment } from 'apis/comments';
 import theme from 'components/theme';
 import { ThemeProvider } from '@mui/material/styles';
 import { ContentWrapper, MainWrapper } from 'Style';
@@ -17,7 +17,12 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
+  IconButton,
+  Menu,
+  MenuItem,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { HTTP_STATUS_CODE } from 'states';
 import DisplayTags from 'components/molecules/DisplayTags';
@@ -28,6 +33,7 @@ import {
   stoolList,
   noseList,
 } from 'constant';
+import DisplayMedicine from 'components/molecules/DisplayMedicine';
 
 const TagNum = styled.div`
   font-size: 22px;
@@ -70,18 +76,45 @@ const TreatmentShow: FC<{
   setChangedCount: React.Dispatch<React.SetStateAction<number>>;
 }> = ({ treatment, changedCount, setChangedCount }) => {
   const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
-  const handleClick = () => {
-    setOpen(true);
+  const [treatmentOpen, setTreatmentOpen] = useState(false);
+  const [commentOpen, setCommentOpen] = useState(false);
+  const [commentId, setCommentId] = useState(0);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const treatmentMenuOpen = Boolean(anchorEl);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setOpen(false);
+  const handleMenuClose = () => {
+    setAnchorEl(null);
   };
-  const handleDestroy = () => {
-    setOpen(false);
+  const handleTreatmentClick = () => {
+    setTreatmentOpen(true);
+    setAnchorEl(null);
+  };
+  const handleTreatmentClose = () => {
+    setTreatmentOpen(false);
+  };
+  const handleTreatmentDestroy = () => {
+    setTreatmentOpen(false);
+
     destroyTreatment(treatment.id ?? '')
       .then(() => {
         navigate('/treatments');
+      })
+      .catch((e) => console.log(e));
+  };
+  const handleCommentClick = (Id: number) => {
+    setCommentOpen(true);
+    setCommentId(Id);
+  };
+  const handleCommentClose = () => {
+    setCommentOpen(false);
+  };
+  const handleCommentDestroy = () => {
+    setCommentOpen(false);
+    destroyTreatComment(commentId)
+      .then(() => {
+        setChangedCount(changedCount + 1);
       })
       .catch((e) => console.log(e));
   };
@@ -151,21 +184,36 @@ const TreatmentShow: FC<{
           </TagNum>
 
           <TopRow>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ height: 20, mt: '5px' }}
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={treatmentMenuOpen ? 'long-menu' : undefined}
+              aria-expanded={treatmentMenuOpen ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleMenuClick}
             >
-              編集
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              sx={{ height: 20, mt: '5px' }}
-              onClick={handleClick}
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              id="long-menu"
+              MenuListProps={{
+                'aria-labelledby': 'long-button',
+              }}
+              anchorEl={anchorEl}
+              open={treatmentMenuOpen}
+              onClose={handleMenuClose}
             >
-              削除
-            </Button>
+              <MenuItem
+                key="0"
+                component={RouterLink}
+                to={`/treatments/edit/${treatment.id ?? ''}`}
+              >
+                編集
+              </MenuItem>
+              <MenuItem key="1" onClick={handleTreatmentClick}>
+                削除
+              </MenuItem>
+            </Menu>
           </TopRow>
         </TopRow>
         <Row>
@@ -200,6 +248,13 @@ const TreatmentShow: FC<{
           <p style={{ lineHeight: 2.5 }}>疾病タグ：</p>
           <Data>
             <DisplayTags tags={treatment.diseaseTags} />
+          </Data>
+        </Row>
+        <Divider />
+        <Row>
+          <p style={{ lineHeight: 2.5 }}>投薬：</p>
+          <Data>
+            <DisplayMedicine tags={treatment.medicineTags} />
           </Data>
         </Row>
         <Divider />
@@ -256,11 +311,20 @@ const TreatmentShow: FC<{
             <MainWrapper>
               <RowComment>
                 <p style={{ fontWeight: 500 }}>{comment.userName}</p>
+                <IconButton
+                  aria-label="delete"
+                  onClick={() => handleCommentClick(comment.id)}
+                  sx={{ height: 22, width: 22 }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </RowComment>
+              <RowComment>
+                <div>{comment.content}</div>
                 <p style={{ color: 'GrayText' }}>
                   {handleToDateAndTime(comment.createdAt ?? '-')}
                 </p>
               </RowComment>
-              <div>{comment.content}</div>
             </MainWrapper>
           </ContentWrapper>
           <Divider />
@@ -288,11 +352,20 @@ const TreatmentShow: FC<{
           送信
         </Button>
       </Row>
-      <Dialog onClose={handleClose} open={open}>
+      <Dialog onClose={handleTreatmentClose} open={treatmentOpen}>
         <DialogTitle>個体の記録を削除しますか？</DialogTitle>
         <DialogActions>
-          <Button onClick={handleClose}>いいえ</Button>
-          <Button onClick={handleDestroy} autoFocus>
+          <Button onClick={handleTreatmentClose}>いいえ</Button>
+          <Button onClick={handleTreatmentDestroy} autoFocus>
+            はい
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog onClose={handleCommentClose} open={commentOpen}>
+        <DialogTitle>コメントを削除しますか？</DialogTitle>
+        <DialogActions>
+          <Button onClick={handleCommentClose}>いいえ</Button>
+          <Button onClick={handleCommentDestroy} autoFocus>
             はい
           </Button>
         </DialogActions>

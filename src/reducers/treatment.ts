@@ -18,6 +18,7 @@ const emptyTreatment: TREATMENT_SHOW_DATA = {
   createdAt: null,
   symptomTags: [],
   diseaseTags: [],
+  medicineTags: [],
   treatComments: [],
   stool: null,
   feed: null,
@@ -26,7 +27,7 @@ const emptyTreatment: TREATMENT_SHOW_DATA = {
   condition: null,
 };
 
-export const initialState: TreatmentShowState = {
+export const initialTreatmentState: TreatmentShowState = {
   fetchState: REQUEST_STATE.INITIAL,
   treatment: emptyTreatment,
 };

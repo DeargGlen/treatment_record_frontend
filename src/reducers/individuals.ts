@@ -7,7 +7,7 @@ type IndividualState = {
 };
 
 const emptyIndividualsList: INDIVIDUAL[] = [];
-export const initialState: IndividualState = {
+export const initialIndividualsState: IndividualState = {
   fetchState: REQUEST_STATE.INITIAL,
   individualsList: emptyIndividualsList,
 };

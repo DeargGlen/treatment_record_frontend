@@ -19,13 +19,17 @@ import {
 const filter = createFilterOptions<DiseaseTagOptionType>();
 
 const DiseaseTagRegister: FC<{
+  // eslint-disable-next-line react/require-default-props
+  initialTagsList?: DiseaseTagOptionType[];
   selectedTagsList: DiseaseTagOptionType[];
   setSelectedTagsList: React.Dispatch<
     React.SetStateAction<DiseaseTagOptionType[]>
   >;
-}> = ({ selectedTagsList, setSelectedTagsList }) => {
+}> = ({ initialTagsList, selectedTagsList, setSelectedTagsList }) => {
   const [, dispatch] = useReducer(diseaseTagsReducer, initialDiseaseTagState);
   const [tagsList, setTagsList] = useState<DiseaseTagOptionType[]>([]);
+  const [changedCount, setChangedCount] = useState(0);
+  const [length, setLength] = useState(0);
 
   useEffect(() => {
     dispatch({ type: diseaseTagsActionTypes.FETCHING });
@@ -41,34 +45,30 @@ const DiseaseTagRegister: FC<{
       })
 
       .catch(() => 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [changedCount]);
 
   return (
     <Autocomplete
       multiple
       id="tags-standard"
+      defaultValue={initialTagsList ?? []}
       onChange={(event, newValue) => {
-        if (newValue.slice(-1)[0]?.inputValue) {
-          // Create a new value from the user input
-          setTagsList(
-            tagsList?.concat({
-              id: tagsList.length + 1,
-              name: newValue.slice(-1)[0].inputValue ?? '',
-            }),
-          );
-          setSelectedTagsList(
-            selectedTagsList?.concat({
-              id: tagsList.length + 1,
-              name: newValue.slice(-1)[0].inputValue ?? '',
-            }),
-          );
-
+        if (newValue.slice(-1)[0]?.inputValue && newValue.length > length) {
           postDiseaseTag({ name: newValue.slice(-1)[0]?.inputValue ?? '' })
-            .then()
+            .then(() => {
+              setChangedCount(changedCount + 1);
+              setSelectedTagsList(
+                selectedTagsList?.concat({
+                  id: tagsList.length + 1,
+                  name: newValue.slice(-1)[0].inputValue ?? '',
+                }),
+              );
+              setLength(newValue.length);
+            })
             .catch((e) => console.log(e));
         } else {
           setSelectedTagsList(newValue);
+          setLength(newValue.length);
         }
       }}
       filterOptions={(options, params) => {

@@ -1,19 +1,17 @@
 import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import AllTreatments from 'containers/templates/AllTreatments';
+import TransfersIndex from 'containers/templates/TransfersIndex';
 import ShowTreatment from 'containers/templates/ShowTreatment';
-import EditTreatment from 'containers/templates/EditTreatment';
 import NewTreatment from './templates/NewTreatment';
 
-const Treatments: FC = () => (
+const Transfers: FC = () => (
   <>
     <Routes>
-      <Route path="/" element={<AllTreatments />} />
+      <Route path="/" element={<TransfersIndex />} />
       <Route path="/:treatmentId" element={<ShowTreatment />} />
       <Route path="/new" element={<NewTreatment />} />
-      <Route path="/edit/:treatmentId" element={<EditTreatment />} />
     </Routes>
   </>
 );
 
-export default Treatments;
+export default Transfers;

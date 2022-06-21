@@ -22,7 +22,7 @@ import { REQUEST_STATE } from 'states';
 
 // reducers
 import {
-  initialState,
+  initialIndividualsState,
   individualsActionTypes,
   individualsReducer,
 } from 'reducers/individuals';
@@ -54,7 +54,10 @@ const AllIndividuals: FC = () => {
     (location.state as {
       setIndividualTagId: number | null;
     }) ?? '';
-  const [state, dispatch] = useReducer(individualsReducer, initialState);
+  const [state, dispatch] = useReducer(
+    individualsReducer,
+    initialIndividualsState,
+  );
   const [selectedList, setIndividualsList] = useState<INDIVIDUAL[]>(
     state.individualsList,
   );
