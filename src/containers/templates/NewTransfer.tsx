@@ -10,7 +10,10 @@ import {
   IconButton,
 } from '@mui/material';
 import styled from 'styled-components';
-import { fetchIndividuals, INDIVIDUALS_DATA } from 'apis/individuals';
+import {
+  fetchIndividualsOnlyUnshipped,
+  INDIVIDUALS_DATA,
+} from 'apis/individuals';
 import {
   initialIndividualsState,
   individualsActionTypes,
@@ -82,7 +85,7 @@ const NewTransfer: FC = () => {
 
   useEffect(() => {
     individualsDispatch({ type: individualsActionTypes.FETCHING });
-    fetchIndividuals()
+    fetchIndividualsOnlyUnshipped()
       .then((data: void | INDIVIDUALS_DATA) => {
         individualsDispatch({
           type: individualsActionTypes.FETCH_SUCCESS,

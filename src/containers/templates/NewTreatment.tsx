@@ -7,7 +7,10 @@ import { Box, TextField, Button, Container, IconButton } from '@mui/material';
 import styled from 'styled-components';
 import { postTreatment } from 'apis/treatments';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
-import { fetchIndividuals, INDIVIDUALS_DATA } from 'apis/individuals';
+import {
+  fetchIndividualsOnlyUnshipped,
+  INDIVIDUALS_DATA,
+} from 'apis/individuals';
 import {
   initialIndividualsState,
   individualsActionTypes,
@@ -318,7 +321,7 @@ const NewTreatment: FC = () => {
 
   useEffect(() => {
     dispatch({ type: individualsActionTypes.FETCHING });
-    fetchIndividuals()
+    fetchIndividualsOnlyUnshipped()
       .then((data: void | INDIVIDUALS_DATA) => {
         dispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
