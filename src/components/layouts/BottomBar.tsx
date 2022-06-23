@@ -3,7 +3,7 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import MovingIcon from '@mui/icons-material/Moving';
 import { Box, Paper, ThemeProvider } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import theme from 'components/theme';
@@ -117,11 +117,11 @@ const BottomBar: FC = () => {
                 sx={{ width: 80 }}
               />
               <BottomNavigationAction
-                label="設定"
+                label="移動"
                 className={classes.button}
-                icon={<AccountCircle />}
+                icon={<MovingIcon />}
                 component={RouterLink}
-                to="/settings"
+                to="/transfers"
                 sx={{ width: 80 }}
               />
             </BottomNavigation>

@@ -27,7 +27,6 @@ const ShowIndividual: FC = () => {
     dispatch({ type: individualActionTypes.FETCHING });
     fetchIndividual(individualId ?? '-')
       .then((data: void | INDIVIDUAL_SHOW_DATA) => {
-        console.log(data);
         dispatch({
           type: individualActionTypes.FETCH_SUCCESS,
           payload: {

@@ -10,7 +10,6 @@ import {
   fetchIndividuals,
   INDIVIDUALS_DATA,
 } from 'apis/individuals';
-import { HTTP_STATUS_CODE } from 'states';
 import { SelectIndividualDialog } from 'components/molecules/SelectIndividualDialog';
 import { SelectLocationDialog } from 'components/molecules/SelectLocationDialog';
 import { SelectBlockDialog } from 'components/molecules/SelectBlockDialog';
@@ -104,17 +103,9 @@ const NewIndividual: FC = () => {
     motherId: '',
   });
 
-  const initialSelectState = {
-    isOpenSelectDialog: false,
-  };
-
-  const [individualState, setIndividual] = useState(initialSelectState);
-
-  const initialLocationState = {
-    isOpenLocationDialog: false,
-  };
-
-  const [locationState, setLocation] = useState(initialLocationState);
+  const [individualDialogOpen, setIndividualDialogOpen] = useState(false);
+  const [blockDialogOpen, setBlockDialogOpen] = useState(false);
+  const [locationDialogOpen, setLocationDialogOpen] = useState(false);
 
   const [barnId, setBarnId] = useState(0);
   const [barnName, setBarnName] = useState('');
@@ -123,12 +114,6 @@ const NewIndividual: FC = () => {
   const [individualTagsList, setIndividualTagsList] = useState<
     IndividualTagOptionType[]
   >([]);
-
-  const initialBlockState = {
-    isOpenBlockDialog: false,
-  };
-
-  const [blockState, setBlock] = useState(initialBlockState);
 
   const navigate = useNavigate();
 
@@ -150,7 +135,6 @@ const NewIndividual: FC = () => {
     dispatch({ type: individualsActionTypes.FETCHING });
     fetchIndividuals()
       .then((data: void | INDIVIDUALS_DATA) => {
-        console.log(data);
         dispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -162,9 +146,10 @@ const NewIndividual: FC = () => {
       .catch(() => 1);
   }, []);
 
+  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
+
   const [areasState, areaDispatch] = useReducer(areasReducer, initialAreaState);
   const [barnState, barnDispatch] = useReducer(barnReducer, initialBarnState);
-  const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
 
   useEffect(() => {
     areaDispatch({ type: areasActionTypes.FETCHING });
@@ -200,7 +185,7 @@ const NewIndividual: FC = () => {
   }, [barnId]);
 
   const handleIndividualClose = (value: string) => {
-    setIndividual({ isOpenSelectDialog: false });
+    setIndividualDialogOpen(false);
     setValues({ ...values, motherId: value });
   };
 
@@ -210,17 +195,17 @@ const NewIndividual: FC = () => {
     areaNameValue: string,
     willOpenBlockDialog: boolean,
   ) => {
-    setLocation({ isOpenLocationDialog: false });
+    setLocationDialogOpen(true);
     setBarnId(value);
     setBarnName(barnNameValue);
     setAreaName(areaNameValue);
-    setBlock({ isOpenBlockDialog: willOpenBlockDialog });
+    setBlockDialogOpen(willOpenBlockDialog);
   };
 
-  const handleBlockClose = (value: number, blockNoValue: string) => {
-    setBlock({ isOpenBlockDialog: false });
+  const handleBlockClose = (blockIdValue: number, blockNoValue: string) => {
+    setBlockDialogOpen(false);
     setBlockNo(blockNoValue);
-    setValues({ ...values, blockId: value });
+    setValues({ ...values, blockId: blockIdValue });
   };
 
   const onSubmit = () => {
@@ -228,7 +213,6 @@ const NewIndividual: FC = () => {
     individualTagsList.forEach((elem) => {
       individualEntries.push(elem.id ?? 0);
     });
-    console.log(individualEntries);
     postIndividual({
       individualId: values.individualId,
       dateOfBirth: values.dateOfBirth,
@@ -384,11 +368,7 @@ const NewIndividual: FC = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() =>
-                  setLocation({
-                    isOpenLocationDialog: true,
-                  })
-                }
+                onClick={() => setLocationDialogOpen(true)}
               >
                 場所の選択
               </Button>
@@ -433,11 +413,7 @@ const NewIndividual: FC = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() =>
-                  setIndividual({
-                    isOpenSelectDialog: true,
-                  })
-                }
+                onClick={() => setIndividualDialogOpen(true)}
               >
                 個体の選択
               </Button>
@@ -508,17 +484,17 @@ const NewIndividual: FC = () => {
           message="エラーです"
         />
       </Container>
-      {individualState.isOpenSelectDialog && (
+      {individualDialogOpen && (
         <SelectIndividualDialog
-          isOpen={individualState.isOpenSelectDialog}
+          isOpen={individualDialogOpen}
           onClose={handleIndividualClose}
           selectedIndividual={values.motherId}
           individualsList={state.individualsList}
         />
       )}
-      {locationState.isOpenLocationDialog && (
+      {locationDialogOpen && (
         <SelectLocationDialog
-          isOpen={locationState.isOpenLocationDialog}
+          isOpen={locationDialogOpen}
           onClose={handleLocationClose}
           selectedBarnId={barnId}
           selectedBarnName={barnName}
@@ -526,9 +502,9 @@ const NewIndividual: FC = () => {
           areasList={areasState.areasList}
         />
       )}
-      {blockState.isOpenBlockDialog && (
+      {blockDialogOpen && (
         <SelectBlockDialog
-          isOpen={blockState.isOpenBlockDialog}
+          isOpen={blockDialogOpen}
           onClose={handleBlockClose}
           selectedBlockId={values.blockId}
           selectedBlockNo={blockNo}

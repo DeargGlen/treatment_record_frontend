@@ -22,8 +22,7 @@ const ShowActivities: FC = () => {
   useEffect(() => {
     dispatch({ type: treatCommentsActionTypes.FETCHING });
     fetchTreatComments()
-      .then((data: void | COMMENT_DATA) => {
-        console.log(data);
+      .then((data: void | null | COMMENT_DATA) => {
         dispatch({
           type: treatCommentsActionTypes.FETCH_SUCCESS,
           payload: {

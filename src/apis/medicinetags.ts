@@ -72,7 +72,7 @@ export const fetchMedicineTags = () =>
     })
     .then((res: MEDICINE_TAG_RES) => res.data)
     // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => ({ medicineTags: [{ id: 0, name: '' }] }));
 
 export const postMedicineTag = (params: MEDICINE_TAG_POST_PROPS) =>
   client

@@ -174,7 +174,6 @@ const NewTreatment: FC = () => {
   );
   const [tagsList, setTagsList] = useState<MedicineTagOptionType[]>([]);
   const [changedCount, setChangedCount] = useState(0);
-  console.log('dosages', dosages);
 
   useEffect(() => {
     medicineDispatch({ type: medicineTagsActionTypes.FETCHING });
@@ -261,15 +260,25 @@ const NewTreatment: FC = () => {
     const amountEntries: number[] = [];
     const typeEntries: number[] = [];
     symptomTagsList.forEach((elem) => {
-      symptomEntries.push(elem.id ?? 0);
+      if (elem.id) {
+        symptomEntries.push(elem.id);
+      }
     });
     diseaseTagsList.forEach((elem) => {
-      diseaseEntries.push(elem.id ?? 0);
+      if (elem.id) {
+        diseaseEntries.push(elem.id);
+      }
     });
     dosages.forEach((elem) => {
-      medicineEntries.push(elem.tag ?? 0);
-      amountEntries.push(elem.amount ?? 0);
-      typeEntries.push(elem.amountType ?? 0);
+      if (elem.tag) {
+        medicineEntries.push(elem.tag);
+      }
+      if (elem.amount) {
+        amountEntries.push(elem.amount);
+      }
+      if (elem.amountType) {
+        typeEntries.push(elem.amountType);
+      }
     });
 
     postTreatment({
@@ -291,9 +300,8 @@ const NewTreatment: FC = () => {
       nose: values.nose,
       condition: values.condition,
     })
-      .then((res) => {
+      .then(() => {
         navigate('/treatments');
-        console.log(res);
       })
       .catch(() => null);
   };
@@ -441,7 +449,7 @@ const NewTreatment: FC = () => {
                             ),
                           );
                         })
-                        .catch((e) => console.log(e));
+                        .catch(() => null);
                     } else {
                       setDosages(
                         dosages.map((dos, i) =>
@@ -480,8 +488,6 @@ const NewTreatment: FC = () => {
                   id="medicine-tag"
                   options={tagsList}
                   isOptionEqualToValue={(option, value) => {
-                    console.log('option', option);
-                    console.log('value', value);
                     if (value.inputValue) {
                       if (value.inputValue === option.name) {
                         return true;

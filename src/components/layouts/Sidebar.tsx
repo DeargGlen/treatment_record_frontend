@@ -36,7 +36,7 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/individuals')}
+              selected={location.pathname.startsWith('/individuals')}
               component={RouterLink}
               to="/individuals"
             >
@@ -47,7 +47,7 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/treatments')}
+              selected={location.pathname.startsWith('/treatments')}
               component={RouterLink}
               to="/treatments"
             >
@@ -58,7 +58,7 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/transfers')}
+              selected={location.pathname.startsWith('/transfers')}
               component={RouterLink}
               to="/transfers"
             >
@@ -69,7 +69,7 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/settings')}
+              selected={location.pathname.startsWith('/settings')}
               component={RouterLink}
               to="/settings"
             >

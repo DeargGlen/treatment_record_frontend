@@ -77,7 +77,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
       .then(() => {
         navigate('/individuals');
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
   const Sortedtreatments: TREATMENT[] | undefined = individual.treatments?.sort(
     (n1, n2) => {
@@ -204,7 +204,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         <Row>
           <p style={{ lineHeight: 2.5 }}>個体タグ：</p>
           <Data>
-            <DisplayTags tags={individual.individualTags} />
+            <DisplayTags tags={individual.individualTags ?? []} />
           </Data>
         </Row>
         <Divider />
@@ -257,7 +257,7 @@ const IndividualShow: FC<{ individual: INDIVIDUAL_SHOW_DATA }> = ({
         </Row>
         <Divider />
       </MainWrapper>
-      {Sortedtreatments.map((treatment: TREATMENT) => (
+      {Sortedtreatments?.map((treatment: TREATMENT) => (
         <ThemeProvider theme={theme} key={treatment.id}>
           <ContentWrapper>
             <MainWrapper>

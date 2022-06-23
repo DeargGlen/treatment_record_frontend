@@ -3,7 +3,7 @@ import * as React from 'react';
 import {
   INDIVIDUALS_DATA,
   INDIVIDUAL,
-  fetchIndividualsOnlyUnshipped,
+  fetchIndividualsOnlyShipped,
 } from 'apis/individuals';
 import { Fab, Tooltip, Typography, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -48,7 +48,7 @@ const SecondRow = styled.div`
   justify-content: space-between;
 `;
 
-const AllIndividuals: FC = () => {
+const AllShippedIndividuals: FC = () => {
   const location = useLocation();
   const { setIndividualTagId } =
     (location.state as {
@@ -99,7 +99,7 @@ const AllIndividuals: FC = () => {
 
   useEffect(() => {
     dispatch({ type: individualsActionTypes.FETCHING });
-    fetchIndividualsOnlyUnshipped()
+    fetchIndividualsOnlyShipped()
       .then((data: void | INDIVIDUALS_DATA) => {
         dispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
@@ -141,11 +141,22 @@ const AllIndividuals: FC = () => {
         (!tagValues.breedType ||
           individual.breedType === Number(tagValues.breedType)),
     );
-    setIndividualsList(filteredList);
+
+    const locationDeletedList: INDIVIDUAL[] = filteredList.map(
+      (individual) => ({
+        ...individual,
+        blockId: null,
+        areaName: null,
+        barnName: null,
+        no: null,
+      }),
+    );
+    setIndividualsList(locationDeletedList);
   }, [state.individualsList, inputValue, tagValues]);
 
   return (
     <>
+      <div style={{ fontSize: 24, textAlign: 'center' }}>出荷済みの牛一覧</div>
       <Row>
         <p style={{ lineHeight: 2.5 }}>個体タグ：</p>
         <TextField
@@ -271,4 +282,4 @@ const AllIndividuals: FC = () => {
   );
 };
 
-export default AllIndividuals;
+export default AllShippedIndividuals;

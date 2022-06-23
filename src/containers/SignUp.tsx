@@ -10,6 +10,8 @@ import {
   CardHeader,
   Button,
   Container,
+  Backdrop,
+  CircularProgress,
 } from '@mui/material';
 import AlertMessage from 'components/molecules/AlertMessage';
 import { signUp } from 'apis/users';
@@ -39,9 +41,17 @@ const SignUp: FC = () => {
   const confirmSuccessUrl = process.env.REACT_APP_CONFIRM_SUCCESS_URL ?? '';
   const [alertMessageOpen, setAlertMessageOpen] = useState<boolean>(false);
   const [alertMessageOpen2, setAlertMessageOpen2] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleToggle = () => {
+    setOpen(!open);
+  };
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    handleToggle();
 
     const params: SignUpParams = {
       name,
@@ -53,7 +63,7 @@ const SignUp: FC = () => {
 
     signUp(params)
       .then((res) => {
-        console.log(res);
+        handleClose();
 
         if (res.status === 200) {
           navigate('/signup');
@@ -154,6 +164,9 @@ const SignUp: FC = () => {
           message="サインインしたユーザーのみがユーザーを追加できます"
         />
       </Container>
+      <Backdrop sx={{ color: '#fff' }} open={open} onClick={handleClose}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

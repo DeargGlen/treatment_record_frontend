@@ -27,7 +27,6 @@ const ShowIndividual: FC = () => {
     dispatch({ type: treatmentActionTypes.FETCHING });
     fetchTreatment(treatmentIdNum ?? 0)
       .then((data: void | TREATMENT_SHOW_DATA) => {
-        console.log(data);
         dispatch({
           type: treatmentActionTypes.FETCH_SUCCESS,
           payload: {

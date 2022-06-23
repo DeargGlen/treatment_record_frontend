@@ -57,10 +57,13 @@ const IndividualsListForLoc: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                   種別：
                   {categoryList[individual.category]?.label}
                 </p>
-                <p>
-                  場所：{individual.areaName} {individual.barnName}{' '}
-                  {individual.no}{' '}
-                </p>
+
+                {individual.areaName ? (
+                  <p>
+                    場所：{individual.areaName} {individual.barnName}{' '}
+                    {individual.no}{' '}
+                  </p>
+                ) : null}
               </Row>
               {individual.breedType === 0 ? (
                 <>

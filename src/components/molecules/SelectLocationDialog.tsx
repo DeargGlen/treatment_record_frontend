@@ -1,6 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { FC, useState } from 'react';
 import {
   Dialog,

@@ -84,9 +84,7 @@ export const fetchAreas = () =>
       },
     })
     .then((res: AREAS_RES) => res.data)
-    .catch((e) => {
-      console.error(e);
-    });
+    .catch(() => ({ areas: [] }));
 
 export const postArea = (params: AREA_POST_PROPS) =>
   client
@@ -103,11 +101,7 @@ export const postArea = (params: AREA_POST_PROPS) =>
         },
       },
     )
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
+    .then((res: AREA_SHOW_RES) => res.data)
     .catch((e) => {
       throw e;
     });
@@ -121,12 +115,8 @@ export const destroyArea = (areaId: number) =>
         uid: Cookies.get('_uid') || '',
       },
     })
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
-    .catch((e) => console.error(e));
+    .then((res: AREA_SHOW_RES) => res.data)
+    .catch(() => null);
 
 export const fetchBarn = (barnId: number) =>
   client
@@ -137,12 +127,8 @@ export const fetchBarn = (barnId: number) =>
         uid: Cookies.get('_uid') || '',
       },
     })
-    .then((res: BARN_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
-    .catch((e) => console.error(e));
+    .then((res: BARN_SHOW_RES) => res.data)
+    .catch(() => ({ id: null, name: '', blocks: [] }));
 
 export const destroyBarn = (barnId: number) =>
   client
@@ -153,12 +139,8 @@ export const destroyBarn = (barnId: number) =>
         uid: Cookies.get('_uid') || '',
       },
     })
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
-    .catch((e) => console.error(e));
+    .then((res: AREA_SHOW_RES) => res.data)
+    .catch(() => null);
 
 export const postBarn = (params: BARN_POST_PROPS) =>
   client
@@ -176,11 +158,7 @@ export const postBarn = (params: BARN_POST_PROPS) =>
         },
       },
     )
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
+    .then((res: AREA_SHOW_RES) => res.data)
     .catch((e) => {
       throw e;
     });
@@ -194,12 +172,8 @@ export const destroyBlock = (blockId: number) =>
         uid: Cookies.get('_uid') || '',
       },
     })
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
-    .catch((e) => console.error(e));
+    .then((res: AREA_SHOW_RES) => res.data)
+    .catch(() => null);
 
 export const postBlock = (params: BLOCK_POST_PROPS) =>
   client
@@ -217,11 +191,7 @@ export const postBlock = (params: BLOCK_POST_PROPS) =>
         },
       },
     )
-    .then((res: AREA_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
+    .then((res: AREA_SHOW_RES) => res.data)
     .catch((e) => {
       throw e;
     });

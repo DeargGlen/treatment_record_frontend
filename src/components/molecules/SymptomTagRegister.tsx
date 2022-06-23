@@ -37,7 +37,7 @@ const SymptomTagRegister: FC<{
   useEffect(() => {
     dispatch({ type: symptomTagsActionTypes.FETCHING });
     fetchSymptomTags()
-      .then((data: void | SYMPTOM_TAG_DATA) => {
+      .then((data: void | null | SYMPTOM_TAG_DATA) => {
         dispatch({
           type: symptomTagsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -70,7 +70,7 @@ const SymptomTagRegister: FC<{
               );
               setLength(newValue.length);
             })
-            .catch((e) => console.log(e));
+            .catch(() => null);
         } else {
           setSelectedTagsList(newValue);
           setLength(newValue.length);

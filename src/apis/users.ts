@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import Cookies from 'js-cookie';
 import {
   SignUpParams,
@@ -34,9 +31,17 @@ export const signIn = (params: SignInParams) =>
   client
     .post(signInUrl, params)
     .then((res) => res)
-    .catch((e) => {
-      throw e;
-    });
+    .catch(() => ({
+      data: {
+        data: '',
+      },
+      status: null,
+      headers: {
+        'access-token': '',
+        client: '',
+        uid: '',
+      },
+    }));
 
 // サインアウト（ログアウト）
 export const signOut = () =>
@@ -68,7 +73,18 @@ export const getCurrentUser = () => {
       },
     })
     .then((res: currentUserRes) => res)
-    .catch((e) => {
-      throw e;
-    });
+    .catch(() => ({
+      data: {
+        isLogin: false,
+        data: {
+          id: 0,
+          uid: '',
+          provider: 'p',
+          email: '',
+          name: '',
+          allowPasswordChange: false,
+        },
+        message: '',
+      },
+    }));
 };

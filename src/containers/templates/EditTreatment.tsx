@@ -368,9 +368,8 @@ const EditTreatment: FC = () => {
       nose: values.nose,
       condition: values.condition,
     })
-      .then((res) => {
+      .then(() => {
         navigate('/treatments');
-        console.log(res);
       })
       .catch(() => null);
   };
@@ -526,7 +525,7 @@ const EditTreatment: FC = () => {
                             ),
                           );
                         })
-                        .catch((e) => console.log(e));
+                        .catch(() => null);
                     } else {
                       setDosages(
                         dosages.map((dos, i) =>

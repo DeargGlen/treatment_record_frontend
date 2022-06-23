@@ -108,7 +108,7 @@ export const fetchTreatments = () =>
     })
     .then((res: TREATMENT_RES) => res.data)
     // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => null);
 
 export const postTreatment = (params: TREATMENT_POST_PROPS) =>
   client
@@ -156,7 +156,27 @@ export const fetchTreatment = (treatmentId: number) =>
       },
     })
     .then((res: TREATMENT_SHOW_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => ({
+      id: 0,
+      individualId: null,
+      datetime: null,
+      bodyTemperature: null,
+      symptom: null,
+      content: null,
+      userId: null,
+      userName: null,
+      createdAt: null,
+      updatedAt: null,
+      symptomTags: [],
+      diseaseTags: [],
+      medicineTags: [],
+      treatComments: [],
+      stool: null,
+      feed: null,
+      cough: null,
+      nose: null,
+      condition: null,
+    }));
 
 export const destroyTreatment = (treatmentId: number) =>
   client
@@ -168,7 +188,7 @@ export const destroyTreatment = (treatmentId: number) =>
       },
     })
     .then((res: TREATMENT_SHOW_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => null);
 
 export const updateTreatment = (params: TREATMENT_POST_PROPS) =>
   client
@@ -201,7 +221,5 @@ export const updateTreatment = (params: TREATMENT_POST_PROPS) =>
         },
       },
     )
-    .then((res: TREATMENT_RES) => res.data)
-    .catch((e) => {
-      throw e;
-    });
+    .then(() => null)
+    .catch(() => null);

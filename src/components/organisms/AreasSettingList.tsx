@@ -120,7 +120,7 @@ const AreasSettingList: FC<{
         navigate('/settings/farm/locations');
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   const submitPostArea = () => {
@@ -133,7 +133,7 @@ const AreasSettingList: FC<{
         handleCloseArea();
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   const submitDestroyBarn = (barnId: number) => {
@@ -143,7 +143,7 @@ const AreasSettingList: FC<{
         handleCloseBarn();
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   const submitPostBarn = () => {
@@ -155,7 +155,7 @@ const AreasSettingList: FC<{
         navigate('/settings/farm/locations');
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   return (

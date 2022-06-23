@@ -40,7 +40,7 @@ const IndividualTagRegister: FC<{
   useEffect(() => {
     dispatch({ type: individualTagsActionTypes.FETCHING });
     fetchIndividualTags()
-      .then((data: void | INDIVIDUAL_TAG_DATA) => {
+      .then((data: void | null | INDIVIDUAL_TAG_DATA) => {
         dispatch({
           type: individualTagsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -71,7 +71,7 @@ const IndividualTagRegister: FC<{
               );
               setLength(newValue.length);
             })
-            .catch((e) => console.log(e));
+            .catch(() => null);
         } else {
           setSelectedTagsList(newValue);
           setLength(newValue.length);

@@ -55,8 +55,7 @@ export const fetchDiseaseTags = () =>
       },
     })
     .then((res: DISEASE_TAG_RES) => res.data)
-    // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => ({ diseaseTags: [] }));
 
 export const postDiseaseTag = (params: DISEASE_TAG_POST_PROPS) =>
   client
@@ -88,9 +87,7 @@ export const postDiseaseEntries = (params: DISEASE_ENTRY_POST_PROPS[]) =>
       },
     })
     .then((res: DISEASE_TAG_SHOW_RES) => res.data)
-    .catch((e) => {
-      throw e;
-    });
+    .catch(() => null);
 
 export const destroyDiseaseTag = (tagId: number) =>
   client
@@ -102,6 +99,4 @@ export const destroyDiseaseTag = (tagId: number) =>
       },
     })
     .then((res: DISEASE_TAG_SHOW_RES) => res.data)
-    .catch((e) => {
-      throw e;
-    });
+    .catch(() => null);

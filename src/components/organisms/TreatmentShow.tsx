@@ -101,7 +101,7 @@ const TreatmentShow: FC<{
       .then(() => {
         navigate('/treatments');
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
   const handleCommentClick = (Id: number) => {
     setCommentOpen(true);
@@ -116,7 +116,7 @@ const TreatmentShow: FC<{
       .then(() => {
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   const [values, setValues] = React.useState<CommentState>({

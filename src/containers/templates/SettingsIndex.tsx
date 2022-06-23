@@ -28,6 +28,12 @@ const SettingsIndex: FC = () => (
         </ListItemButton>
       </ListItem>
       <Divider />
+      <ListItem disablePadding>
+        <ListItemButton component={RouterLink} to="/settings/shipped">
+          <ListItemText primary="出荷済みの牛一覧" />
+        </ListItemButton>
+      </ListItem>
+      <Divider />
     </List>
   </>
 );

@@ -59,8 +59,7 @@ export const fetchIndividualTags = () =>
       },
     })
     .then((res: INDIVIDUAL_TAG_RES) => res.data)
-    // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => ({ individualTags: [] }));
 
 export const postIndividualTag = (params: INDIVIDUAL_TAG_POST_PROPS) =>
   client

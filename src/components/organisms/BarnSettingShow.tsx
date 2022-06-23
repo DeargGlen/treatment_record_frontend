@@ -63,7 +63,7 @@ const BarnSettingShow: FC<{
         handleClose();
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   const submitDestroyBlock = (blockId: number) => {
@@ -72,7 +72,7 @@ const BarnSettingShow: FC<{
         navigate(`/settings/barns/${barn.id ?? 0}`);
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => console.log(e));
+      .catch(() => null);
   };
 
   return (

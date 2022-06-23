@@ -1,4 +1,6 @@
 export const individualsIndex = `/individuals.json`;
+export const individualsIndexOnlyUnshipped = `/individuals.json?unshipped=true`;
+export const individualsIndexOnlyShipped = `/individuals.json?shipped=true`;
 export const individualShow = (individualId: string) =>
   `/individuals/${individualId}.json`;
 export const individualCreate = `/individuals`;

@@ -10,9 +10,15 @@ import client from './client';
 
 type TransferEntry = {
   id: number;
-  individual_id: string;
-  prev_block_id: number;
-  after_block_id: number;
+  individualId: string;
+  prevBlockId: number;
+  prevAreaName: string;
+  prevBarnName: string;
+  prevBlockNo: string;
+  afterBlockId: number;
+  afterAreaName: string;
+  afterBarnName: string;
+  afterBlockNo: string;
 };
 
 export type TRANSFER = {
@@ -24,11 +30,16 @@ export type TRANSFER = {
 
 export type TRANSFER_POST_PROPS = {
   id?: number;
-  date: string;
+  date: string | null;
+  completed?: boolean;
+  individualEntries: string[];
+  prevBlockIdEntries: number[];
+  afterBlockIdEntries: number[];
+};
+
+export type TRANSFER_COMPLETE_PROPS = {
+  id: number;
   completed: boolean;
-  individualEntry: string[];
-  prevBlockIdEntry: number[];
-  afterBlockIdEntry: number[];
 };
 
 export type TRANSFER_SHOW_DATA = {
@@ -50,6 +61,24 @@ type TRANSFERS_RES = {
   data: TRANSFERS_DATA;
 };
 
+export type INDIVIDUALS_LOCATION = {
+  id: string;
+  prevBlockId: number;
+  afterBlockId: number;
+};
+
+export type TRANSFER_INDIVIDUAL = {
+  id: string;
+  prevBlockId: number;
+  afterBlockId?: number;
+  prevAreaName?: string;
+  prevBarnName?: string;
+  prevBlockNo?: string;
+  afterAreaName?: string;
+  afterBarnName?: string;
+  afterBlockNo?: string;
+};
+
 export const fetchTransfers = () =>
   client
     .get(transfersIndex, {
@@ -60,8 +89,7 @@ export const fetchTransfers = () =>
       },
     })
     .then((res: TRANSFERS_RES) => res.data)
-    // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => ({ transfers: [] }));
 
 export const postTransfer = (params: TRANSFER_POST_PROPS) =>
   client
@@ -70,9 +98,9 @@ export const postTransfer = (params: TRANSFER_POST_PROPS) =>
       {
         date: params.date,
         completed: params.completed,
-        individual_entry: params.individualEntry,
-        prev_block_id_entry: params.prevBlockIdEntry,
-        after_block_id_entry: params.afterBlockIdEntry,
+        individual_entries: params.individualEntries,
+        prev_block_id_entries: params.prevBlockIdEntries,
+        after_block_id_entries: params.afterBlockIdEntries,
       },
       {
         headers: {
@@ -83,9 +111,7 @@ export const postTransfer = (params: TRANSFER_POST_PROPS) =>
       },
     )
     .then((res: TRANSFER_SHOW_RES) => res.data)
-    .catch((e) => {
-      throw e;
-    });
+    .catch(() => null);
 
 export const fetchTransfer = (transferId: number) =>
   client
@@ -97,7 +123,13 @@ export const fetchTransfer = (transferId: number) =>
       },
     })
     .then((res: TRANSFER_SHOW_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => ({
+      id: 0,
+      date: null,
+      individualsEntry: [],
+      prevBlockIdEntry: [],
+      afterBlockIdEntry: [],
+    }));
 
 export const destroyTransfer = (transferId: number) =>
   client
@@ -109,18 +141,14 @@ export const destroyTransfer = (transferId: number) =>
       },
     })
     .then((res: TRANSFER_SHOW_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => null);
 
-export const updateTransfer = (params: TRANSFER_POST_PROPS) =>
+export const updateTransfer = (params: TRANSFER_COMPLETE_PROPS) =>
   client
     .put(
       transferUpdate(params.id ?? 0),
       {
-        date: params.date,
         completed: params.completed,
-        individual_entry: params.individualEntry,
-        prev_block_id_entry: params.prevBlockIdEntry,
-        after_block_id_entry: params.afterBlockIdEntry,
       },
       {
         headers: {

@@ -55,8 +55,7 @@ export const fetchSymptomTags = () =>
       },
     })
     .then((res: SYMPTOM_TAG_RES) => res.data)
-    // eslint-disable-next-line no-console
-    .catch((e) => console.error(e));
+    .catch(() => ({ symptomTags: [] }));
 
 export const postSymptomTag = (params: SYMPTOM_TAG_POST_PROPS) =>
   client

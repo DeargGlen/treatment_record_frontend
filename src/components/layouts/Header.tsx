@@ -1,4 +1,3 @@
-/* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { FC, useContext } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
@@ -14,6 +13,7 @@ import {
   IconButton,
   Drawer,
 } from '@mui/material';
+import AccoutntCircle from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Cookies from 'js-cookie';
 import { signOut } from 'apis/users';
@@ -65,13 +65,9 @@ const Header: FC = () => {
 
           setIsSignedIn(false);
           navigate('/signin');
-        } else {
-          alert('Failed in sign out');
         }
       })
-      .catch((err) => {
-        alert(err);
-      });
+      .catch(() => null);
   };
 
   const back = () => {
@@ -82,9 +78,18 @@ const Header: FC = () => {
     if (!loading) {
       if (isSignedIn) {
         return (
-          <Button color="secondary" onClick={handleSignOut}>
-            ログアウト
-          </Button>
+          <>
+            <Button color="secondary" onClick={handleSignOut}>
+              ログアウト
+            </Button>
+            <IconButton
+              sx={{ display: { sm: 'none' } }}
+              component={RouterLink}
+              to="/settings"
+            >
+              <AccoutntCircle />
+            </IconButton>
+          </>
         );
       }
 

@@ -34,7 +34,7 @@ const DiseaseTagRegister: FC<{
   useEffect(() => {
     dispatch({ type: diseaseTagsActionTypes.FETCHING });
     fetchDiseaseTags()
-      .then((data: void | DISEASE_TAG_DATA) => {
+      .then((data: void | null | DISEASE_TAG_DATA) => {
         dispatch({
           type: diseaseTagsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -65,7 +65,7 @@ const DiseaseTagRegister: FC<{
               );
               setLength(newValue.length);
             })
-            .catch((e) => console.log(e));
+            .catch(() => null);
         } else {
           setSelectedTagsList(newValue);
           setLength(newValue.length);

@@ -15,9 +15,8 @@ const SymptomTagSettingShow: FC<{
       .then(() => {
         setChangedCount(changedCount + 1);
       })
-      .catch((e) => {
+      .catch(() => {
         setAlertMessageOpen(true);
-        console.log(e);
       });
   };
 

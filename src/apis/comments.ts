@@ -65,7 +65,7 @@ export const fetchTreatComments = () =>
       },
     })
     .then((res: COMMENT_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => null);
 
 export const destroyTreatComment = (Id: number) =>
   client
@@ -77,4 +77,4 @@ export const destroyTreatComment = (Id: number) =>
       },
     })
     .then((res: COMMENT_RES) => res.data)
-    .catch((e) => console.error(e));
+    .catch(() => null);

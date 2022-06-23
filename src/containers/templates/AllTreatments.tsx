@@ -161,14 +161,13 @@ const AllTreatments: FC = () => {
   useEffect(() => {
     treatmentsDispatch({ type: treatmentsActionTypes.FETCHING });
     fetchTreatments()
-      .then((data: void | DATA) => {
+      .then((data: void | null | DATA) => {
         treatmentsDispatch({
           type: treatmentsActionTypes.FETCH_SUCCESS,
           payload: {
             treatments: data?.treatments,
           },
         });
-        console.log(data);
       })
       .catch(() => 1);
   }, []);
@@ -176,7 +175,7 @@ const AllTreatments: FC = () => {
   useEffect(() => {
     symptomTagDispatch({ type: symptomTagsActionTypes.FETCHING });
     fetchSymptomTags()
-      .then((data: void | SYMPTOM_TAG_DATA) => {
+      .then((data: void | null | SYMPTOM_TAG_DATA) => {
         symptomTagDispatch({
           type: symptomTagsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -190,7 +189,7 @@ const AllTreatments: FC = () => {
   useEffect(() => {
     diseaseTagDispatch({ type: diseaseTagsActionTypes.FETCHING });
     fetchDiseaseTags()
-      .then((data: void | DISEASE_TAG_DATA) => {
+      .then((data: void | null | DISEASE_TAG_DATA) => {
         diseaseTagDispatch({
           type: diseaseTagsActionTypes.FETCH_SUCCESS,
           payload: {

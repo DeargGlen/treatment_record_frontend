@@ -134,7 +134,6 @@ const EditIndividual: FC = () => {
     individualDispatch({ type: individualActionTypes.FETCHING });
     fetchIndividual(individualId ?? '-')
       .then((data: void | INDIVIDUAL_SHOW_DATA) => {
-        console.log('data', data);
         individualDispatch({
           type: individualActionTypes.FETCH_SUCCESS,
           payload: {
@@ -202,7 +201,6 @@ const EditIndividual: FC = () => {
     individualsDispatch({ type: individualsActionTypes.FETCHING });
     fetchIndividuals()
       .then((data: void | INDIVIDUALS_DATA) => {
-        console.log(data);
         individualsDispatch({
           type: individualsActionTypes.FETCH_SUCCESS,
           payload: {
@@ -280,7 +278,6 @@ const EditIndividual: FC = () => {
     individualTagsList.forEach((elem) => {
       individualEntries.push(elem.id ?? 0);
     });
-    console.log(individualEntries);
     updateIndividual({
       individualId: values.individualId,
       dateOfBirth: values.dateOfBirth,

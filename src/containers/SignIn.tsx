@@ -68,8 +68,7 @@ const SignIn: FC = () => {
           setAlertMessageOpen(true);
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setAlertMessageOpen(true);
       });
   };
