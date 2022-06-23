@@ -13,6 +13,7 @@ import { getCurrentUser } from 'apis/users';
 import { styled } from '@mui/material/styles';
 import { ThemeProvider } from '@mui/material';
 import theme from 'components/theme';
+import AuthContext from 'interfaces/context';
 
 // components
 import Individuals from 'containers/Individuals';
@@ -24,17 +25,6 @@ import SignUp from 'containers/SignUp';
 import Settings from 'containers/Settings';
 import BottomBar from 'components/layouts/BottomBar';
 import Transfers from 'containers/Transfers';
-
-export const AuthContext = createContext(
-  {} as {
-    loading: boolean;
-    setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-    isSignedIn: boolean;
-    setIsSignedIn: React.Dispatch<React.SetStateAction<boolean>>;
-    currentUser: User | undefined;
-    setCurrentUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-  },
-);
 
 const App: FC = () => {
   const sidebarWidth = 160;
@@ -73,6 +63,7 @@ const App: FC = () => {
         setCurrentUser(res?.data?.data);
       }
     } catch (err) {
+      // eslint-disable-next-line no-console
       console.log(err);
     }
 

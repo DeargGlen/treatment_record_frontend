@@ -14,7 +14,7 @@ import {
 import AlertMessage from 'components/molecules/AlertMessage';
 import { userInfoUpdate } from 'apis/users';
 import { UserInfoUpdateParams } from 'interfaces/index';
-import { AuthContext } from 'App';
+import AuthContext from 'interfaces/context';
 import Cookies from 'js-cookie';
 
 const useStyles = makeStyles(() => ({
@@ -53,22 +53,17 @@ const UserSettings: FC = () => {
 
     userInfoUpdate(params)
       .then((res) => {
-        console.log(res);
-
         if (res.status === 200) {
           Cookies.set('_access_token', res.headers['access-token']);
           Cookies.set('_client', res.headers.client);
           Cookies.set('_uid', res.headers.uid);
           setCurrentUser(res.data.data);
           navigate('/individuals');
-
-          console.log('Changed successfully!');
         } else {
           setAlertMessageOpen(true);
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setAlertMessageOpen(true);
       });
   };

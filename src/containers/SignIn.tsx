@@ -14,7 +14,7 @@ import {
   Button,
 } from '@mui/material';
 
-import { AuthContext } from 'App';
+import AuthContext from 'interfaces/context';
 import AlertMessage from 'components/molecules/AlertMessage';
 import { signIn } from 'apis/users';
 import { SignInParams } from 'interfaces/index';

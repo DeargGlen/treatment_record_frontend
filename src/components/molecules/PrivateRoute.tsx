@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { FC, useContext } from 'react';
 import { Route, Navigate, RouteProps } from 'react-router-dom';
-import { AuthContext } from 'App';
+import AuthContext from 'interfaces/context';
 
 const PrivateRoute: FC<RouteProps> = ({ element, ...rest }) => {
   const { currentUser, loading } = useContext(AuthContext);
