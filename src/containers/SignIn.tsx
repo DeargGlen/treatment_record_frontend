@@ -63,13 +63,12 @@ const SignIn: FC = () => {
           setIsSignedIn(true);
           setCurrentUser(res.data.data);
 
-          navigate('/individuals');
+          navigate('/');
         } else {
           setAlertMessageOpen(true);
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
         setAlertMessageOpen(true);
       });
   };

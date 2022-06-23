@@ -1,7 +1,7 @@
-import { FC, useEffect, useReducer } from 'react';
+import { FC, useEffect, useReducer, useState } from 'react';
 import { fetchAreas, AREAS_DATA } from 'apis/locations';
 import { REQUEST_STATE } from 'states';
-import AreasList from 'components/organisms/AreasList';
+import AreasSettingList from 'components/organisms/AreasSettingList';
 
 import {
   initialAreaState,
@@ -11,6 +11,8 @@ import {
 
 const LocationSettings: FC = () => {
   const [state, dispatch] = useReducer(areasReducer, initialAreaState);
+  const [changedCount, setChangedCount] = useState(0);
+
   useEffect(() => {
     dispatch({ type: areasActionTypes.FETCHING });
     fetchAreas()
@@ -24,14 +26,18 @@ const LocationSettings: FC = () => {
       })
 
       .catch(() => 1);
-  }, []);
+  }, [changedCount]);
 
   return (
     <>
       {state.fetchState === REQUEST_STATE.LOADING ? (
         <div style={{ fontSize: 24 }}>エリア名の設定</div>
       ) : (
-        <AreasList areas={state.areasList} />
+        <AreasSettingList
+          areas={state.areasList}
+          changedCount={changedCount}
+          setChangedCount={setChangedCount}
+        />
       )}
     </>
   );

@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 // reducers
 import {
-  initialState,
+  initialIndividualState,
   individualActionTypes,
   individualReducer,
 } from 'reducers/individual';
@@ -19,7 +19,7 @@ import { REQUEST_STATE } from 'states';
 const ShowIndividual: FC = () => {
   const [individualState, dispatch] = useReducer(
     individualReducer,
-    initialState,
+    initialIndividualState,
   );
   const { individualId } = useParams();
 
@@ -27,7 +27,6 @@ const ShowIndividual: FC = () => {
     dispatch({ type: individualActionTypes.FETCHING });
     fetchIndividual(individualId ?? '-')
       .then((data: void | INDIVIDUAL_SHOW_DATA) => {
-        console.log(data);
         dispatch({
           type: individualActionTypes.FETCH_SUCCESS,
           payload: {
@@ -36,31 +35,34 @@ const ShowIndividual: FC = () => {
         });
       })
       .catch(() => 1);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [individualId]);
 
   return (
     <>
       {individualState.fetchState === REQUEST_STATE.LOADING ? (
         <IndividualSkelton />
       ) : (
-        <IndividualShow individual={individualState.individual} />
+        <>
+          <IndividualShow individual={individualState.individual} />
+
+          <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
+            <Fab
+              sx={{
+                position: 'fixed',
+                bottom: 85,
+                right: 20,
+              }}
+              color="primary"
+              aria-label="add"
+              component={RouterLink}
+              to="/treatments/new"
+              state={{ sentIndividualId: individualState.individual.id }}
+            >
+              <AddIcon />
+            </Fab>
+          </Tooltip>
+        </>
       )}
-      <Tooltip title={<Typography fontSize={15}>治療の登録</Typography>}>
-        <Fab
-          sx={{
-            position: 'fixed',
-            bottom: 70,
-            right: 20,
-          }}
-          color="primary"
-          aria-label="add"
-          component={RouterLink}
-          to="/treatments/new"
-        >
-          <AddIcon />
-        </Fab>
-      </Tooltip>
     </>
   );
 };

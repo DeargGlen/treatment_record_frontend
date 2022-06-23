@@ -3,12 +3,13 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import MovingIcon from '@mui/icons-material/Moving';
 import { Box, Paper, ThemeProvider } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import theme from 'components/theme';
 import { useLocation, Link as RouterLink, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CattleImg from 'images/Cattle.svg';
 
 const useStyles = makeStyles({
   palette: {
@@ -46,12 +47,14 @@ const BottomBar: FC = () => {
 
   const select = () => {
     let num = -1;
-    if (location.pathname.includes('/individuals')) {
+    if (location.pathname === '/') {
       num = 0;
-    } else if (location.pathname.includes('/treatments')) {
+    } else if (location.pathname.includes('/individuals')) {
       num = 1;
-    } else if (location.pathname.includes('/settings')) {
+    } else if (location.pathname.includes('/treatments')) {
       num = 2;
+    } else if (location.pathname.includes('/settings')) {
+      num = 3;
     } else {
       num = -1;
     }
@@ -72,7 +75,7 @@ const BottomBar: FC = () => {
               bottom: 0,
               left: 0,
               right: 0,
-              height: 70,
+              height: 80,
               display: 'flex',
               justifyContent: 'center',
             }}
@@ -90,12 +93,20 @@ const BottomBar: FC = () => {
               className={classes.root}
             >
               <BottomNavigationAction
-                label="個体管理"
+                label="ホーム"
                 className={classes.button}
                 icon={<HomeIcon />}
                 component={RouterLink}
+                to="/"
+                sx={{ width: 80 }}
+              />
+              <BottomNavigationAction
+                label="個体管理"
+                className={classes.button}
+                icon={<img src={CattleImg} alt="tag-number" width="25" />}
+                component={RouterLink}
                 to="/individuals"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
               <BottomNavigationAction
                 label="治療管理"
@@ -103,15 +114,15 @@ const BottomBar: FC = () => {
                 icon={<CreateIcon />}
                 component={RouterLink}
                 to="/treatments"
-                sx={{ width: 105 }}
+                sx={{ width: 80 }}
               />
               <BottomNavigationAction
-                label="設定"
+                label="移動"
                 className={classes.button}
-                icon={<AccountCircle />}
+                icon={<MovingIcon />}
                 component={RouterLink}
-                to="/settings"
-                sx={{ width: 105 }}
+                to="/transfers"
+                sx={{ width: 80 }}
               />
             </BottomNavigation>
           </Paper>

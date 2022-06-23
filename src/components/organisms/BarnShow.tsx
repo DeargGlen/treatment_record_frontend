@@ -1,131 +1,75 @@
-import { FC, useState } from 'react';
-import { BARN_SHOW_DATA, BLOCK, postBlock, destroyBlock } from 'apis/locations';
-import {
-  ListItem,
-  ListItemText,
-  Button,
-  Divider,
-  Dialog,
-  DialogActions,
-  TextField,
-  DialogTitle,
-} from '@mui/material';
-import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable react/jsx-props-no-spreading */
+import * as React from 'react';
+import { FC } from 'react';
+import { BARN_SHOW_DATA, BLOCK_WITH_INDIVIDUALS } from 'apis/locations';
+import IndividualsListForLoc from 'components/organisms/IndividualsListForLoc';
+import { styled } from '@mui/material/styles';
+import { Typography, Divider } from '@mui/material';
+import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
+import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
+import MuiAccordionSummary, {
+  AccordionSummaryProps,
+} from '@mui/material/AccordionSummary';
 
-const ButtonDiv = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
+const Accordion = styled((props: AccordionProps) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `0.5px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
+}));
+
+const AccordionSummary = styled((props: AccordionSummaryProps) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
 const BarnShow: FC<{ barn: BARN_SHOW_DATA }> = ({ barn }) => {
-  const Sortedblocks: BLOCK[] | undefined = barn.blocks?.sort((n1, n2) => {
-    if (n1.no > n2.no) {
-      return 1;
-    }
-    if (n1.no < n2.no) {
-      return -1;
-    }
+  const Sortedblocks: BLOCK_WITH_INDIVIDUALS[] | undefined = barn.blocks?.sort(
+    (n1, n2) => {
+      if (n1.no > n2.no) {
+        return 1;
+      }
+      if (n1.no < n2.no) {
+        return -1;
+      }
 
-    return 0;
-  });
-
-  const navigate = useNavigate();
-  const [blockNo, setBlockNo] = useState('');
-  const [openDialog, setOpenDialog] = useState(false);
-  const [editState, setEdit] = useState(false);
-  const toggleEdit = () => {
-    setEdit(!editState);
-  };
-  const handleClose = () => {
-    setOpenDialog(false);
-    setBlockNo('');
-  };
-  const handleClickOpen = () => {
-    setOpenDialog(true);
-  };
-  const handleChangeBlock = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setBlockNo(event.target.value);
-  };
-  const submitPostBlock = () => {
-    postBlock({
-      no: blockNo,
-      id: barn.id ?? 0,
-    })
-      .then(() => {
-        navigate('/settings/farm');
-      })
-      .catch((e) => console.log(e));
-  };
-
-  const submitDestroyBlock = (blockId: number) => {
-    destroyBlock(blockId)
-      .then(() => {
-        navigate('/settings/farm');
-      })
-      .catch((e) => console.log(e));
-  };
+      return 0;
+    },
+  );
 
   return (
     <>
-      <div style={{ display: 'flex' }}>
-        <div style={{ fontSize: 24, textAlign: 'center' }}>{barn.name}</div>
-        {editState ? (
-          <Button variant="text" sx={{ ml: 'auto' }} onClick={toggleEdit}>
-            完了
-          </Button>
-        ) : (
-          <Button variant="text" sx={{ ml: 'auto' }} onClick={toggleEdit}>
-            編集
-          </Button>
-        )}
-      </div>
-      <Divider />
-      {Sortedblocks.map((block: BLOCK) => (
-        <div key={block.id}>
-          <ListItem sx={{ height: 49 }}>
-            <ListItemText>{block.no}</ListItemText>
-            {editState ? (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => submitDestroyBlock(block.id)}
-              >
-                削除
-              </Button>
-            ) : null}
-          </ListItem>
-          <Divider />
-        </div>
-      ))}
-      {editState ? (
-        <ButtonDiv>
-          <Button variant="contained" color="primary" onClick={handleClickOpen}>
-            追加
-          </Button>
-        </ButtonDiv>
-      ) : null}
+      <div style={{ fontSize: 24, textAlign: 'center' }}>{barn.name}</div>
+      {Sortedblocks.map((block: BLOCK_WITH_INDIVIDUALS) => (
+        <Accordion key={block.id}>
+          <AccordionSummary
+            aria-controls="area-content"
+            id="area-header"
+            sx={{ paddingRight: 0 }}
+          >
+            <Typography sx={{ flexShrink: 0 }}>{block.no}</Typography>
+            <Divider />
+          </AccordionSummary>
 
-      <Dialog open={openDialog} onClose={handleClose} fullWidth maxWidth="xs">
-        <DialogTitle>登録するマス名</DialogTitle>
-        <TextField
-          autoFocus
-          margin="dense"
-          id="areaName"
-          label="エリア名"
-          type="text"
-          variant="standard"
-          value={blockNo}
-          onChange={handleChangeBlock}
-          sx={{ width: '80%', mr: 'auto', ml: 'auto' }}
-        />
-        <DialogActions>
-          <Button onClick={handleClose}>キャンセル</Button>
-          <Button onClick={submitPostBlock}>登録</Button>
-        </DialogActions>
-      </Dialog>
+          {block.individuals.length ? <Divider /> : null}
+          <IndividualsListForLoc individuals={block.individuals} />
+        </Accordion>
+      ))}
     </>
   );
 };

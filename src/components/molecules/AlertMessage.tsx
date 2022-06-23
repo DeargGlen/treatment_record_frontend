@@ -14,7 +14,6 @@ interface AlertMessageProps {
   message: string;
 }
 
-// アラートメッセージ（何かアクションを行なった際の案内用に使い回す）
 const AlertMessage = ({
   open,
   setOpen,

@@ -7,6 +7,8 @@ import theme from 'components/theme';
 import HomeIcon from '@mui/icons-material/Home';
 import CreateIcon from '@mui/icons-material/Create';
 import AccoutntCircle from '@mui/icons-material/AccountCircle';
+import MovingIcon from '@mui/icons-material/Moving';
+import CattleImg from 'images/cattle.png';
 
 const SidebarWrapper = styled.div`
   height: 100%;
@@ -23,18 +25,29 @@ const Sidebar: FC = () => {
         <ThemeProvider theme={theme}>
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/individuals')}
+              selected={location.pathname === '/'}
+              component={RouterLink}
+              to="/"
+            >
+              <HomeIcon />
+              <ListItemText primary="ホーム" />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname.startsWith('/individuals')}
               component={RouterLink}
               to="/individuals"
             >
-              <HomeIcon />
+              <img src={CattleImg} alt="tag-number" width="25" />
               <ListItemText primary="個体管理" />
             </ListItemButton>
           </ListItem>
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/treatments')}
+              selected={location.pathname.startsWith('/treatments')}
               component={RouterLink}
               to="/treatments"
             >
@@ -45,7 +58,18 @@ const Sidebar: FC = () => {
           <Divider />
           <ListItem>
             <ListItemButton
-              selected={location.pathname.includes('/settings')}
+              selected={location.pathname.startsWith('/transfers')}
+              component={RouterLink}
+              to="/transfers"
+            >
+              <MovingIcon />
+              <ListItemText primary="移動" />
+            </ListItemButton>
+          </ListItem>
+          <Divider />
+          <ListItem>
+            <ListItemButton
+              selected={location.pathname.startsWith('/settings')}
               component={RouterLink}
               to="/settings"
             >

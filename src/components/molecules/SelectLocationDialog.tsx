@@ -1,6 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { FC, useState } from 'react';
 import {
   Dialog,
@@ -107,7 +105,7 @@ export const SelectLocationDialog: FC<{
 
             <Divider />
             {area.barns?.map((barn: BARN) => (
-              <div key={area.id} style={{ display: 'flex' }}>
+              <div key={barn.id} style={{ display: 'flex' }}>
                 <ListItem key={barn.id}>
                   <ListItemButton
                     onClick={() => onBarnClick(barn.id, barn.name, area.name)}

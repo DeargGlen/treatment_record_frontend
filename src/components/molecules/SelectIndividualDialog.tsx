@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import { FC, useEffect, useState } from 'react';
 import { INDIVIDUALS_DATA, INDIVIDUAL } from 'apis/individuals';
 import {
@@ -39,7 +37,7 @@ export const SelectIndividualDialog: FC<{
   individualsList: void | INDIVIDUAL[];
 }> = ({ isOpen, onClose, selectedIndividual, individualsList }) => {
   const [selectedList, setIndividualsList] = useState<INDIVIDUAL[]>(
-    individualsList!,
+    individualsList ?? [],
   );
   const [inputValue, setInputValue] = useState('');
 
@@ -51,15 +49,15 @@ export const SelectIndividualDialog: FC<{
 
   useEffect(() => {
     if (inputValue.match(/\S/g)) {
-      const filteredList: INDIVIDUAL[] = individualsList!.filter(
-        (individual: INDIVIDUAL) =>
+      const filteredList: INDIVIDUAL[] =
+        individualsList?.filter((individual: INDIVIDUAL) =>
           individual.id?.slice(5, 9).startsWith(inputValue),
-      );
+        ) ?? [];
       setIndividualsList(filteredList);
 
       return;
     }
-    setIndividualsList(individualsList!);
+    setIndividualsList(individualsList ?? []);
   }, [individualsList, inputValue]);
 
   const handleIndividualClick = (value: string) => {

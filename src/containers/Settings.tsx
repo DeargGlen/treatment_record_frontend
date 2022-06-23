@@ -1,10 +1,14 @@
 import { FC } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import SettingsIndex from 'containers/templates/SettingsIndex';
-import UserSettings from 'containers/templates/UserSettings';
-import FarmSettings from 'containers/templates/FarmSettings';
-import LocationSettings from 'containers/templates/LocationSettings';
-import ShowBarn from 'containers/templates/ShowBarn';
+import SettingsIndex from './templates/SettingsIndex';
+import UserSettings from './templates/UserSettings';
+import FarmSettings from './templates/FarmSettings';
+import TagSettings from './templates/TagSettings';
+import LocationSettings from './templates/LocationSettings';
+import ShowSettingBarn from './templates/ShowSettingBarn';
+import ShowSettingSymptomTag from './templates/ShowSettingSymptomTag';
+import ShowSettingDiseaseTag from './templates/ShowSettingDiseaseTag';
+import ShowSettingIndividualTag from './templates/ShowSettingIndividualTag';
 
 const Settings: FC = () => (
   <>
@@ -13,7 +17,11 @@ const Settings: FC = () => (
       <Route path="/user" element={<UserSettings />} />
       <Route path="/farm" element={<FarmSettings />} />
       <Route path="/farm/locations" element={<LocationSettings />} />
-      <Route path="/barns/:barnId" element={<ShowBarn />} />
+      <Route path="/barns/:barnId" element={<ShowSettingBarn />} />
+      <Route path="/tags" element={<TagSettings />} />
+      <Route path="/tags/symptom" element={<ShowSettingSymptomTag />} />
+      <Route path="/tags/disease" element={<ShowSettingDiseaseTag />} />
+      <Route path="/tags/individual" element={<ShowSettingIndividualTag />} />
     </Routes>
   </>
 );

@@ -17,11 +17,13 @@ import theme from 'components/theme';
 // components
 import Individuals from 'containers/Individuals';
 import Treatments from 'containers/Treatments';
+import Home from 'containers/Home';
 import Header from 'components/layouts/Header';
 import SignIn from 'containers/SignIn';
 import SignUp from 'containers/SignUp';
 import Settings from 'containers/Settings';
 import BottomBar from 'components/layouts/BottomBar';
+import Transfers from 'containers/Transfers';
 
 export const AuthContext = createContext(
   {} as {
@@ -113,6 +115,14 @@ const App: FC = () => {
             <ResponsiveDrawer>
               <Routes>
                 <Route
+                  path="/*"
+                  element={
+                    <Private>
+                      <Home />
+                    </Private>
+                  }
+                />
+                <Route
                   path="/individuals/*"
                   element={
                     <Private>
@@ -129,6 +139,14 @@ const App: FC = () => {
                   }
                 />
                 <Route
+                  path="/transfers/*"
+                  element={
+                    <Private>
+                      <Transfers />
+                    </Private>
+                  }
+                />
+                <Route
                   path="/settings/*"
                   element={
                     <Private>
@@ -138,7 +156,6 @@ const App: FC = () => {
                 />
                 <Route path="/signup" element={<SignUp />} />
                 <Route path="/signin" element={<SignIn />} />
-                <Route path="/" element={<Navigate to="/individuals" />} />
               </Routes>
             </ResponsiveDrawer>
           </ThemeProvider>
