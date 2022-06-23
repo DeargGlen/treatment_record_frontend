@@ -17,7 +17,7 @@ import AccoutntCircle from '@mui/icons-material/AccountCircle';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Cookies from 'js-cookie';
 import { signOut } from 'apis/users';
-import { AuthContext } from 'App';
+import AuthContext from 'interfaces/context';
 import Sidebar from './Sidebar';
 
 const myTheme = createTheme({
