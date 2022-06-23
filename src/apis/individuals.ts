@@ -82,8 +82,9 @@ type INDIVIDUAL_POST_PROPS = {
   grandfatherName?: string;
   grandGrandfatherName?: string;
   dateOfIntroduction?: string;
-  blockId: number;
+  blockId?: number;
   individualTags?: number[];
+  shipped?: boolean;
 };
 
 export const fetchIndividuals = () =>
@@ -193,6 +194,7 @@ export const updateIndividual = (params: INDIVIDUAL_POST_PROPS) =>
         date_of_introduction: params.dateOfIntroduction,
         block_id: params.blockId,
         individual_tags: params.individualTags,
+        shipped: params.shipped,
       },
       {
         headers: {

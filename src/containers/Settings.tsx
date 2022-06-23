@@ -9,6 +9,8 @@ import ShowSettingBarn from './templates/ShowSettingBarn';
 import ShowSettingSymptomTag from './templates/ShowSettingSymptomTag';
 import ShowSettingDiseaseTag from './templates/ShowSettingDiseaseTag';
 import ShowSettingIndividualTag from './templates/ShowSettingIndividualTag';
+import AllShippedIndividuals from './templates/AllShippedIndividuals';
+import UpdateShipped from './templates/UpdateShipped';
 
 const Settings: FC = () => (
   <>
@@ -22,6 +24,8 @@ const Settings: FC = () => (
       <Route path="/tags/symptom" element={<ShowSettingSymptomTag />} />
       <Route path="/tags/disease" element={<ShowSettingDiseaseTag />} />
       <Route path="/tags/individual" element={<ShowSettingIndividualTag />} />
+      <Route path="/shipped" element={<AllShippedIndividuals />} />
+      <Route path="/shipped/update" element={<UpdateShipped />} />
     </Routes>
   </>
 );

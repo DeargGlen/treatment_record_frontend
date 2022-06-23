@@ -195,7 +195,7 @@ const NewIndividual: FC = () => {
     areaNameValue: string,
     willOpenBlockDialog: boolean,
   ) => {
-    setLocationDialogOpen(true);
+    setLocationDialogOpen(false);
     setBarnId(value);
     setBarnName(barnNameValue);
     setAreaName(areaNameValue);
