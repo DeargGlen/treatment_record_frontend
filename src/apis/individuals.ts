@@ -204,14 +204,8 @@ export const updateIndividual = (params: INDIVIDUAL_POST_PROPS) =>
         },
       },
     )
-    .then((res: INDIVIDUAL_SHOW_RES) => {
-      console.log(res);
-
-      return res.data;
-    })
+    .then((res: INDIVIDUAL_SHOW_RES) => res.data)
     .catch((e) => {
-      console.log(e);
-
       throw e;
     });
 
