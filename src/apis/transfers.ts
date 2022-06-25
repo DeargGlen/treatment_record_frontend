@@ -110,7 +110,12 @@ export const postTransfer = (params: TRANSFER_POST_PROPS) =>
         },
       },
     )
-    .then((res: TRANSFER_SHOW_RES) => res.data)
+    .then((res: TRANSFER_SHOW_RES) => {
+      // eslint-disable-next-line no-console
+      console.log(res);
+
+      return res.data;
+    })
     .catch(() => null);
 
 export const fetchTransfer = (transferId: number) =>

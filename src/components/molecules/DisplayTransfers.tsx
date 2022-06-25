@@ -16,7 +16,7 @@ import handleToDateAndYobi from 'containers/func/handleToDateAndYobi';
 const DisplayTransfers: FC<{ transfers: TRANSFER[] }> = ({ transfers }) => (
   <>
     {transfers.map((transfer) => (
-      <Paper key={transfer.date} style={{ marginBottom: 20 }}>
+      <Paper key={transfer.id} style={{ marginBottom: 20 }}>
         <div>
           <p style={{ marginLeft: 10 }}>{handleToDateAndYobi(transfer.date)}</p>
         </div>

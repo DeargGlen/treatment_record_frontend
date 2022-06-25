@@ -49,11 +49,11 @@ const BottomBar: FC = () => {
     let num = -1;
     if (location.pathname === '/') {
       num = 0;
-    } else if (location.pathname.includes('/individuals')) {
+    } else if (location.pathname.startsWith('/individuals')) {
       num = 1;
-    } else if (location.pathname.includes('/treatments')) {
+    } else if (location.pathname.startsWith('/treatments')) {
       num = 2;
-    } else if (location.pathname.includes('/settings')) {
+    } else if (location.pathname.startsWith('/transfers')) {
       num = 3;
     } else {
       num = -1;

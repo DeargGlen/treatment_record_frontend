@@ -232,7 +232,7 @@ const NewTransfer: FC = () => {
   return (
     <>
       <Container maxWidth="sm">
-        <div style={{ fontSize: 24, textAlign: 'center' }}>治療記録の登録</div>
+        <div style={{ fontSize: 24, textAlign: 'center' }}>移動予定の登録</div>
         <Box>
           <WrapBox>
             <div>
