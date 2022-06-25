@@ -210,6 +210,8 @@ export const updateIndividual = (params: INDIVIDUAL_POST_PROPS) =>
       return res.data;
     })
     .catch((e) => {
+      console.log(e);
+
       throw e;
     });
 
