@@ -35,7 +35,7 @@ const App: FC = () => {
   const ResponsiveDrawer = styled('div')(() => ({
     flexGrow: 1,
     paddingTop: `calc(5px + ${headerNavigationHeightSmall}px)`,
-    paddingBottom: `calc(10px + ${bottomNavigationHeight}px)`,
+    paddingBottom: `calc(20px + ${bottomNavigationHeight}px)`,
     marginLeft: 0,
     marginRight: 0,
     width: '100%',
