@@ -74,11 +74,13 @@ const IndividualsListForLoc: FC<{ individuals: void | INDIVIDUAL[] }> = ({
                     </p>
                     <p>
                       母の父：
-                      {individual.fatherName ? individual.fatherName : '-'}
+                      {individual.fatherName ? individual.grandfatherName : '-'}
                     </p>
                     <p>
                       祖母の父：
-                      {individual.fatherName ? individual.fatherName : '-'}
+                      {individual.fatherName
+                        ? individual.grandGrandfatherName
+                        : '-'}
                     </p>
                   </Row>
                 </>
